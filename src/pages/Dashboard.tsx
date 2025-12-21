@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Card, Badge, MiniLine, ProfileSummary, BaselineEvolution } from "@/components/nzt";
+import { Card, Badge, MiniLine, ProfileSummary, BaselineEvolution, InsightsCard } from "@/components/nzt";
 import { baselineInicial, mediaMovel } from "@/lib/baseline";
 import { getParticipante, getReferencias, getSeries30d, getSono60d } from "@/lib/api";
 import { calcularIdade } from "@/lib/date";
@@ -150,6 +150,28 @@ export default function Dashboard() {
           )}
         </Card>
 
+        {/* Insights IA */}
+        {participante && (
+          <Card 
+            title="Recomendações" 
+            subtitle="Análise personalizada com IA"
+            className="lg:col-span-3"
+          >
+            <InsightsCard 
+              participante={participante} 
+              metrics={{
+                diaBaseline: kpis.dia.base,
+                diaAtual: kpis.dia.now,
+                tardeBaseline: kpis.tarde.base,
+                tardeAtual: kpis.tarde.now,
+                sonoBaseline: kpis.sono.base,
+                sonoAtual: kpis.sono.now,
+                diasAcompanhamento: daysSinceStart,
+              }}
+            />
+          </Card>
+        )}
+
         {/* Gráficos de tendência */}
         <Card title="Clareza mental (dia)" subtitle="Tendência 30 dias" className="lg:col-span-1">
           <MiniLine 
@@ -189,6 +211,45 @@ export default function Dashboard() {
             </p>
           )}
         </Card>
+
+        {/* Grid de métricas adicionais */}
+        <Card 
+          title="Correlações observadas" 
+          subtitle="Padrões identificados nos seus dados"
+          className="lg:col-span-4"
+        >
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <CorrelationTile 
+              label="Sono × Clareza"
+              value={participante?.qualidade_sono_geral && kpis.dia.now 
+                ? `${participante.qualidade_sono_geral} → ${kpis.dia.now}` 
+                : null}
+              trend={kpis.dia.base && kpis.dia.now ? kpis.dia.now - kpis.dia.base : null}
+            />
+            <CorrelationTile 
+              label="Estresse × Foco"
+              value={participante?.nivel_estresse_geral && kpis.tarde.now 
+                ? `${participante.nivel_estresse_geral} → ${kpis.tarde.now}` 
+                : null}
+              trend={kpis.tarde.base && kpis.tarde.now ? kpis.tarde.now - kpis.tarde.base : null}
+              inverted
+            />
+            <CorrelationTile 
+              label="Sono anamnese × atual"
+              value={participante?.qualidade_sono_geral && kpis.sono.now 
+                ? `${participante.qualidade_sono_geral} → ${kpis.sono.now}` 
+                : null}
+              trend={participante?.qualidade_sono_geral && kpis.sono.now 
+                ? kpis.sono.now - participante.qualidade_sono_geral 
+                : null}
+            />
+            <CorrelationTile 
+              label="Dias registrados"
+              value={`${daysSinceStart} dias`}
+              trend={null}
+            />
+          </div>
+        </Card>
       </div>
 
       {/* Nota explicativa */}
@@ -197,6 +258,35 @@ export default function Dashboard() {
         os dados informados na anamnese. Um dia "fora do padrão" não define você — 
         priorizamos tendência e consistência.
       </p>
+    </div>
+  );
+}
+
+function CorrelationTile({ 
+  label, 
+  value, 
+  trend,
+  inverted 
+}: { 
+  label: string; 
+  value: string | null; 
+  trend: number | null;
+  inverted?: boolean;
+}) {
+  const isPositive = trend !== null && (inverted ? trend < 0 : trend > 0);
+  const isNegative = trend !== null && (inverted ? trend > 0 : trend < 0);
+  
+  return (
+    <div className="p-3 rounded-xl bg-muted/30 border border-border/50">
+      <p className="text-xs text-muted-foreground mb-1">{label}</p>
+      <div className="flex items-center gap-2">
+        <span className="text-sm font-medium text-foreground">{value ?? "—"}</span>
+        {trend !== null && Math.abs(trend) >= 0.3 && (
+          <span className={`text-xs ${isPositive ? "text-secondary" : isNegative ? "text-destructive" : "text-muted-foreground"}`}>
+            ({trend > 0 ? "+" : ""}{trend.toFixed(1)})
+          </span>
+        )}
+      </div>
     </div>
   );
 }
