@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Check, Sun, Sunset, Moon } from "lucide-react";
 
 const products = [
   {
     id: "dia",
     name: "NZT Dia",
-    tagline: "Foco & Clareza",
+    tagline: "Performance Diurna",
     description: "Fórmula para máxima performance cognitiva durante o dia. Ideal para trabalho intenso e tomada de decisões.",
-    icon: Sun,
-    color: "from-amber-400 to-orange-500",
+    gradient: "from-amber-500/20 via-orange-500/10 to-transparent",
+    accentColor: "text-amber-600",
+    borderAccent: "border-amber-500/30",
     features: ["Foco intenso", "Clareza mental", "Energia sustentada"],
     originalPrice: "R$ 197,00",
     price: "R$ 147,00",
@@ -20,8 +20,9 @@ const products = [
     name: "NZT Tarde",
     tagline: "Criatividade & Flow",
     description: "Potencializa o pensamento criativo e mantém o flow produtivo até o final do expediente.",
-    icon: Sunset,
-    color: "from-purple-500 to-pink-500",
+    gradient: "from-purple-500/20 via-pink-500/10 to-transparent",
+    accentColor: "text-purple-600",
+    borderAccent: "border-purple-500/30",
     features: ["Estado de flow", "Criatividade", "Resistência mental"],
     originalPrice: "R$ 197,00",
     price: "R$ 147,00",
@@ -32,8 +33,9 @@ const products = [
     name: "NZT Noite",
     tagline: "Recuperação & Memória",
     description: "Otimiza a consolidação da memória e prepara o cérebro para uma recuperação profunda.",
-    icon: Moon,
-    color: "from-indigo-500 to-purple-600",
+    gradient: "from-indigo-500/20 via-blue-500/10 to-transparent",
+    accentColor: "text-indigo-600",
+    borderAccent: "border-indigo-500/30",
     features: ["Memória consolidada", "Sono reparador", "Recuperação neural"],
     originalPrice: "R$ 197,00",
     price: "R$ 147,00",
@@ -43,86 +45,77 @@ const products = [
 
 export function ProductCard() {
   return (
-    <section id="produto" className="py-24 bg-muted/30">
+    <section id="produto" className="py-24 bg-muted/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-            Nossos Produtos
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Uma linha completa para otimização cognitiva em cada momento do seu dia
+          <p className="text-sm text-muted-foreground uppercase tracking-widest mb-3">
+            Nossa Linha
           </p>
+          <h2 className="text-3xl sm:text-4xl font-semibold text-foreground">
+            Suplementação Cognitiva Avançada
+          </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {products.map((product) => {
-            const IconComponent = product.icon;
-            return (
-              <div key={product.id} className="glass-card p-6 flex flex-col h-full hover:scale-[1.02] transition-transform duration-300">
-                {/* Product Header */}
-                <div className="text-center mb-6">
-                  <span className="text-xs text-muted-foreground uppercase tracking-wider">
-                    {product.tagline}
-                  </span>
-                  <h3 className={`text-2xl font-bold mt-1 bg-gradient-to-r ${product.color} bg-clip-text text-transparent`}>
-                    {product.name}
-                  </h3>
-                </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          {products.map((product) => (
+            <div 
+              key={product.id} 
+              className={`bg-card border ${product.borderAccent} rounded-2xl p-8 flex flex-col h-full hover:shadow-lg transition-all duration-300`}
+            >
+              {/* Tag */}
+              <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
+                {product.tagline}
+              </p>
+              
+              {/* Product Name */}
+              <h3 className={`text-xl font-semibold ${product.accentColor} mb-4`}>
+                {product.name}
+              </h3>
 
-                {/* Product Visual */}
-                <div className={`w-full h-40 mx-auto mb-6 rounded-xl bg-gradient-to-br ${product.color} flex items-center justify-center`}>
-                  <IconComponent className="w-16 h-16 text-white" />
-                </div>
-
-                {/* Description */}
-                <p className="text-sm text-muted-foreground text-center mb-6 flex-grow">
-                  {product.description}
-                </p>
-
-                {/* Features */}
-                <ul className="space-y-2 mb-6">
-                  {product.features.map((feature, index) => (
-                    <li key={index} className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Check className="w-4 h-4 text-secondary flex-shrink-0" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Price */}
-                <div className="text-center mb-4">
-                  <div className="flex items-center justify-center gap-2">
-                    <span className="text-sm text-muted-foreground line-through">{product.originalPrice}</span>
-                    <span className="text-xs font-medium text-secondary">{product.discount}</span>
-                  </div>
-                  <div className="text-3xl font-bold text-foreground">
-                    {product.price}
-                  </div>
-                </div>
-
-                {/* CTA */}
-                <Link to="/login?signup=true" className="mt-auto">
-                  <Button variant="outline" className="w-full py-5 rounded-lg border-border/50 hover:bg-primary/10 hover:border-primary/50">
-                    Saiba mais
-                  </Button>
-                </Link>
+              {/* Product Visual - Clean placeholder for future product image */}
+              <div className={`w-full h-48 mb-6 rounded-xl bg-gradient-to-br ${product.gradient} border border-border/30 flex items-center justify-center`}>
+                <span className="text-4xl font-light text-muted-foreground/50">NZT</span>
               </div>
-            );
-          })}
+
+              {/* Description */}
+              <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+                {product.description}
+              </p>
+
+              {/* Price */}
+              <div className="mb-6">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-sm text-muted-foreground line-through">{product.originalPrice}</span>
+                </div>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-2xl font-semibold text-foreground">{product.price}</span>
+                  <span className="text-xs font-medium text-secondary">{product.discount}</span>
+                </div>
+              </div>
+
+              {/* CTA */}
+              <Link to="/login?signup=true" className="mt-auto">
+                <Button variant="outline" className="w-full py-5 rounded-lg">
+                  Saiba mais
+                </Button>
+              </Link>
+            </div>
+          ))}
         </div>
 
         {/* Bundle CTA */}
-        <div className="mt-12 text-center">
-          <div className="glass-card inline-block px-8 py-6">
-            <p className="text-muted-foreground mb-2">Adquira o pacote completo</p>
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <span className="text-lg text-muted-foreground line-through">R$ 591,00</span>
-              <span className="text-3xl font-bold text-foreground">R$ 397,00</span>
+        <div className="mt-16 text-center">
+          <div className="inline-block bg-card border border-border/50 rounded-2xl px-10 py-8">
+            <p className="text-sm text-muted-foreground mb-1">Pacote Completo</p>
+            <p className="text-xs text-muted-foreground mb-4">Dia + Tarde + Noite</p>
+            <div className="flex items-baseline justify-center gap-3 mb-6">
+              <span className="text-muted-foreground line-through">R$ 591,00</span>
+              <span className="text-3xl font-semibold text-foreground">R$ 397,00</span>
               <span className="text-sm font-medium text-secondary">33% OFF</span>
             </div>
             <Link to="/login?signup=true">
-              <Button className="bg-primary hover:bg-primary/90 px-8 py-5 text-lg rounded-xl">
-                Adquirir Pacote Completo
+              <Button className="bg-primary hover:bg-primary/90 px-10 py-5 rounded-lg">
+                Adquirir Pacote
               </Button>
             </Link>
           </div>
