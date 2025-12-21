@@ -3,6 +3,7 @@ export { BaselineEvolution } from "./BaselineEvolution";
 export { Card } from "./Card";
 export { Chip } from "./Chip";
 export { Field } from "./Field";
+export { InsightsCard } from "./InsightsCard";
 export { KpiRow } from "./KpiRow";
 export { MiniLine } from "./MiniLine";
 export { NavSidebar } from "./NavSidebar";
