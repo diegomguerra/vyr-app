@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { TrendingUp, Moon, Brain, Zap } from "lucide-react";
 
 // Simulated Dashboard Screen
@@ -147,15 +146,25 @@ function SleepScreen() {
 function PhoneFrame({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
     <div className={`relative ${className}`}>
-      {/* Phone Frame */}
-      <div className="relative bg-slate-800 rounded-[2.5rem] p-2 shadow-2xl shadow-black/50">
-        {/* Notch */}
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 w-20 h-5 bg-black rounded-full z-10" />
-        {/* Screen */}
-        <div className="relative bg-slate-900 rounded-[2rem] overflow-hidden w-44 h-80">
-          <div className="pt-6 px-1 h-full">
-            {children}
+      {/* Phone Frame - More realistic with metallic edges */}
+      <div className="relative bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 rounded-[3rem] p-[3px] shadow-2xl shadow-black/60">
+        {/* Inner bezel */}
+        <div className="bg-black rounded-[2.8rem] p-2">
+          {/* Dynamic Island */}
+          <div className="absolute top-5 left-1/2 -translate-x-1/2 w-24 h-7 bg-black rounded-full z-10 flex items-center justify-center gap-2">
+            <div className="w-2 h-2 bg-slate-800 rounded-full" />
+            <div className="w-3 h-3 bg-slate-900 rounded-full ring-1 ring-slate-700" />
           </div>
+          {/* Screen */}
+          <div className="relative bg-slate-900 rounded-[2.5rem] overflow-hidden w-56 h-[480px]">
+            <div className="pt-10 px-2 h-full">
+              {children}
+            </div>
+            {/* Screen reflection effect */}
+            <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
+          </div>
+          {/* Bottom bar indicator */}
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-28 h-1 bg-slate-600 rounded-full" />
         </div>
       </div>
     </div>
@@ -184,19 +193,13 @@ export function AppShowcase() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Phone Mockups */}
-          <div className="relative flex justify-center lg:justify-start">
-            {/* Stats Badge */}
-            <div className="absolute -left-4 top-1/4 z-20 bg-white/95 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-xl">
-              <div className="text-2xl font-bold text-slate-800">500+</div>
-              <div className="text-xs text-slate-600">Usuários</div>
-            </div>
-
+          <div className="relative flex justify-center lg:justify-center">
             {/* Phones Container */}
-            <div className="relative flex items-end gap-[-20px]">
+            <div className="relative flex items-end">
               <PhoneFrame className="transform -rotate-6 translate-y-4 hover:-translate-y-2 transition-transform duration-500">
                 <DashboardScreen />
               </PhoneFrame>
-              <PhoneFrame className="transform rotate-6 -translate-x-8 z-10 hover:-translate-y-4 transition-transform duration-500">
+              <PhoneFrame className="transform rotate-6 -translate-x-12 z-10 hover:-translate-y-4 transition-transform duration-500">
                 <SleepScreen />
               </PhoneFrame>
             </div>
@@ -228,16 +231,8 @@ export function AppShowcase() {
               ))}
             </div>
 
-            {/* CTA Button */}
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="border-2 border-white/30 text-white hover:bg-white/10 rounded-full px-8 py-6 text-lg"
-            >
-              Saiba mais
-            </Button>
+            </div>
           </div>
-        </div>
       </div>
     </section>
   );
