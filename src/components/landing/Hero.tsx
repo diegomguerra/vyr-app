@@ -60,17 +60,17 @@ export function Hero() {
           <Link to="/login?signup=true">
             <Button 
               size="lg" 
-              className="bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white px-10 py-7 text-lg rounded-2xl group shadow-2xl shadow-violet-500/25 border border-violet-400/20"
+              className="relative bg-gradient-to-r from-violet-600 via-fuchsia-600 to-violet-600 bg-[length:200%_100%] hover:bg-right text-white px-12 py-7 text-lg rounded-full group shadow-[0_0_40px_rgba(139,92,246,0.4)] border-0 transition-all duration-500"
             >
               Começar agora
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>
           <a href="#produto">
             <Button 
               size="lg" 
               variant="outline" 
-              className="bg-transparent px-10 py-7 text-lg rounded-2xl border-slate-600 text-slate-300 hover:bg-slate-800/50 hover:border-slate-500 hover:text-white"
+              className="bg-transparent px-10 py-7 text-lg rounded-full border-slate-600 text-slate-300 hover:bg-slate-800/50 hover:border-slate-500 hover:text-white"
             >
               Ver produto
             </Button>
@@ -78,38 +78,38 @@ export function Hero() {
         </div>
 
         {/* Performance Metrics Bar */}
-        <div className="inline-flex items-center gap-6 sm:gap-10 px-8 py-5 rounded-2xl bg-slate-800/50 backdrop-blur-xl border border-slate-700/50">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-emerald-400" />
+        <div className="inline-flex items-center gap-0 rounded-2xl bg-slate-800/60 backdrop-blur-xl border border-slate-700/50 overflow-hidden">
+          <div className="flex items-center gap-4 px-6 sm:px-8 py-5">
+            <div className="w-12 h-12 rounded-full bg-emerald-500/15 flex items-center justify-center">
+              <TrendingUp className="w-6 h-6 text-emerald-400" />
             </div>
             <div className="text-left">
               <div className="text-2xl font-bold text-white">+37%</div>
-              <div className="text-xs text-slate-400">Foco médio</div>
+              <div className="text-sm text-slate-400">Foco médio</div>
             </div>
           </div>
           
-          <div className="w-px h-10 bg-slate-600" />
+          <div className="w-px h-16 bg-slate-600/50" />
           
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-violet-500/15 flex items-center justify-center">
-              <Brain className="w-5 h-5 text-violet-400" />
+          <div className="flex items-center gap-4 px-6 sm:px-8 py-5">
+            <div className="w-12 h-12 rounded-full bg-violet-500/15 flex items-center justify-center">
+              <Brain className="w-6 h-6 text-violet-400" />
             </div>
             <div className="text-left">
               <div className="text-2xl font-bold text-white">89%</div>
-              <div className="text-xs text-slate-400">Clareza mental</div>
+              <div className="text-sm text-slate-400">Clareza mental</div>
             </div>
           </div>
           
-          <div className="w-px h-10 bg-slate-600" />
+          <div className="w-px h-16 bg-slate-600/50" />
           
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center">
-              <Zap className="w-5 h-5 text-amber-400" />
+          <div className="flex items-center gap-4 px-6 sm:px-8 py-5">
+            <div className="w-12 h-12 rounded-full bg-amber-500/15 flex items-center justify-center">
+              <Zap className="w-6 h-6 text-amber-400" />
             </div>
             <div className="text-left">
               <div className="text-2xl font-bold text-white">12h</div>
-              <div className="text-xs text-slate-400">Energia sustentada</div>
+              <div className="text-sm text-slate-400">Energia sustentada</div>
             </div>
           </div>
         </div>
