@@ -6,6 +6,7 @@ import {
   BenefitSection,
   FAQ,
   Footer,
+  GradientBanner,
 } from "@/components/landing";
 
 export default function Landing() {
@@ -14,8 +15,11 @@ export default function Landing() {
       <LandingNav />
       <Hero />
       <ProductCard />
+      <GradientBanner variant="newsletter" />
       <HowItWorks />
+      <GradientBanner variant="info" />
       <BenefitSection />
+      <GradientBanner variant="cta" />
       <FAQ />
       <Footer />
     </div>
