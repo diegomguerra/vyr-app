@@ -8,6 +8,7 @@ import {
   Footer,
   GradientBanner,
   AppShowcase,
+  Testimonials,
 } from "@/components/landing";
 
 export default function Landing() {
@@ -19,6 +20,7 @@ export default function Landing() {
       <ProductCard />
       <GradientBanner variant="newsletter" />
       <HowItWorks />
+      <Testimonials />
       <GradientBanner variant="info" />
       <BenefitSection />
       <GradientBanner variant="cta" />

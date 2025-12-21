@@ -1,67 +1,133 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Brain, TrendingUp, Zap } from "lucide-react";
 
 export function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-accent/10" />
+      {/* Dark Premium Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950" />
       
-      {/* Animated Orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/30 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-secondary/20 rounded-full blur-3xl animate-pulse delay-1000" />
+      {/* Animated Grid Pattern */}
+      <div 
+        className="absolute inset-0 opacity-20"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '60px 60px'
+        }}
+      />
       
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      {/* Glowing Orbs */}
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-violet-600/20 rounded-full blur-[120px] animate-pulse" />
+      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-indigo-500/15 rounded-full blur-[100px] animate-pulse delay-1000" />
+      <div className="absolute top-1/2 right-1/3 w-[300px] h-[300px] bg-fuchsia-500/10 rounded-full blur-[80px]" />
+      
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/30 mb-8">
-          <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-sm text-primary font-medium">Plataforma de Suplementação Inteligente</span>
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-500/10 border border-violet-500/30 mb-8 backdrop-blur-sm">
+          <Brain className="w-4 h-4 text-violet-400" />
+          <span className="text-sm text-violet-300 font-medium tracking-wide">Nootrópicos de Alta Performance</span>
         </div>
 
         {/* Main Heading */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-tight">
-          Eleve sua{" "}
-          <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-            performance cognitiva
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
+          Seu cérebro no{" "}
+          <span className="relative">
+            <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-indigo-400 bg-clip-text text-transparent">
+              modo peak
+            </span>
+            <span className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-full opacity-60" />
           </span>
         </h1>
 
-        {/* Subtitle */}
-        <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
-          Acompanhe sua suplementação, monitore seu sono e descubra insights personalizados 
-          sobre como seu corpo responde ao longo do tempo.
+        {/* Subtitle - Speaking to the target audience */}
+        <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto mb-6 leading-relaxed">
+          Para quem compete com a mente. Traders, founders, desenvolvedores e profissionais 
+          que não podem se dar ao luxo de um dia ruim.
+        </p>
+
+        {/* Secondary tagline */}
+        <p className="text-base text-slate-400 max-w-2xl mx-auto mb-10">
+          Suplementação cognitiva com tracking científico. Saiba exatamente como seu corpo 
+          responde e otimize seus resultados ao longo do tempo.
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
           <Link to="/login?signup=true">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg rounded-xl group">
-              Começar gratuitamente
+            <Button 
+              size="lg" 
+              className="bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white px-10 py-7 text-lg rounded-2xl group shadow-2xl shadow-violet-500/25 border border-violet-400/20"
+            >
+              Começar agora
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>
-          <a href="#como-funciona">
-            <Button size="lg" variant="outline" className="px-8 py-6 text-lg rounded-xl border-border/50 hover:bg-muted/50">
-              Saiba mais
+          <a href="#produto">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="bg-transparent px-10 py-7 text-lg rounded-2xl border-slate-600 text-slate-300 hover:bg-slate-800/50 hover:border-slate-500 hover:text-white"
+            >
+              Ver produto
             </Button>
           </a>
         </div>
 
-        {/* Stats */}
-        <div className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto">
-          <div className="text-center">
-            <div className="text-3xl font-bold text-foreground">500+</div>
-            <div className="text-sm text-muted-foreground">Usuários ativos</div>
+        {/* Performance Metrics Bar */}
+        <div className="inline-flex items-center gap-6 sm:gap-10 px-8 py-5 rounded-2xl bg-slate-800/50 backdrop-blur-xl border border-slate-700/50">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/15 flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-emerald-400" />
+            </div>
+            <div className="text-left">
+              <div className="text-2xl font-bold text-white">+37%</div>
+              <div className="text-xs text-slate-400">Foco médio</div>
+            </div>
           </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-foreground">98%</div>
-            <div className="text-sm text-muted-foreground">Satisfação</div>
+          
+          <div className="w-px h-10 bg-slate-600" />
+          
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-violet-500/15 flex items-center justify-center">
+              <Brain className="w-5 h-5 text-violet-400" />
+            </div>
+            <div className="text-left">
+              <div className="text-2xl font-bold text-white">89%</div>
+              <div className="text-xs text-slate-400">Clareza mental</div>
+            </div>
           </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-foreground">30+</div>
-            <div className="text-sm text-muted-foreground">Dias de dados</div>
+          
+          <div className="w-px h-10 bg-slate-600" />
+          
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center">
+              <Zap className="w-5 h-5 text-amber-400" />
+            </div>
+            <div className="text-left">
+              <div className="text-2xl font-bold text-white">12h</div>
+              <div className="text-xs text-slate-400">Energia sustentada</div>
+            </div>
           </div>
+        </div>
+
+        {/* Trust Indicators */}
+        <div className="mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-sm text-slate-500">
+          <span className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
+            Usado por profissionais da Faria Lima
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 bg-violet-400 rounded-full" />
+            Fórmula científica comprovada
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 bg-amber-400 rounded-full" />
+            Sem crash de energia
+          </span>
         </div>
       </div>
     </section>

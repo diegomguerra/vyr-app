@@ -1,0 +1,111 @@
+import { Quote } from "lucide-react";
+
+const testimonials = [
+  {
+    name: "Rafael M.",
+    role: "Trader | B3",
+    content: "Na abertura do mercado, cada segundo conta. NZT me dá a clareza que preciso para tomar decisões em milissegundos. Minha taxa de acerto aumentou significativamente.",
+    highlight: "+42% na taxa de acerto",
+    avatar: "RM",
+    bgColor: "from-emerald-600 to-teal-600",
+  },
+  {
+    name: "Carolina S.",
+    role: "Tech Lead | Unicórnio BR",
+    content: "Code reviews de 4 horas sem perder a concentração. Finalmente consigo entrar em flow profundo sem aquela fadiga mental do meio da tarde.",
+    highlight: "4h de deep work contínuo",
+    avatar: "CS",
+    bgColor: "from-violet-600 to-fuchsia-600",
+  },
+  {
+    name: "André L.",
+    role: "Founder & CEO",
+    content: "Reuniões das 8h às 22h são minha rotina. Com NZT, mantenho a mesma energia e clareza na última call do dia que tinha na primeira.",
+    highlight: "14h de alta performance",
+    avatar: "AL",
+    bgColor: "from-amber-600 to-orange-600",
+  },
+  {
+    name: "Juliana F.",
+    role: "Investment Analyst | Faria Lima",
+    content: "Analisar 50 páginas de relatórios financeiros exige foco absoluto. A diferença é sentir que meu cérebro está funcionando no máximo potencial.",
+    highlight: "3x mais relatórios/dia",
+    avatar: "JF",
+    bgColor: "from-indigo-600 to-purple-600",
+  },
+  {
+    name: "Pedro H.",
+    role: "Software Engineer | FAANG",
+    content: "Algoritmos complexos e debugging de sistemas distribuídos. NZT me ajuda a manter a nitidez mental durante sessões intensas de problem-solving.",
+    highlight: "Debugging 2x mais rápido",
+    avatar: "PH",
+    bgColor: "from-cyan-600 to-blue-600",
+  },
+  {
+    name: "Mariana R.",
+    role: "M&A Director",
+    content: "Due diligence de milhões exige atenção aos detalhes. Não posso deixar nada passar. NZT se tornou parte essencial da minha rotina de alta performance.",
+    highlight: "Zero erros em deals",
+    avatar: "MR",
+    bgColor: "from-rose-600 to-pink-600",
+  },
+];
+
+export function Testimonials() {
+  return (
+    <section className="py-24 bg-gradient-to-b from-slate-900 to-slate-950 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+            Quem já está no <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">peak</span>
+          </h2>
+          <p className="text-slate-400 max-w-2xl mx-auto text-lg">
+            Profissionais de alta performance que escolheram otimizar seu maior ativo: o cérebro
+          </p>
+        </div>
+
+        {/* Testimonials Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {testimonials.map((testimonial, index) => (
+            <div
+              key={index}
+              className="relative group p-6 rounded-2xl bg-slate-800/30 border border-slate-700/50 backdrop-blur-sm hover:border-violet-500/30 transition-all duration-300"
+            >
+              {/* Quote Icon */}
+              <Quote className="w-8 h-8 text-violet-500/20 mb-4" />
+              
+              {/* Content */}
+              <p className="text-slate-300 leading-relaxed mb-6">
+                "{testimonial.content}"
+              </p>
+
+              {/* Highlight Badge */}
+              <div className="inline-flex px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 mb-6">
+                <span className="text-emerald-400 text-sm font-medium">{testimonial.highlight}</span>
+              </div>
+
+              {/* Author */}
+              <div className="flex items-center gap-3">
+                <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${testimonial.bgColor} flex items-center justify-center`}>
+                  <span className="text-white text-sm font-bold">{testimonial.avatar}</span>
+                </div>
+                <div>
+                  <div className="text-white font-semibold">{testimonial.name}</div>
+                  <div className="text-slate-400 text-sm">{testimonial.role}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom CTA */}
+        <div className="mt-16 text-center">
+          <p className="text-slate-500 text-sm">
+            Junte-se a centenas de profissionais que já elevaram sua performance cognitiva
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
