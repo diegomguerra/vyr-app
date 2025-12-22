@@ -1,4 +1,5 @@
 import { ClipboardCheck, TrendingUp, BarChart3, Brain, Zap, Moon, RefreshCw } from "lucide-react";
+import { LineChart, Line, AreaChart, Area, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 const trackingPillars = [
   {
@@ -64,6 +65,36 @@ const platformFeatures = [
     title: "Correlações Inteligentes",
     description: "Entenda como rotina, sono e suplementação impactam sua performance.",
   },
+];
+
+// Dados fictícios para os gráficos
+const performanceData = [
+  { day: "Seg", foco: 6.5, energia: 5.8, clareza: 6.2 },
+  { day: "Ter", foco: 7.2, energia: 6.5, clareza: 6.8 },
+  { day: "Qua", foco: 6.8, energia: 7.1, clareza: 7.0 },
+  { day: "Qui", foco: 7.8, energia: 7.5, clareza: 7.5 },
+  { day: "Sex", foco: 8.2, energia: 7.8, clareza: 8.1 },
+  { day: "Sab", foco: 7.5, energia: 8.2, clareza: 7.8 },
+  { day: "Dom", foco: 8.5, energia: 8.0, clareza: 8.4 },
+];
+
+const sleepData = [
+  { day: "Seg", qualidade: 65 },
+  { day: "Ter", qualidade: 72 },
+  { day: "Qua", qualidade: 68 },
+  { day: "Qui", qualidade: 78 },
+  { day: "Sex", qualidade: 82 },
+  { day: "Sab", qualidade: 85 },
+  { day: "Dom", qualidade: 88 },
+];
+
+const weeklyTrend = [
+  { week: "S1", score: 52 },
+  { week: "S2", score: 58 },
+  { week: "S3", score: 65 },
+  { week: "S4", score: 72 },
+  { week: "S5", score: 78 },
+  { week: "S6", score: 82 },
 ];
 
 export function PlatformSection() {
@@ -153,6 +184,201 @@ export function PlatformSection() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Dashboard Preview Section */}
+        <div className="mb-20">
+          <div className="text-center mb-10">
+            <p className="text-sm text-slate-500 uppercase tracking-widest mb-2">
+              Visualize seus dados
+            </p>
+            <h3 className="text-2xl font-bold text-white">
+              Dashboard de Performance Cognitiva
+            </h3>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-6">
+            {/* Performance Chart */}
+            <div className="lg:col-span-2 p-6 rounded-2xl bg-slate-800/40 border border-slate-700/50">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h4 className="text-white font-semibold">Evolução Semanal</h4>
+                  <p className="text-slate-400 text-sm">Foco, Energia e Clareza</p>
+                </div>
+                <div className="flex items-center gap-4 text-xs">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-2 h-2 rounded-full bg-amber-400" />
+                    <span className="text-slate-400">Foco</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-2 h-2 rounded-full bg-purple-400" />
+                    <span className="text-slate-400">Energia</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-2 h-2 rounded-full bg-violet-400" />
+                    <span className="text-slate-400">Clareza</span>
+                  </div>
+                </div>
+              </div>
+              <div className="h-48">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={performanceData}>
+                    <XAxis 
+                      dataKey="day" 
+                      axisLine={false} 
+                      tickLine={false} 
+                      tick={{ fill: '#64748b', fontSize: 12 }}
+                    />
+                    <YAxis 
+                      domain={[5, 10]} 
+                      axisLine={false} 
+                      tickLine={false} 
+                      tick={{ fill: '#64748b', fontSize: 12 }}
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="foco" 
+                      stroke="#fbbf24" 
+                      strokeWidth={2} 
+                      dot={{ fill: '#fbbf24', r: 3 }}
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="energia" 
+                      stroke="#a855f7" 
+                      strokeWidth={2} 
+                      dot={{ fill: '#a855f7', r: 3 }}
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="clareza" 
+                      stroke="#8b5cf6" 
+                      strokeWidth={2} 
+                      dot={{ fill: '#8b5cf6', r: 3 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Sleep Quality */}
+            <div className="p-6 rounded-2xl bg-slate-800/40 border border-indigo-500/30">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center">
+                  <Moon className="w-5 h-5 text-indigo-400" />
+                </div>
+                <div>
+                  <h4 className="text-white font-semibold">Qualidade do Sono</h4>
+                  <p className="text-slate-400 text-xs">Últimos 7 dias</p>
+                </div>
+              </div>
+              <div className="h-32">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={sleepData}>
+                    <defs>
+                      <linearGradient id="sleepGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <Area 
+                      type="monotone" 
+                      dataKey="qualidade" 
+                      stroke="#6366f1" 
+                      strokeWidth={2}
+                      fill="url(#sleepGradient)" 
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="mt-3 flex items-center justify-between">
+                <span className="text-slate-400 text-sm">Média</span>
+                <span className="text-indigo-400 font-bold text-lg">77%</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Second row of dashboard */}
+          <div className="grid md:grid-cols-3 gap-6 mt-6">
+            {/* Plasticidade Score */}
+            <div className="p-5 rounded-2xl bg-slate-800/40 border border-violet-500/30">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-slate-400 text-sm">Plasticidade Cognitiva</span>
+                <span className="text-xs px-2 py-1 rounded-full bg-green-500/20 text-green-400">+12%</span>
+              </div>
+              <div className="flex items-end gap-2">
+                <span className="text-3xl font-bold text-white">82</span>
+                <span className="text-slate-400 text-sm mb-1">/100</span>
+              </div>
+              <div className="mt-3 h-2 bg-slate-700 rounded-full overflow-hidden">
+                <div className="h-full w-[82%] bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-full" />
+              </div>
+            </div>
+
+            {/* Weekly Trend */}
+            <div className="p-5 rounded-2xl bg-slate-800/40 border border-slate-700/50">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-slate-400 text-sm">Tendência 6 Semanas</span>
+                <TrendingUp className="w-4 h-4 text-green-400" />
+              </div>
+              <div className="h-16">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={weeklyTrend}>
+                    <defs>
+                      <linearGradient id="trendGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#22c55e" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <Area 
+                      type="monotone" 
+                      dataKey="score" 
+                      stroke="#22c55e" 
+                      strokeWidth={2}
+                      fill="url(#trendGradient)" 
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Ring Scores Preview */}
+            <div className="p-5 rounded-2xl bg-slate-800/40 border border-slate-700/50">
+              <span className="text-slate-400 text-sm">Índices do Dia</span>
+              <div className="mt-3 flex items-center justify-around">
+                {/* Circular progress indicators */}
+                <div className="relative w-14 h-14">
+                  <svg className="w-14 h-14 transform -rotate-90">
+                    <circle cx="28" cy="28" r="24" stroke="#334155" strokeWidth="4" fill="none" />
+                    <circle cx="28" cy="28" r="24" stroke="#ef4444" strokeWidth="4" fill="none" 
+                      strokeDasharray={`${0.85 * 150.8} 150.8`} strokeLinecap="round" />
+                  </svg>
+                  <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white">85%</span>
+                </div>
+                <div className="relative w-14 h-14">
+                  <svg className="w-14 h-14 transform -rotate-90">
+                    <circle cx="28" cy="28" r="24" stroke="#334155" strokeWidth="4" fill="none" />
+                    <circle cx="28" cy="28" r="24" stroke="#22c55e" strokeWidth="4" fill="none" 
+                      strokeDasharray={`${0.72 * 150.8} 150.8`} strokeLinecap="round" />
+                  </svg>
+                  <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white">72%</span>
+                </div>
+                <div className="relative w-14 h-14">
+                  <svg className="w-14 h-14 transform -rotate-90">
+                    <circle cx="28" cy="28" r="24" stroke="#334155" strokeWidth="4" fill="none" />
+                    <circle cx="28" cy="28" r="24" stroke="#3b82f6" strokeWidth="4" fill="none" 
+                      strokeDasharray={`${0.91 * 150.8} 150.8`} strokeLinecap="round" />
+                  </svg>
+                  <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white">91%</span>
+                </div>
+              </div>
+              <div className="mt-2 flex items-center justify-around text-xs text-slate-500">
+                <span>Ativação</span>
+                <span>Sustentação</span>
+                <span>Recuperação</span>
+              </div>
+            </div>
           </div>
         </div>
 
