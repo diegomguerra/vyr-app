@@ -1,106 +1,131 @@
 import { ClipboardCheck, TrendingUp, BarChart3, Brain, Zap, Moon, RefreshCw } from "lucide-react";
 import dashboardPreview from "@/assets/dashboard-preview.png";
 import { LineChart, Line, AreaChart, Area, ResponsiveContainer, XAxis, YAxis } from "recharts";
-
-const trackingPillars = [
-  {
-    id: "ativacao",
-    title: "Ativação & Clareza",
-    period: "Manhã",
-    icon: Zap,
-    color: "from-amber-500 to-orange-500",
-    bgColor: "bg-amber-500/10",
-    borderColor: "border-amber-500/30",
-    textColor: "text-amber-400",
-    questions: [
-      "Como foi seu foco nas primeiras horas?",
-      "Clareza nas decisões matinais?",
-      "Energia mental ao iniciar o dia?",
-    ],
-  },
-  {
-    id: "sustentacao",
-    title: "Sustentação & Resiliência",
-    period: "Tarde",
-    icon: Brain,
-    color: "from-purple-500 to-fuchsia-500",
-    bgColor: "bg-purple-500/10",
-    borderColor: "border-purple-500/30",
-    textColor: "text-purple-400",
-    questions: [
-      "Manteve o ritmo após o almoço?",
-      "Resistência à fadiga cognitiva?",
-      "Equilíbrio emocional sob pressão?",
-    ],
-  },
-  {
-    id: "recuperacao",
-    title: "Recuperação Cognitiva",
-    period: "Noite",
-    icon: Moon,
-    color: "from-indigo-500 to-violet-500",
-    bgColor: "bg-indigo-500/10",
-    borderColor: "border-indigo-500/30",
-    textColor: "text-indigo-400",
-    questions: [
-      "Qualidade do sono percebida?",
-      "Facilidade para adormecer?",
-      "Sensação ao acordar?",
-    ],
-  },
-];
-
-const platformFeatures = [
-  {
-    icon: ClipboardCheck,
-    title: "Registro Diário Simples",
-    description: "Check-ins rápidos após cada dose. Menos de 1 minuto por registro.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Evolução ao Longo do Tempo",
-    description: "Veja padrões emergirem semana após semana. Sua linha de base se constrói.",
-  },
-  {
-    icon: BarChart3,
-    title: "Correlações Inteligentes",
-    description: "Entenda como rotina, sono e suplementação impactam sua performance.",
-  },
-];
+const trackingPillars = [{
+  id: "ativacao",
+  title: "Ativação & Clareza",
+  period: "Manhã",
+  icon: Zap,
+  color: "from-amber-500 to-orange-500",
+  bgColor: "bg-amber-500/10",
+  borderColor: "border-amber-500/30",
+  textColor: "text-amber-400",
+  questions: ["Como foi seu foco nas primeiras horas?", "Clareza nas decisões matinais?", "Energia mental ao iniciar o dia?"]
+}, {
+  id: "sustentacao",
+  title: "Sustentação & Resiliência",
+  period: "Tarde",
+  icon: Brain,
+  color: "from-purple-500 to-fuchsia-500",
+  bgColor: "bg-purple-500/10",
+  borderColor: "border-purple-500/30",
+  textColor: "text-purple-400",
+  questions: ["Manteve o ritmo após o almoço?", "Resistência à fadiga cognitiva?", "Equilíbrio emocional sob pressão?"]
+}, {
+  id: "recuperacao",
+  title: "Recuperação Cognitiva",
+  period: "Noite",
+  icon: Moon,
+  color: "from-indigo-500 to-violet-500",
+  bgColor: "bg-indigo-500/10",
+  borderColor: "border-indigo-500/30",
+  textColor: "text-indigo-400",
+  questions: ["Qualidade do sono percebida?", "Facilidade para adormecer?", "Sensação ao acordar?"]
+}];
+const platformFeatures = [{
+  icon: ClipboardCheck,
+  title: "Registro Diário Simples",
+  description: "Check-ins rápidos após cada dose. Menos de 1 minuto por registro."
+}, {
+  icon: TrendingUp,
+  title: "Evolução ao Longo do Tempo",
+  description: "Veja padrões emergirem semana após semana. Sua linha de base se constrói."
+}, {
+  icon: BarChart3,
+  title: "Correlações Inteligentes",
+  description: "Entenda como rotina, sono e suplementação impactam sua performance."
+}];
 
 // Dados fictícios para os gráficos
-const performanceData = [
-  { day: "Seg", foco: 6.5, energia: 5.8, clareza: 6.2 },
-  { day: "Ter", foco: 7.2, energia: 6.5, clareza: 6.8 },
-  { day: "Qua", foco: 6.8, energia: 7.1, clareza: 7.0 },
-  { day: "Qui", foco: 7.8, energia: 7.5, clareza: 7.5 },
-  { day: "Sex", foco: 8.2, energia: 7.8, clareza: 8.1 },
-  { day: "Sab", foco: 7.5, energia: 8.2, clareza: 7.8 },
-  { day: "Dom", foco: 8.5, energia: 8.0, clareza: 8.4 },
-];
-
-const sleepData = [
-  { day: "Seg", qualidade: 65 },
-  { day: "Ter", qualidade: 72 },
-  { day: "Qua", qualidade: 68 },
-  { day: "Qui", qualidade: 78 },
-  { day: "Sex", qualidade: 82 },
-  { day: "Sab", qualidade: 85 },
-  { day: "Dom", qualidade: 88 },
-];
-
-const weeklyTrend = [
-  { week: "S1", score: 52 },
-  { week: "S2", score: 58 },
-  { week: "S3", score: 65 },
-  { week: "S4", score: 72 },
-  { week: "S5", score: 78 },
-  { week: "S6", score: 82 },
-];
-
+const performanceData = [{
+  day: "Seg",
+  foco: 6.5,
+  energia: 5.8,
+  clareza: 6.2
+}, {
+  day: "Ter",
+  foco: 7.2,
+  energia: 6.5,
+  clareza: 6.8
+}, {
+  day: "Qua",
+  foco: 6.8,
+  energia: 7.1,
+  clareza: 7.0
+}, {
+  day: "Qui",
+  foco: 7.8,
+  energia: 7.5,
+  clareza: 7.5
+}, {
+  day: "Sex",
+  foco: 8.2,
+  energia: 7.8,
+  clareza: 8.1
+}, {
+  day: "Sab",
+  foco: 7.5,
+  energia: 8.2,
+  clareza: 7.8
+}, {
+  day: "Dom",
+  foco: 8.5,
+  energia: 8.0,
+  clareza: 8.4
+}];
+const sleepData = [{
+  day: "Seg",
+  qualidade: 65
+}, {
+  day: "Ter",
+  qualidade: 72
+}, {
+  day: "Qua",
+  qualidade: 68
+}, {
+  day: "Qui",
+  qualidade: 78
+}, {
+  day: "Sex",
+  qualidade: 82
+}, {
+  day: "Sab",
+  qualidade: 85
+}, {
+  day: "Dom",
+  qualidade: 88
+}];
+const weeklyTrend = [{
+  week: "S1",
+  score: 52
+}, {
+  week: "S2",
+  score: 58
+}, {
+  week: "S3",
+  score: 65
+}, {
+  week: "S4",
+  score: 72
+}, {
+  week: "S5",
+  score: 78
+}, {
+  week: "S6",
+  score: 82
+}];
 export function PlatformSection() {
-  return (
-    <section id="plataforma" className="py-24 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 overflow-hidden">
+  return <section id="plataforma" className="py-24 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
@@ -129,11 +154,7 @@ export function PlatformSection() {
             
             {/* Dashboard image with frame */}
             <div className="relative rounded-2xl overflow-hidden border border-slate-700/50 shadow-2xl shadow-violet-500/10">
-              <img 
-                src={dashboardPreview} 
-                alt="NZT Dashboard - Painel de Performance Cognitiva" 
-                className="w-full h-auto"
-              />
+              <img src={dashboardPreview} alt="NZT Dashboard - Painel de Performance Cognitiva" className="w-full h-auto" />
               {/* Subtle overlay gradient */}
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent pointer-events-none" />
             </div>
@@ -151,7 +172,7 @@ export function PlatformSection() {
         {/* Os 3 Eixos de Mensuração */}
         <div className="mb-20">
           <div className="text-center mb-10">
-            <p className="text-sm text-slate-500 uppercase tracking-widest mb-2">
+            <p className="text-sm uppercase tracking-widest mb-2 text-slate-300">
               O que mensuramos
             </p>
             <h3 className="text-2xl font-bold text-white">
@@ -160,11 +181,7 @@ export function PlatformSection() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {trackingPillars.map((pillar) => (
-              <div
-                key={pillar.id}
-                className={`relative p-6 rounded-2xl bg-slate-800/40 border ${pillar.borderColor} hover:bg-slate-800/60 transition-all duration-300`}
-              >
+            {trackingPillars.map(pillar => <div key={pillar.id} className={`relative p-6 rounded-2xl bg-slate-800/40 border ${pillar.borderColor} hover:bg-slate-800/60 transition-all duration-300`}>
                 {/* Period badge */}
                 <div className={`absolute -top-3 right-4 px-3 py-1 rounded-full bg-gradient-to-r ${pillar.color} text-white text-xs font-semibold`}>
                   {pillar.period}
@@ -182,12 +199,10 @@ export function PlatformSection() {
 
                 {/* Questions */}
                 <ul className="space-y-2">
-                  {pillar.questions.map((question, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm text-slate-400">
+                  {pillar.questions.map((question, idx) => <li key={idx} className="flex items-start gap-2 text-sm text-slate-400">
                       <span className={`w-1.5 h-1.5 rounded-full mt-1.5 ${pillar.bgColor.replace('/10', '/50')}`} />
                       {question}
-                    </li>
-                  ))}
+                    </li>)}
                 </ul>
 
                 {/* Visual escala */}
@@ -197,28 +212,19 @@ export function PlatformSection() {
                     <span className={pillar.textColor}>1-10</span>
                   </div>
                   <div className="flex gap-1">
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
-                      <div
-                        key={n}
-                        className={`flex-1 h-2 rounded-full ${
-                          n <= 7 
-                            ? `bg-gradient-to-r ${pillar.color} opacity-${n <= 4 ? '30' : n <= 6 ? '50' : '80'}`
-                            : 'bg-slate-700'
-                        }`}
-                        style={{ opacity: n <= 7 ? 0.3 + (n * 0.08) : 0.2 }}
-                      />
-                    ))}
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => <div key={n} className={`flex-1 h-2 rounded-full ${n <= 7 ? `bg-gradient-to-r ${pillar.color} opacity-${n <= 4 ? '30' : n <= 6 ? '50' : '80'}` : 'bg-slate-700'}`} style={{
+                  opacity: n <= 7 ? 0.3 + n * 0.08 : 0.2
+                }} />)}
                   </div>
                 </div>
-              </div>
-            ))}
+              </div>)}
           </div>
         </div>
 
         {/* Dashboard Preview Section */}
         <div className="mb-20">
           <div className="text-center mb-10">
-            <p className="text-sm text-slate-500 uppercase tracking-widest mb-2">
+            <p className="text-sm uppercase tracking-widest mb-2 text-slate-300">
               Visualize seus dados
             </p>
             <h3 className="text-2xl font-bold text-white">
@@ -252,39 +258,26 @@ export function PlatformSection() {
               <div className="h-48">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={performanceData}>
-                    <XAxis 
-                      dataKey="day" 
-                      axisLine={false} 
-                      tickLine={false} 
-                      tick={{ fill: '#64748b', fontSize: 12 }}
-                    />
-                    <YAxis 
-                      domain={[5, 10]} 
-                      axisLine={false} 
-                      tickLine={false} 
-                      tick={{ fill: '#64748b', fontSize: 12 }}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="foco" 
-                      stroke="#fbbf24" 
-                      strokeWidth={2} 
-                      dot={{ fill: '#fbbf24', r: 3 }}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="energia" 
-                      stroke="#a855f7" 
-                      strokeWidth={2} 
-                      dot={{ fill: '#a855f7', r: 3 }}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="clareza" 
-                      stroke="#8b5cf6" 
-                      strokeWidth={2} 
-                      dot={{ fill: '#8b5cf6', r: 3 }}
-                    />
+                    <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{
+                    fill: '#64748b',
+                    fontSize: 12
+                  }} />
+                    <YAxis domain={[5, 10]} axisLine={false} tickLine={false} tick={{
+                    fill: '#64748b',
+                    fontSize: 12
+                  }} />
+                    <Line type="monotone" dataKey="foco" stroke="#fbbf24" strokeWidth={2} dot={{
+                    fill: '#fbbf24',
+                    r: 3
+                  }} />
+                    <Line type="monotone" dataKey="energia" stroke="#a855f7" strokeWidth={2} dot={{
+                    fill: '#a855f7',
+                    r: 3
+                  }} />
+                    <Line type="monotone" dataKey="clareza" stroke="#8b5cf6" strokeWidth={2} dot={{
+                    fill: '#8b5cf6',
+                    r: 3
+                  }} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -306,17 +299,11 @@ export function PlatformSection() {
                   <AreaChart data={sleepData}>
                     <defs>
                       <linearGradient id="sleepGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
-                        <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
                       </linearGradient>
                     </defs>
-                    <Area 
-                      type="monotone" 
-                      dataKey="qualidade" 
-                      stroke="#6366f1" 
-                      strokeWidth={2}
-                      fill="url(#sleepGradient)" 
-                    />
+                    <Area type="monotone" dataKey="qualidade" stroke="#6366f1" strokeWidth={2} fill="url(#sleepGradient)" />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
@@ -355,17 +342,11 @@ export function PlatformSection() {
                   <AreaChart data={weeklyTrend}>
                     <defs>
                       <linearGradient id="trendGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3}/>
-                        <stop offset="95%" stopColor="#22c55e" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
                       </linearGradient>
                     </defs>
-                    <Area 
-                      type="monotone" 
-                      dataKey="score" 
-                      stroke="#22c55e" 
-                      strokeWidth={2}
-                      fill="url(#trendGradient)" 
-                    />
+                    <Area type="monotone" dataKey="score" stroke="#22c55e" strokeWidth={2} fill="url(#trendGradient)" />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
@@ -379,24 +360,21 @@ export function PlatformSection() {
                 <div className="relative w-14 h-14">
                   <svg className="w-14 h-14 transform -rotate-90">
                     <circle cx="28" cy="28" r="24" stroke="#334155" strokeWidth="4" fill="none" />
-                    <circle cx="28" cy="28" r="24" stroke="#ef4444" strokeWidth="4" fill="none" 
-                      strokeDasharray={`${0.85 * 150.8} 150.8`} strokeLinecap="round" />
+                    <circle cx="28" cy="28" r="24" stroke="#ef4444" strokeWidth="4" fill="none" strokeDasharray={`${0.85 * 150.8} 150.8`} strokeLinecap="round" />
                   </svg>
                   <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white">85%</span>
                 </div>
                 <div className="relative w-14 h-14">
                   <svg className="w-14 h-14 transform -rotate-90">
                     <circle cx="28" cy="28" r="24" stroke="#334155" strokeWidth="4" fill="none" />
-                    <circle cx="28" cy="28" r="24" stroke="#22c55e" strokeWidth="4" fill="none" 
-                      strokeDasharray={`${0.72 * 150.8} 150.8`} strokeLinecap="round" />
+                    <circle cx="28" cy="28" r="24" stroke="#22c55e" strokeWidth="4" fill="none" strokeDasharray={`${0.72 * 150.8} 150.8`} strokeLinecap="round" />
                   </svg>
                   <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white">72%</span>
                 </div>
                 <div className="relative w-14 h-14">
                   <svg className="w-14 h-14 transform -rotate-90">
                     <circle cx="28" cy="28" r="24" stroke="#334155" strokeWidth="4" fill="none" />
-                    <circle cx="28" cy="28" r="24" stroke="#3b82f6" strokeWidth="4" fill="none" 
-                      strokeDasharray={`${0.91 * 150.8} 150.8`} strokeLinecap="round" />
+                    <circle cx="28" cy="28" r="24" stroke="#3b82f6" strokeWidth="4" fill="none" strokeDasharray={`${0.91 * 150.8} 150.8`} strokeLinecap="round" />
                   </svg>
                   <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white">91%</span>
                 </div>
@@ -412,11 +390,7 @@ export function PlatformSection() {
 
         {/* Features da Plataforma */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
-          {platformFeatures.map((feature) => (
-            <div
-              key={feature.title}
-              className="flex items-start gap-4 p-5 rounded-xl bg-slate-800/30 border border-slate-700/50"
-            >
+          {platformFeatures.map(feature => <div key={feature.title} className="flex items-start gap-4 p-5 rounded-xl bg-slate-800/30 border border-slate-700/50">
               <div className="w-12 h-12 rounded-xl bg-violet-500/15 flex items-center justify-center flex-shrink-0">
                 <feature.icon className="w-6 h-6 text-violet-400" />
               </div>
@@ -424,8 +398,7 @@ export function PlatformSection() {
                 <h4 className="text-white font-semibold mb-1">{feature.title}</h4>
                 <p className="text-slate-400 text-sm">{feature.description}</p>
               </div>
-            </div>
-          ))}
+            </div>)}
         </div>
 
         {/* Callout */}
@@ -436,6 +409,5 @@ export function PlatformSection() {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 }

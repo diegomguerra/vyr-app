@@ -1,24 +1,19 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Brain, TrendingUp, Activity, BarChart3 } from "lucide-react";
-
 export function Hero() {
-  return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+  return <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
       {/* Dark Premium Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950" />
       
       {/* Animated Grid Pattern */}
-      <div 
-        className="absolute inset-0 opacity-20"
-        style={{
-          backgroundImage: `
+      <div className="absolute inset-0 opacity-20" style={{
+      backgroundImage: `
             linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
             linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px)
           `,
-          backgroundSize: '60px 60px'
-        }}
-      />
+      backgroundSize: '60px 60px'
+    }} />
       
       {/* Glowing Orbs */}
       <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-violet-600/20 rounded-full blur-[120px] animate-pulse" />
@@ -42,18 +37,18 @@ export function Hero() {
         </h1>
 
         {/* Subtitle - Speaking to the target audience */}
-        <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto mb-6 leading-relaxed">
+        <p className="text-lg sm:text-xl max-w-3xl mx-auto mb-6 leading-relaxed text-slate-200">
           O sistema de performance intelectual para profissionais de elite. 
           Traders, founders, desenvolvedores e estudantes de alto rendimento.
         </p>
 
         {/* Key phrase */}
-        <p className="text-base text-slate-400 max-w-2xl mx-auto mb-4 italic">
+        <p className="text-base max-w-2xl mx-auto mb-4 italic text-slate-300">
           "Alta performance intelectual não se ostenta. Se mede."
         </p>
 
         {/* Secondary tagline */}
-        <p className="text-sm text-slate-500 max-w-xl mx-auto mb-10">
+        <p className="text-sm max-w-xl mx-auto mb-10 text-slate-400">
           Suplementação por ciclo + Plataforma digital + Smart Ring. 
           Evolução mensurável baseada em dados.
         </p>
@@ -61,20 +56,13 @@ export function Hero() {
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
           <Link to="/login?signup=true">
-            <Button 
-              size="lg" 
-              className="relative bg-gradient-to-r from-violet-600 via-fuchsia-600 to-violet-600 bg-[length:200%_100%] hover:bg-right text-white px-12 py-7 text-lg rounded-full group shadow-[0_0_40px_rgba(139,92,246,0.4)] border-0 transition-all duration-500"
-            >
+            <Button size="lg" className="relative bg-gradient-to-r from-violet-600 via-fuchsia-600 to-violet-600 bg-[length:200%_100%] hover:bg-right text-white px-12 py-7 text-lg rounded-full group shadow-[0_0_40px_rgba(139,92,246,0.4)] border-0 transition-all duration-500">
               Começar agora
               <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>
           <a href="#sistema">
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="bg-transparent px-10 py-7 text-lg rounded-full border-slate-600 text-slate-300 hover:bg-slate-800/50 hover:border-slate-500 hover:text-white"
-            >
+            <Button size="lg" variant="outline" className="bg-transparent px-10 py-7 text-lg rounded-full border-slate-600 text-slate-300 hover:bg-slate-800/50 hover:border-slate-500 hover:text-white">
               Conhecer o sistema
             </Button>
           </a>
@@ -117,6 +105,5 @@ export function Hero() {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 }

@@ -1,54 +1,41 @@
 import { Circle, Activity, Moon, Brain, Zap, TrendingUp, Sparkles } from "lucide-react";
 import smartRingImage from "@/assets/smart-ring-nobg.png";
-
-const ringCapabilities = [
-  {
-    icon: Activity,
-    title: "HRV Contínuo",
-    description: "Variabilidade da frequência cardíaca 24/7 revela estresse e recuperação em tempo real.",
-  },
-  {
-    icon: Moon,
-    title: "Arquitetura do Sono",
-    description: "Fases do sono, latência, despertares. Saiba exatamente como você recupera.",
-  },
-  {
-    icon: Brain,
-    title: "Prontidão Mental",
-    description: "Score diário de prontidão cognitiva baseado em biomarcadores reais.",
-  },
-  {
-    icon: Zap,
-    title: "Resposta Autonômica",
-    description: "Ativação simpática e parassimpática. Entenda seu sistema nervoso.",
-  },
-];
-
-const evolutionSteps = [
-  {
-    step: 1,
-    label: "Suplementação",
-    description: "Nootrópicos otimizam sua química cerebral",
-    active: true,
-  },
-  {
-    step: 2,
-    label: "Relatos",
-    description: "Plataforma captura sua percepção subjetiva",
-    active: true,
-  },
-  {
-    step: 3,
-    label: "Smart Ring",
-    description: "Dados fisiológicos validam e expandem a análise",
-    active: true,
-    highlight: true,
-  },
-];
-
+const ringCapabilities = [{
+  icon: Activity,
+  title: "HRV Contínuo",
+  description: "Variabilidade da frequência cardíaca 24/7 revela estresse e recuperação em tempo real."
+}, {
+  icon: Moon,
+  title: "Arquitetura do Sono",
+  description: "Fases do sono, latência, despertares. Saiba exatamente como você recupera."
+}, {
+  icon: Brain,
+  title: "Prontidão Mental",
+  description: "Score diário de prontidão cognitiva baseado em biomarcadores reais."
+}, {
+  icon: Zap,
+  title: "Resposta Autonômica",
+  description: "Ativação simpática e parassimpática. Entenda seu sistema nervoso."
+}];
+const evolutionSteps = [{
+  step: 1,
+  label: "Suplementação",
+  description: "Nootrópicos otimizam sua química cerebral",
+  active: true
+}, {
+  step: 2,
+  label: "Relatos",
+  description: "Plataforma captura sua percepção subjetiva",
+  active: true
+}, {
+  step: 3,
+  label: "Smart Ring",
+  description: "Dados fisiológicos validam e expandem a análise",
+  active: true,
+  highlight: true
+}];
 export function SmartRingSection() {
-  return (
-    <section id="smartring" className="py-24 bg-gradient-to-b from-slate-950 via-fuchsia-950/10 to-slate-900 overflow-hidden">
+  return <section id="smartring" className="py-24 bg-gradient-to-b from-slate-950 via-fuchsia-950/10 to-slate-900 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
@@ -83,11 +70,7 @@ export function SmartRingSection() {
 
             {/* Ring Image */}
             <div className="relative z-10">
-              <img 
-                src={smartRingImage} 
-                alt="Smart Ring NZT" 
-                className="w-72 h-auto drop-shadow-2xl"
-              />
+              <img src={smartRingImage} alt="Smart Ring NZT" className="w-72 h-auto drop-shadow-2xl" />
               
               {/* Floating badges */}
               <div className="absolute -top-4 -right-4 px-3 py-2 rounded-xl bg-slate-800/90 border border-fuchsia-500/40 backdrop-blur-sm">
@@ -118,20 +101,15 @@ export function SmartRingSection() {
             </div>
 
             <div className="grid gap-4">
-              {ringCapabilities.map((cap) => (
-                <div
-                  key={cap.title}
-                  className="flex items-start gap-4 p-4 rounded-xl bg-slate-800/40 border border-slate-700/50 hover:border-fuchsia-500/30 transition-colors"
-                >
+              {ringCapabilities.map(cap => <div key={cap.title} className="flex items-start gap-4 p-4 rounded-xl bg-slate-800/40 border border-slate-700/50 hover:border-fuchsia-500/30 transition-colors">
                   <div className="w-10 h-10 rounded-lg bg-fuchsia-500/15 flex items-center justify-center flex-shrink-0">
                     <cap.icon className="w-5 h-5 text-fuchsia-400" />
                   </div>
                   <div>
                     <h4 className="text-white font-semibold mb-1">{cap.title}</h4>
-                    <p className="text-slate-400 text-sm">{cap.description}</p>
+                    <p className="text-sm text-slate-200">{cap.description}</p>
                   </div>
-                </div>
-              ))}
+                </div>)}
             </div>
           </div>
         </div>
@@ -139,7 +117,7 @@ export function SmartRingSection() {
         {/* Evolution Steps */}
         <div className="relative">
           <div className="text-center mb-10">
-            <p className="text-sm text-slate-500 uppercase tracking-widest mb-2">
+            <p className="text-sm uppercase tracking-widest mb-2 text-slate-100">
               A evolução completa
             </p>
             <h3 className="text-2xl font-bold text-white">
@@ -153,30 +131,22 @@ export function SmartRingSection() {
             <div className="absolute top-12 left-0 right-0 h-1 bg-gradient-to-r from-amber-500/50 via-violet-500/50 to-fuchsia-500 rounded-full" />
 
             <div className="grid grid-cols-3 gap-4 relative">
-              {evolutionSteps.map((step) => (
-                <div key={step.step} className="relative text-center">
+              {evolutionSteps.map(step => <div key={step.step} className="relative text-center">
                   {/* Step circle */}
-                  <div className={`relative z-10 w-24 h-24 mx-auto mb-4 rounded-2xl flex flex-col items-center justify-center ${
-                    step.highlight 
-                      ? 'bg-gradient-to-br from-fuchsia-600 to-violet-600 shadow-lg shadow-fuchsia-500/30'
-                      : 'bg-slate-800 border border-slate-700'
-                  }`}>
+                  <div className={`relative z-10 w-24 h-24 mx-auto mb-4 rounded-2xl flex flex-col items-center justify-center ${step.highlight ? 'bg-gradient-to-br from-fuchsia-600 to-violet-600 shadow-lg shadow-fuchsia-500/30' : 'bg-slate-800 border border-slate-700'}`}>
                     <span className={`text-2xl font-bold ${step.highlight ? 'text-white' : 'text-slate-400'}`}>
                       {step.step}
                     </span>
-                    {step.highlight && (
-                      <TrendingUp className="w-4 h-4 text-fuchsia-200 mt-1" />
-                    )}
+                    {step.highlight && <TrendingUp className="w-4 h-4 text-fuchsia-200 mt-1" />}
                   </div>
 
                   <h4 className={`font-bold mb-1 ${step.highlight ? 'text-fuchsia-400' : 'text-white'}`}>
                     {step.label}
                   </h4>
-                  <p className="text-slate-400 text-sm">
+                  <p className="text-sm text-slate-300">
                     {step.description}
                   </p>
-                </div>
-              ))}
+                </div>)}
             </div>
           </div>
         </div>
@@ -194,6 +164,5 @@ export function SmartRingSection() {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 }
