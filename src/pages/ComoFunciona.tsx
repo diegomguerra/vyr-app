@@ -41,12 +41,16 @@ const sachets = [
       { name: "Córtex Temporal Medial", funcao: "Aprendizado" }
     ],
     componentes: [
-      { nome: "Citicolina (CDP-Colina)", area: "Córtex Pré-Frontal, Hipocampo", funcao: "Atenção executiva, memória de trabalho" },
-      { nome: "Fosfatidilserina", area: "Córtex Pré-Frontal, Hipocampo", funcao: "Velocidade cognitiva, processamento executivo" },
-      { nome: "Bacopa monnieri", area: "Hipocampo, Córtex Temporal Medial", funcao: "Consolidação de memória, aprendizado" },
-      { nome: "PQQ", area: "Hipocampo, Neocórtex", funcao: "Neuroplasticidade, suporte mitocondrial" },
-      { nome: "Vitaminas B6, B9, B12", area: "Sistema nervoso central", funcao: "Síntese de neurotransmissores" },
-      { nome: "L-Teanina", area: "Córtex Pré-Frontal, Sistema Límbico", funcao: "Atenção calma, redução de ruído cognitivo" }
+      { nome: "Citicolina — 250 mg", area: "Córtex Pré-Frontal, Hipocampo", funcao: "Atenção executiva, memória de trabalho" },
+      { nome: "Fosfatidilserina — 200 mg", area: "Córtex Pré-Frontal, Hipocampo", funcao: "Velocidade cognitiva, processamento executivo" },
+      { nome: "Bacopa monnieri — 400 mg", area: "Hipocampo, Córtex Temporal Medial", funcao: "Consolidação de memória, aprendizado" },
+      { nome: "L-Teanina — 100 mg", area: "Córtex Pré-Frontal, Sistema Límbico", funcao: "Atenção calma, redução de ruído cognitivo" },
+      { nome: "Teacrina — 100 mg", area: "Sistema Reticular, Córtex Pré-Frontal", funcao: "Energia mental sustentada" },
+      { nome: "PQQ — 10 mg", area: "Hipocampo, Neocórtex", funcao: "Neuroplasticidade, suporte mitocondrial" },
+      { nome: "Creatina — 3 g", area: "Córtex Cerebral", funcao: "Reserva energética neuronal" },
+      { nome: "Vitamina B6 — 25 mg", area: "Sistema nervoso central", funcao: "Síntese de neurotransmissores" },
+      { nome: "Vitamina B9 — 400 mcg", area: "Sistema nervoso central", funcao: "Metilação e função neural" },
+      { nome: "Vitamina B12 — 500 mcg", area: "Sistema nervoso central", funcao: "Manutenção da mielina" }
     ]
   },
   {
@@ -65,10 +69,11 @@ const sachets = [
       { name: "Amígdala", funcao: "Regulação emocional" }
     ],
     componentes: [
-      { nome: "Teacrine", area: "Sistema Reticular, Córtex Pré-Frontal", funcao: "Estado de alerta estável, energia mental" },
-      { nome: "L-Teanina", area: "Córtex Pré-Frontal, Amígdala", funcao: "Controle do estresse cognitivo, foco relaxado" },
-      { nome: "Bacopa monnieri", area: "Hipocampo", funcao: "Continuidade da memória e aprendizado" },
-      { nome: "Fosfatidilserina", area: "Córtex Pré-Frontal", funcao: "Sustentação cognitiva ao longo do dia" }
+      { nome: "Teacrina — 100 mg", area: "Sistema Reticular, Córtex Pré-Frontal", funcao: "Estado de alerta estável, energia mental" },
+      { nome: "L-Teanina — 100 mg", area: "Córtex Pré-Frontal, Amígdala", funcao: "Controle do estresse cognitivo, foco relaxado" },
+      { nome: "L-Taurina — 250 mg", area: "Sistema GABAérgico", funcao: "Modulação neural, redução de excitotoxicidade" },
+      { nome: "Cafeína — 25 mg", area: "Sistema Reticular Ativador", funcao: "Alerta suave, sem picos" },
+      { nome: "Bicarbonato de sódio — 1,4 g", area: "Sistema metabólico", funcao: "Tampão ácido-base, performance" }
     ]
   },
   {
@@ -87,11 +92,9 @@ const sachets = [
       { name: "Hipocampo", funcao: "Consolidação de memória" }
     ],
     componentes: [
-      { nome: "Magnésio quelado", area: "Hipotálamo, Sistema GABAérgico", funcao: "Relaxamento neural, transição sono-vigília" },
-      { nome: "Ashwagandha", area: "Eixo HPA, Amígdala", funcao: "Modulação do estresse, redução de ativação límbica" },
-      { nome: "NAC (N-acetilcisteína)", area: "Córtex Pré-Frontal, Núcleo Accumbens", funcao: "Regulação glutamatérgica, recuperação sináptica" },
-      { nome: "Ômega-3 (DHA/EPA)", area: "Hipocampo, Córtex Cerebral", funcao: "Reparação neuronal, plasticidade sináptica" },
-      { nome: "L-Teanina (dose noturna)", area: "Sistema Límbico, Córtex Pré-Frontal", funcao: "Desaceleração cognitiva, relaxamento" }
+      { nome: "N-acetilcisteína (NAC) — 600 mg", area: "Córtex Pré-Frontal, Núcleo Accumbens", funcao: "Regulação glutamatérgica, recuperação sináptica" },
+      { nome: "Ashwagandha — 300 mg", area: "Eixo HPA, Amígdala", funcao: "Modulação do estresse, redução de ativação límbica" },
+      { nome: "Magnésio quelato — 200 mg", area: "Hipotálamo, Sistema GABAérgico", funcao: "Relaxamento neural, transição sono-vigília" }
     ]
   }
 ];
