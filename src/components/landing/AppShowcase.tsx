@@ -148,16 +148,16 @@ function PhoneFrame({ children, className = "" }: { children: React.ReactNode; c
   return (
     <div className={`relative ${className}`}>
       {/* Phone Frame */}
-      <div className="relative bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 rounded-[3rem] p-[3px] shadow-2xl shadow-black/60">
+      <div className="relative bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 rounded-[2rem] sm:rounded-[3rem] p-[2px] sm:p-[3px] shadow-2xl shadow-black/60">
         {/* Inner bezel */}
-        <div className="bg-black rounded-[2.8rem] p-2">
+        <div className="bg-black rounded-[1.8rem] sm:rounded-[2.8rem] p-1.5 sm:p-2">
           {/* Dynamic Island */}
-          <div className="absolute top-5 left-1/2 -translate-x-1/2 w-24 h-7 bg-black rounded-full z-10 flex items-center justify-center gap-2">
-            <div className="w-2 h-2 bg-slate-800 rounded-full" />
-            <div className="w-3 h-3 bg-slate-900 rounded-full ring-1 ring-slate-700" />
+          <div className="absolute top-3 sm:top-5 left-1/2 -translate-x-1/2 w-16 sm:w-24 h-5 sm:h-7 bg-black rounded-full z-10 flex items-center justify-center gap-1.5 sm:gap-2">
+            <div className="w-1.5 sm:w-2 h-1.5 sm:h-2 bg-slate-800 rounded-full" />
+            <div className="w-2 sm:w-3 h-2 sm:h-3 bg-slate-900 rounded-full ring-1 ring-slate-700" />
           </div>
           {/* Screen */}
-          <div className="relative bg-slate-900 rounded-[2.5rem] overflow-hidden w-56 h-[480px]">
+          <div className="relative bg-slate-900 rounded-[2.5rem] overflow-hidden w-40 h-[340px] sm:w-56 sm:h-[480px]">
             <div className="pt-10 px-2 h-full">
               {children}
             </div>
@@ -193,25 +193,25 @@ export function AppShowcase() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Phone Mockups + Ring */}
-          <div className="relative flex justify-center lg:justify-center">
+          <div className="relative flex justify-center">
             {/* Phones Container */}
-            <div className="relative flex items-end">
+            <div className="relative flex items-end scale-[0.7] sm:scale-100 origin-center">
               <PhoneFrame className="transform -rotate-6 translate-y-4 hover:-translate-y-2 transition-transform duration-500">
                 <DashboardScreen />
               </PhoneFrame>
-              <PhoneFrame className="transform rotate-6 -translate-x-12 z-10 hover:-translate-y-4 transition-transform duration-500">
+              <PhoneFrame className="transform rotate-6 -translate-x-8 sm:-translate-x-12 z-10 hover:-translate-y-4 transition-transform duration-500">
                 <SleepScreen />
               </PhoneFrame>
               
               {/* Smart Ring - clean transparent image */}
-              <div className="absolute -bottom-12 -right-4 z-20">
+              <div className="absolute -bottom-8 sm:-bottom-12 -right-2 sm:-right-4 z-20">
                 <div className="relative group">
                   {/* Subtle glow */}
                   <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-500/20 to-violet-500/20 rounded-full blur-2xl scale-125 opacity-50 group-hover:opacity-70 transition-opacity duration-500" />
                   <img 
                     src={smartRingImage} 
                     alt="Smart Ring" 
-                    className="w-32 h-auto relative z-10 drop-shadow-2xl transform hover:scale-105 transition-transform duration-300"
+                    className="w-20 sm:w-32 h-auto relative z-10 drop-shadow-2xl transform hover:scale-105 transition-transform duration-300"
                   />
                 </div>
               </div>
