@@ -153,22 +153,22 @@ const integracaoNoite = [
 
 export default function ComoFunciona() {
   return (
-    <div className="min-h-screen bg-vyr-black">
+    <div className="min-h-screen vyr-gradient-bg">
       <LandingNav />
       
       {/* Hero */}
       <section className="pt-24 sm:pt-32 pb-12 sm:pb-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-vyr-gray-900/50 via-transparent to-transparent" />
+        <div className="absolute inset-0 vyr-gradient-radial" />
         
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <span className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-vyr-gray-800/50 border border-vyr-gray-700/50 text-vyr-gray-300 text-xs sm:text-sm font-mono mb-4 sm:mb-6">
+          <span className="vyr-badge-accent mb-4 sm:mb-6">
             <Layers className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            Sistema Integrado de Performance
+            <span className="text-xs sm:text-sm font-mono tracking-wider">SISTEMA INTEGRADO DE PERFORMANCE</span>
           </span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-vyr-white mb-4 sm:mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium text-vyr-white mb-4 sm:mb-6">
             Como Funciona o{" "}
-            <span className="font-mono tracking-wider">VYR SYSTEM</span>
+            <span className="font-mono tracking-wider text-gradient-accent">VYR SYSTEM</span>
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-vyr-gray-400 max-w-3xl mx-auto leading-relaxed px-2">
             Três pilares integrados: Sachês que modulam o cérebro, VYR NODE que capta respostas fisiológicas, 
@@ -178,23 +178,23 @@ export default function ComoFunciona() {
       </section>
 
       {/* Quick Nav */}
-      <section className="py-4 sm:py-6 px-4 border-y border-vyr-gray-800 bg-vyr-gray-900/50 overflow-x-auto">
+      <section className="py-4 sm:py-6 px-4 border-y border-vyr-graphite/50 bg-vyr-graphite-dark/50 overflow-x-auto">
         <div className="max-w-5xl mx-auto">
           <div className="flex justify-start sm:justify-center gap-2 sm:gap-3 min-w-max sm:min-w-0">
-            <a href="#saches" className="px-3 sm:px-5 py-2 sm:py-2.5 rounded-full bg-vyr-gray-800/50 border border-vyr-gray-700/50 hover:border-vyr-gray-500 transition-colors flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-vyr-gray-300 hover:text-vyr-white whitespace-nowrap">
-              <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-vyr-gray-400" />
+            <a href="#saches" className="px-3 sm:px-5 py-2 sm:py-2.5 rounded-sm vyr-card-graphite flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-vyr-gray-300 hover:text-vyr-white whitespace-nowrap transition-all">
+              <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-vyr-accent vyr-icon-glow" />
               <span>Sachês</span>
             </a>
-            <a href="#dados" className="px-3 sm:px-5 py-2 sm:py-2.5 rounded-full bg-vyr-gray-800/50 border border-vyr-gray-700/50 hover:border-vyr-gray-500 transition-colors flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-vyr-gray-300 hover:text-vyr-white whitespace-nowrap">
-              <Smartphone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-vyr-gray-400" />
+            <a href="#dados" className="px-3 sm:px-5 py-2 sm:py-2.5 rounded-sm vyr-card-graphite flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-vyr-gray-300 hover:text-vyr-white whitespace-nowrap transition-all">
+              <Smartphone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-vyr-accent vyr-icon-glow" />
               <span>Dados</span>
             </a>
-            <a href="#ring" className="px-3 sm:px-5 py-2 sm:py-2.5 rounded-full bg-vyr-gray-800/50 border border-vyr-gray-700/50 hover:border-vyr-gray-500 transition-colors flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-vyr-gray-300 hover:text-vyr-white whitespace-nowrap">
-              <Watch className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-vyr-gray-400" />
+            <a href="#ring" className="px-3 sm:px-5 py-2 sm:py-2.5 rounded-sm vyr-card-graphite flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-vyr-gray-300 hover:text-vyr-white whitespace-nowrap transition-all">
+              <Watch className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-vyr-accent vyr-icon-glow" />
               <span>VYR NODE</span>
             </a>
-            <a href="#integracao" className="px-3 sm:px-5 py-2 sm:py-2.5 rounded-full bg-vyr-gray-800/50 border border-vyr-gray-700/50 hover:border-vyr-gray-500 transition-colors flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-vyr-gray-300 hover:text-vyr-white whitespace-nowrap">
-              <Database className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-vyr-gray-400" />
+            <a href="#integracao" className="px-3 sm:px-5 py-2 sm:py-2.5 rounded-sm vyr-card-graphite flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-vyr-gray-300 hover:text-vyr-white whitespace-nowrap transition-all">
+              <Database className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-vyr-accent vyr-icon-glow" />
               <span>Integração</span>
             </a>
           </div>
@@ -205,8 +205,8 @@ export default function ComoFunciona() {
       <section id="saches" className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-vyr-white mb-4">
-              Como Funcionam os Sachês
+            <h2 className="text-3xl sm:text-4xl font-medium text-vyr-white mb-4">
+              Como Funcionam os <span className="text-gradient-accent">Sachês</span>
             </h2>
             <p className="text-vyr-gray-400 max-w-2xl mx-auto">
               Os sachês atuam modulando sistemas neurofuncionais, não "sintomas". 
@@ -218,7 +218,7 @@ export default function ComoFunciona() {
             {sachets.map((sachet) => (
               <div 
                 key={sachet.id} 
-                className={`relative rounded-sm bg-vyr-gray-900/80 border ${sachet.borderColor} overflow-hidden`}
+                className="relative rounded-sm vyr-card-graphite overflow-hidden"
               >
                 {/* Top bar */}
                 <div className={`absolute top-0 left-0 w-full h-1 ${sachet.bgColor}`} />
@@ -234,15 +234,15 @@ export default function ComoFunciona() {
                         </div>
                         <div>
                           <div className="flex items-center gap-2 mb-1">
-                            <sachet.icon className={`w-4 h-4 ${sachet.accentColor}`} />
-                            <span className={`text-xs ${sachet.accentColor} font-mono uppercase tracking-wider`}>{sachet.periodo}</span>
+                            <sachet.icon className={`w-4 h-4 text-vyr-accent vyr-icon-glow`} />
+                            <span className="text-xs text-vyr-accent font-mono uppercase tracking-wider">{sachet.periodo}</span>
                           </div>
-                          <h3 className="text-xl font-mono font-bold text-vyr-white tracking-wide">{sachet.name}</h3>
+                          <h3 className="text-xl font-mono font-medium text-vyr-white tracking-wide">{sachet.name}</h3>
                         </div>
                       </div>
 
-                      <p className={`text-sm mb-2`}>
-                        <strong className={sachet.accentColor}>{sachet.objetivo}.</strong>
+                      <p className="text-sm mb-2">
+                        <strong className="text-vyr-accent">{sachet.objetivo}.</strong>
                       </p>
                       <p className="text-sm text-vyr-gray-400 leading-relaxed mb-6">
                         {sachet.descricao}
@@ -255,7 +255,7 @@ export default function ComoFunciona() {
                         </h4>
                         {sachet.areas.map((area, i) => (
                           <div key={i} className="flex items-center gap-2 text-sm">
-                            <Brain className={`w-3.5 h-3.5 ${sachet.accentColor}`} />
+                            <Brain className="w-3.5 h-3.5 text-vyr-accent vyr-icon-glow" />
                             <span className="text-vyr-white font-medium">{area.name}</span>
                             <span className="text-vyr-gray-500">— {area.funcao}</span>
                           </div>
@@ -270,8 +270,8 @@ export default function ComoFunciona() {
                       </h4>
                       <div className="grid sm:grid-cols-2 gap-3">
                         {sachet.componentes.map((comp, i) => (
-                          <div key={i} className="flex items-start gap-2 p-3 rounded-sm bg-vyr-gray-800/50 border border-vyr-gray-700/50">
-                            <Check className={`w-4 h-4 ${sachet.accentColor} mt-0.5 flex-shrink-0`} />
+                          <div key={i} className="flex items-start gap-2 p-3 rounded-sm bg-vyr-graphite/30 border border-vyr-graphite/50">
+                            <Check className="w-4 h-4 text-vyr-accent vyr-icon-glow mt-0.5 flex-shrink-0" />
                             <div>
                               <div className="text-sm text-vyr-white font-medium">{comp.nome}</div>
                               <div className="text-xs text-vyr-gray-500">{comp.funcao}</div>
@@ -289,15 +289,15 @@ export default function ComoFunciona() {
       </section>
 
       {/* SEÇÃO 2: ENTRADA DE DADOS */}
-      <section id="dados" className="py-20 px-4 bg-gradient-to-b from-vyr-black to-vyr-gray-900">
+      <section id="dados" className="py-20 px-4 bg-vyr-graphite-dark/30">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-vyr-gray-800/50 border border-vyr-gray-700/50 text-vyr-gray-300 text-sm font-mono mb-6">
+            <span className="vyr-badge-accent mb-6">
               <Smartphone className="w-4 h-4" />
-              Sem VYR NODE
+              <span className="font-mono tracking-wider">SEM VYR NODE</span>
             </span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-vyr-white mb-4">
-              Entrada de Dados na Plataforma
+            <h2 className="text-3xl sm:text-4xl font-medium text-vyr-white mb-4">
+              Entrada de Dados na <span className="text-gradient-accent">Plataforma</span>
             </h2>
             <p className="text-vyr-gray-400 max-w-2xl mx-auto">
               Usuários sem VYR NODE alimentam a plataforma via <strong className="text-vyr-white">percepção consciente</strong>, 
@@ -307,24 +307,24 @@ export default function ComoFunciona() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
             {entradaDados.map((item, i) => (
-              <div key={i} className="p-5 rounded-sm bg-vyr-gray-800/50 border border-vyr-gray-700/50 hover:border-vyr-gray-500 transition-colors">
-                <div className="w-10 h-10 rounded-sm bg-vyr-gray-700/50 flex items-center justify-center mb-3">
-                  <item.icon className="w-5 h-5 text-vyr-gray-300" />
+              <div key={i} className="p-5 vyr-card-graphite">
+                <div className="w-10 h-10 rounded-sm bg-vyr-graphite flex items-center justify-center mb-3">
+                  <item.icon className="w-5 h-5 text-vyr-accent vyr-icon-glow" />
                 </div>
-                <h3 className="font-semibold text-vyr-white mb-1">{item.label}</h3>
+                <h3 className="font-medium text-vyr-white mb-1">{item.label}</h3>
                 <p className="text-sm text-vyr-gray-500">{item.desc}</p>
               </div>
             ))}
           </div>
 
-          <div className="bg-vyr-gray-800/50 rounded-sm p-8 border border-vyr-gray-700/50">
-            <h3 className="text-xl font-semibold text-vyr-white mb-6">
+          <div className="vyr-card-graphite p-8">
+            <h3 className="text-xl font-medium text-vyr-white mb-6">
               Por que a percepção é importante?
             </h3>
             <div className="grid sm:grid-cols-3 gap-6">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-sm bg-vyr-gray-700/50 flex items-center justify-center flex-shrink-0">
-                  <Check className="w-4 h-4 text-vyr-gray-300" />
+                <div className="w-8 h-8 rounded-sm bg-vyr-graphite flex items-center justify-center flex-shrink-0">
+                  <Check className="w-4 h-4 text-vyr-accent vyr-icon-glow" />
                 </div>
                 <div>
                   <span className="font-medium text-vyr-white block mb-1">Baseline subjetivo</span>
@@ -332,8 +332,8 @@ export default function ComoFunciona() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-sm bg-vyr-gray-700/50 flex items-center justify-center flex-shrink-0">
-                  <Check className="w-4 h-4 text-vyr-gray-300" />
+                <div className="w-8 h-8 rounded-sm bg-vyr-graphite flex items-center justify-center flex-shrink-0">
+                  <Check className="w-4 h-4 text-vyr-accent vyr-icon-glow" />
                 </div>
                 <div>
                   <span className="font-medium text-vyr-white block mb-1">Controle interno</span>
@@ -341,8 +341,8 @@ export default function ComoFunciona() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-sm bg-vyr-gray-700/50 flex items-center justify-center flex-shrink-0">
-                  <Check className="w-4 h-4 text-vyr-gray-300" />
+                <div className="w-8 h-8 rounded-sm bg-vyr-graphite flex items-center justify-center flex-shrink-0">
+                  <Check className="w-4 h-4 text-vyr-accent vyr-icon-glow" />
                 </div>
                 <div>
                   <span className="font-medium text-vyr-white block mb-1">Validação cruzada</span>
@@ -355,15 +355,15 @@ export default function ComoFunciona() {
       </section>
 
       {/* SEÇÃO 3: VYR NODE */}
-      <section id="ring" className="py-20 px-4 bg-vyr-gray-900">
+      <section id="ring" className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-vyr-gray-800/50 border border-vyr-gray-700/50 text-vyr-gray-300 text-sm font-mono mb-6">
+            <span className="vyr-badge-accent mb-6">
               <Watch className="w-4 h-4" />
-              Monitoramento Fisiológico
+              <span className="font-mono tracking-wider">MONITORAMENTO FISIOLÓGICO</span>
             </span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-vyr-white mb-4">
-              <span className="font-mono tracking-wider">VYR NODE</span>
+            <h2 className="text-3xl sm:text-4xl font-medium text-vyr-white mb-4">
+              <span className="font-mono tracking-wider text-gradient-accent">VYR NODE</span>
             </h2>
             <p className="text-vyr-gray-400 max-w-2xl mx-auto">
               O VYR NODE é um instrumento técnico de coleta contínua, não um acessório. 
@@ -379,11 +379,11 @@ export default function ComoFunciona() {
             <div className="order-1 md:order-2">
               <div className="grid sm:grid-cols-2 gap-4">
                 {ringMetrics.map((metric, i) => (
-                  <div key={i} className="p-4 rounded-sm bg-vyr-gray-800/50 border border-vyr-gray-700/50 hover:border-vyr-gray-500 transition-colors">
-                    <div className="w-10 h-10 rounded-sm bg-vyr-gray-700/50 flex items-center justify-center mb-3">
-                      <metric.icon className="w-5 h-5 text-vyr-gray-300" />
+                  <div key={i} className="p-4 vyr-card-graphite">
+                    <div className="w-10 h-10 rounded-sm bg-vyr-graphite flex items-center justify-center mb-3">
+                      <metric.icon className="w-5 h-5 text-vyr-accent vyr-icon-glow" />
                     </div>
-                    <h3 className="font-semibold text-vyr-white text-sm mb-1">{metric.label}</h3>
+                    <h3 className="font-medium text-vyr-white text-sm mb-1">{metric.label}</h3>
                     <p className="text-xs text-vyr-gray-500">{metric.desc}</p>
                   </div>
                 ))}
@@ -394,15 +394,15 @@ export default function ComoFunciona() {
       </section>
 
       {/* SEÇÃO 4: INTEGRAÇÃO */}
-      <section id="integracao" className="py-20 px-4 bg-vyr-black">
+      <section id="integracao" className="py-20 px-4 bg-vyr-graphite-dark/30">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-vyr-gray-800/50 border border-vyr-gray-700/50 text-vyr-gray-300 text-sm font-mono mb-6">
+            <span className="vyr-badge-accent mb-6">
               <Database className="w-4 h-4" />
-              Correlações Inteligentes
+              <span className="font-mono tracking-wider">CORRELAÇÕES INTELIGENTES</span>
             </span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-vyr-white mb-4">
-              Integração Sachê + VYR NODE
+            <h2 className="text-3xl sm:text-4xl font-medium text-vyr-white mb-4">
+              Integração Sachê + <span className="text-gradient-accent">VYR NODE</span>
             </h2>
             <p className="text-vyr-gray-400 max-w-2xl mx-auto">
               Quando o VYR NODE está ativo, cada sachet gera sinais fisiológicos rastreáveis. 
@@ -414,14 +414,14 @@ export default function ComoFunciona() {
           <div className="mb-12">
             <div className="flex items-center gap-3 mb-6">
               <Sun className="w-6 h-6 text-vyr-gray-100" />
-              <h3 className="text-xl font-mono font-bold text-vyr-white tracking-wide">VYR BOOT + VYR NODE</h3>
+              <h3 className="text-xl font-mono font-medium text-vyr-white tracking-wide">VYR BOOT + VYR NODE</h3>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {integracaoDia.map((item, i) => (
-                <div key={i} className="p-4 rounded-sm bg-vyr-gray-800/30 border border-vyr-gray-700/50">
+                <div key={i} className="p-4 vyr-card-graphite">
                   <div className="text-sm font-medium text-vyr-white mb-2">{item.acao}</div>
                   <div className="text-xs text-vyr-gray-500 mb-2">{item.impacto}</div>
-                  <div className="text-xs text-vyr-gray-400 font-mono">{item.metrica}</div>
+                  <div className="text-xs text-vyr-accent font-mono">{item.metrica}</div>
                 </div>
               ))}
             </div>
@@ -430,15 +430,15 @@ export default function ComoFunciona() {
           {/* VYR HOLD Integration */}
           <div className="mb-12">
             <div className="flex items-center gap-3 mb-6">
-              <Sunset className="w-6 h-6 text-vyr-gray-400" />
-              <h3 className="text-xl font-mono font-bold text-vyr-white tracking-wide">VYR HOLD + VYR NODE</h3>
+              <Sunset className="w-6 h-6 text-vyr-graphite-light" />
+              <h3 className="text-xl font-mono font-medium text-vyr-white tracking-wide">VYR HOLD + VYR NODE</h3>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {integracaoTarde.map((item, i) => (
-                <div key={i} className="p-4 rounded-sm bg-vyr-gray-800/30 border border-vyr-gray-700/50">
+                <div key={i} className="p-4 vyr-card-graphite">
                   <div className="text-sm font-medium text-vyr-white mb-2">{item.acao}</div>
                   <div className="text-xs text-vyr-gray-500 mb-2">{item.impacto}</div>
-                  <div className="text-xs text-vyr-gray-400 font-mono">{item.metrica}</div>
+                  <div className="text-xs text-vyr-accent font-mono">{item.metrica}</div>
                 </div>
               ))}
             </div>
@@ -447,15 +447,15 @@ export default function ComoFunciona() {
           {/* VYR CLEAR Integration */}
           <div className="mb-12">
             <div className="flex items-center gap-3 mb-6">
-              <Moon className="w-6 h-6 text-vyr-cold-blue" />
-              <h3 className="text-xl font-mono font-bold text-vyr-white tracking-wide">VYR CLEAR + VYR NODE</h3>
+              <Moon className="w-6 h-6 text-vyr-accent vyr-icon-glow" />
+              <h3 className="text-xl font-mono font-medium text-vyr-white tracking-wide">VYR CLEAR + VYR NODE</h3>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
               {integracaoNoite.map((item, i) => (
-                <div key={i} className="p-4 rounded-sm bg-vyr-cold-blue/10 border border-vyr-cold-blue/30">
+                <div key={i} className="p-4 rounded-sm backdrop-blur-sm border transition-all duration-300" style={{ background: 'linear-gradient(145deg, hsl(var(--vyr-accent) / 0.15) 0%, hsl(var(--vyr-graphite-dark) / 0.6) 100%)', borderColor: 'hsl(var(--vyr-accent) / 0.3)' }}>
                   <div className="text-sm font-medium text-vyr-white mb-2">{item.acao}</div>
                   <div className="text-xs text-vyr-gray-500 mb-2">{item.impacto}</div>
-                  <div className="text-xs text-vyr-cold-blue font-mono">{item.metrica}</div>
+                  <div className="text-xs text-vyr-accent font-mono">{item.metrica}</div>
                 </div>
               ))}
             </div>
@@ -464,23 +464,23 @@ export default function ComoFunciona() {
       </section>
 
       {/* CTA Final */}
-      <section className="py-20 px-4 bg-gradient-to-b from-vyr-gray-900 to-vyr-black border-t border-vyr-gray-800">
+      <section className="py-20 px-4 border-t border-vyr-graphite/50">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-vyr-white mb-6">
-            Pronto para Otimizar sua Performance?
+          <h2 className="text-3xl sm:text-4xl font-medium text-vyr-white mb-6">
+            Pronto para Otimizar sua <span className="text-gradient-accent">Performance</span>?
           </h2>
           <p className="text-vyr-gray-400 mb-8 max-w-xl mx-auto">
             Escolha o plano que melhor se adapta às suas necessidades e comece sua jornada de otimização cognitiva.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/rotina-completa">
-              <Button className="w-full sm:w-auto px-8 py-6 text-base font-mono bg-vyr-gray-800 hover:bg-vyr-gray-700 text-vyr-white border border-vyr-gray-600 rounded-sm transition-all">
+              <Button className="w-full sm:w-auto px-8 py-6 text-base font-mono vyr-card-graphite hover:border-vyr-accent/50 text-vyr-white rounded-sm transition-all">
                 Rotina Completa
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
             <Link to="/sistema-completo">
-              <Button className="w-full sm:w-auto px-8 py-6 text-base font-mono bg-vyr-white hover:bg-vyr-gray-100 text-vyr-black rounded-sm transition-all">
+              <Button className="w-full sm:w-auto px-8 py-6 text-base font-mono vyr-btn-accent rounded-sm transition-all">
                 VYR SYSTEM
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
