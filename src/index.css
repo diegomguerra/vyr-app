@@ -27,7 +27,7 @@
     --muted: 0 0% 90%;
     --muted-foreground: 0 0% 45%;
 
-    --accent: 210 100% 50%;
+    --accent: 215 35% 35%;
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84% 60%;
@@ -41,7 +41,7 @@
 
     --border: 0 0% 88%;
     --input: 0 0% 90%;
-    --ring: 210 100% 50%;
+    --ring: 215 35% 40%;
 
     --radius: 0.5rem;
 
@@ -59,11 +59,11 @@
     --vyr-gray-900: 0 0% 9%;
     --vyr-cold-blue: 215 25% 17%;
 
-    /* Accent colors - vibrant but technical */
-    --vyr-accent: 210 100% 50%;
-    --vyr-accent-glow: 210 100% 60%;
-    --vyr-cyan: 185 100% 50%;
-    --vyr-cyan-glow: 185 100% 60%;
+    /* Accent colors - cold blue, solid, technical */
+    --vyr-accent: 215 40% 40%;
+    --vyr-accent-glow: 215 45% 50%;
+    --vyr-cyan: 200 35% 45%;
+    --vyr-cyan-glow: 200 40% 55%;
 
     /* Product tokens */
     --vyr-boot: 0 0% 90%;
@@ -99,7 +99,7 @@
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 64%;
 
-    --accent: 210 100% 50%;
+    --accent: 215 35% 35%;
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84% 60%;
@@ -107,7 +107,7 @@
 
     --border: 0 0% 15%;
     --input: 0 0% 10%;
-    --ring: 210 100% 50%;
+    --ring: 215 35% 40%;
 
     --sidebar-background: 0 0% 5%;
     --sidebar-foreground: 0 0% 98%;

@@ -19,11 +19,11 @@ export function NodeVisual({ size = "md", showLabel = true, className = "" }: No
     <div className={`flex flex-col items-center ${className}`}>
       {/* Ring representation - technical, minimal with accent glow */}
       <div className="relative">
-        {/* Accent glow behind the ring */}
+        {/* Accent glow behind the ring - cold blue */}
         <div 
-          className="absolute inset-0 rounded-full blur-xl opacity-30"
+          className="absolute inset-0 rounded-full blur-xl opacity-40"
           style={{
-            background: `radial-gradient(circle, hsl(210 100% 50% / 0.4) 0%, hsl(185 100% 50% / 0.2) 50%, transparent 70%)`,
+            background: `radial-gradient(circle, hsl(215 40% 40% / 0.5) 0%, hsl(215 25% 17% / 0.3) 50%, transparent 70%)`,
             transform: 'scale(1.3)'
           }}
         />
@@ -39,7 +39,7 @@ export function NodeVisual({ size = "md", showLabel = true, className = "" }: No
               inset 0 2px 4px rgba(255,255,255,0.05),
               inset 0 -2px 4px rgba(0,0,0,0.3),
               0 10px 30px -10px ${VYR_COLORS.black},
-              0 0 30px hsl(210 100% 50% / 0.15)
+              0 0 30px hsl(215 40% 40% / 0.2)
             `
           }}
         >
@@ -57,6 +57,7 @@ export function NodeVisual({ size = "md", showLabel = true, className = "" }: No
           />
           
           {/* Sensor indicator with glow */}
+          {/* Sensor indicator with cold blue glow */}
           <div 
             className="absolute rounded-full animate-pulse"
             style={{
@@ -65,8 +66,8 @@ export function NodeVisual({ size = "md", showLabel = true, className = "" }: No
               bottom: dim.thickness + 4,
               left: "50%",
               transform: "translateX(-50%)",
-              backgroundColor: 'hsl(210 100% 50%)',
-              boxShadow: '0 0 8px hsl(210 100% 60% / 0.8)'
+              backgroundColor: 'hsl(215 45% 50%)',
+              boxShadow: '0 0 8px hsl(215 40% 45% / 0.8)'
             }}
           />
         </div>
