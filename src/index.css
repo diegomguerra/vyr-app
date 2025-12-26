@@ -59,16 +59,21 @@
     --vyr-gray-900: 0 0% 9%;
     --vyr-cold-blue: 215 25% 17%;
 
-    /* Accent colors - cold blue, muted, matte */
-    --vyr-accent: 215 18% 32%;
-    --vyr-accent-glow: 215 22% 38%;
-    --vyr-cyan: 200 15% 35%;
-    --vyr-cyan-glow: 200 18% 42%;
+    /* Accent colors - cold blue + graphite mix, muted, matte */
+    --vyr-accent: 210 12% 28%;
+    --vyr-accent-glow: 210 15% 35%;
+    --vyr-cyan: 200 10% 32%;
+    --vyr-cyan-glow: 200 12% 38%;
+    
+    /* VYR HOLD graphite tones */
+    --vyr-graphite: 0 0% 25%;
+    --vyr-graphite-light: 0 0% 30%;
+    --vyr-graphite-dark: 0 0% 18%;
 
     /* Product tokens */
     --vyr-boot: 0 0% 90%;
     --vyr-hold: 0 0% 25%;
-    --vyr-clear: 215 25% 17%;
+    --vyr-clear: 215 20% 15%;
 
     --sidebar-background: 0 0% 96%;
     --sidebar-foreground: 0 0% 4%;
@@ -227,45 +232,61 @@
     @apply text-rose-500;
   }
 
-  /* Glow effects */
+  /* Glow effects - muted graphite + cold blue */
   .vyr-glow {
-    box-shadow: 0 0 40px hsl(var(--vyr-accent) / 0.15),
-                0 0 80px hsl(var(--vyr-cyan) / 0.1);
+    box-shadow: 0 0 40px hsl(var(--vyr-graphite) / 0.3),
+                0 0 80px hsl(var(--vyr-accent) / 0.1);
   }
 
   .vyr-glow-intense {
-    box-shadow: 0 0 30px hsl(var(--vyr-accent) / 0.3),
-                0 0 60px hsl(var(--vyr-cyan) / 0.2),
-                0 0 100px hsl(var(--vyr-accent) / 0.1);
+    box-shadow: 0 0 30px hsl(var(--vyr-graphite) / 0.4),
+                0 0 60px hsl(var(--vyr-accent) / 0.15),
+                0 0 100px hsl(var(--vyr-graphite) / 0.2);
   }
 
   .vyr-icon-glow {
-    filter: drop-shadow(0 0 8px hsl(var(--vyr-accent) / 0.5));
+    filter: drop-shadow(0 0 6px hsl(var(--vyr-accent) / 0.4));
   }
 
   .vyr-text-glow {
-    text-shadow: 0 0 20px hsl(var(--vyr-accent) / 0.5),
-                 0 0 40px hsl(var(--vyr-cyan) / 0.3);
+    text-shadow: 0 0 20px hsl(var(--vyr-graphite) / 0.6),
+                 0 0 40px hsl(var(--vyr-accent) / 0.2);
   }
 
-  /* Gradient backgrounds */
+  /* Gradient backgrounds - graphite + cold blue */
   .vyr-gradient-bg {
     background: linear-gradient(180deg, 
       hsl(var(--vyr-gray-900)) 0%, 
-      hsl(215 30% 8%) 50%,
+      hsl(var(--vyr-graphite-dark)) 35%,
+      hsl(210 15% 10%) 65%,
       hsl(var(--vyr-gray-900)) 100%);
   }
 
   .vyr-gradient-radial {
     background: radial-gradient(ellipse at 50% 0%, 
-      hsl(var(--vyr-accent) / 0.08) 0%, 
-      transparent 50%);
+      hsl(var(--vyr-graphite) / 0.15) 0%, 
+      hsl(var(--vyr-accent) / 0.05) 30%,
+      transparent 60%);
   }
 
   .vyr-gradient-accent {
     background: linear-gradient(135deg, 
-      hsl(var(--vyr-accent)) 0%, 
-      hsl(var(--vyr-cyan)) 100%);
+      hsl(var(--vyr-graphite)) 0%, 
+      hsl(var(--vyr-accent)) 100%);
+  }
+  
+  /* New graphite card style */
+  .vyr-card-graphite {
+    @apply backdrop-blur-xl border rounded-lg transition-all duration-300;
+    background: linear-gradient(145deg, 
+      hsl(var(--vyr-graphite-dark) / 0.8) 0%, 
+      hsl(var(--vyr-gray-800) / 0.6) 100%);
+    border-color: hsl(var(--vyr-graphite) / 0.4);
+  }
+
+  .vyr-card-graphite:hover {
+    border-color: hsl(var(--vyr-accent) / 0.3);
+    box-shadow: 0 0 25px hsl(var(--vyr-graphite) / 0.2);
   }
 
   /* Card with subtle glow */

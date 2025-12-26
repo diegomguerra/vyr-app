@@ -11,7 +11,7 @@ export function NavSidebar() {
   const location = useLocation();
 
   return (
-    <nav className="bg-slate-900/60 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-3 flex flex-col gap-1.5 h-fit">
+    <nav className="vyr-card-graphite p-3 flex flex-col gap-1.5 h-fit">
       {NAV_ITEMS.map((item) => {
         const isActive = location.pathname === item.to;
         const Icon = item.icon;
@@ -20,13 +20,13 @@ export function NavSidebar() {
             key={item.to}
             to={item.to}
             className={`
-              flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all
+              flex items-center gap-3 px-4 py-3 rounded-sm text-sm font-medium font-mono transition-all
               ${isActive 
-                ? 'bg-violet-500/20 text-white border border-violet-500/30' 
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/50 border border-transparent'}
+                ? 'bg-vyr-accent/15 text-vyr-white border border-vyr-accent/30' 
+                : 'text-vyr-gray-400 hover:text-vyr-white hover:bg-vyr-graphite/50 border border-transparent'}
             `}
           >
-            <Icon className="w-4 h-4" />
+            <Icon className={`w-4 h-4 ${isActive ? 'vyr-icon-glow' : ''}`} />
             {item.label}
           </Link>
         );

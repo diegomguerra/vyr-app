@@ -48,15 +48,15 @@ function Header({ codigo }: { codigo?: string }) {
   };
 
   return (
-    <header className="sticky top-0 z-10 bg-gradient-to-r from-slate-900 via-slate-900/95 to-indigo-950/90 backdrop-blur-xl border-b border-slate-700/50">
+    <header className="sticky top-0 z-10 bg-gradient-to-r from-vyr-gray-900 via-vyr-graphite-dark/95 to-vyr-gray-900/90 backdrop-blur-xl border-b border-vyr-graphite/50">
       <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center justify-between">
         <div className="min-w-0 flex-1 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center shadow-lg shadow-violet-500/20">
-            <Brain className="w-4 h-4 text-white" />
+          <div className="w-8 h-8 rounded-sm bg-gradient-to-br from-vyr-graphite to-vyr-accent flex items-center justify-center shadow-lg shadow-vyr-accent/10">
+            <Brain className="w-4 h-4 text-vyr-white" />
           </div>
           <div>
-            <h1 className="font-bold text-white text-sm sm:text-base">NZT Platform</h1>
-            <p className="text-[10px] sm:text-xs text-slate-400">
+            <h1 className="font-bold text-vyr-white text-sm sm:text-base font-mono tracking-wide">VYR</h1>
+            <p className="text-[10px] sm:text-xs text-vyr-gray-400">
               {codigo ? `ID: ${codigo}` : "Carregando..."}
             </p>
           </div>
@@ -64,7 +64,7 @@ function Header({ codigo }: { codigo?: string }) {
         <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
           <ThemeToggle />
           <button 
-            className="px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/50 border border-slate-700/50 transition-all" 
+            className="px-3 py-2 sm:px-4 sm:py-2.5 rounded-sm text-xs sm:text-sm font-medium text-vyr-gray-300 hover:text-vyr-white hover:bg-vyr-graphite/50 border border-vyr-graphite/50 transition-all" 
             onClick={handleLogout}
           >
             Sair
@@ -83,13 +83,13 @@ const NAV_ITEMS = [
 
 function MobileNav() {
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-xl border-t border-slate-700/50">
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-vyr-graphite-dark/95 backdrop-blur-xl border-t border-vyr-graphite/50">
       <div className="flex items-center justify-around py-2 px-1 safe-area-inset-bottom">
         {NAV_ITEMS.map((item) => (
           <a
             key={item.to}
             href={item.to}
-            className="flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all min-w-0"
+            className="flex flex-col items-center gap-0.5 px-4 py-2 rounded-sm text-vyr-gray-400 hover:text-vyr-white hover:bg-vyr-graphite/50 transition-all min-w-0"
           >
             <span className="text-lg">{item.icon}</span>
             <span className="text-[10px] font-medium">{item.label}</span>
@@ -146,7 +146,7 @@ function AuthenticatedApp() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950">
+    <div className="min-h-screen vyr-gradient-bg">
       <Header codigo={participante?.codigo} />
       <div className="max-w-7xl mx-auto flex flex-col lg:grid lg:grid-cols-[220px_1fr] gap-4 p-3 sm:p-4 pb-24 lg:pb-4">
         {/* Sidebar - hidden on mobile, shown on desktop */}
