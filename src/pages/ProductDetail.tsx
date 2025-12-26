@@ -2,30 +2,19 @@ import { Link, useParams, Navigate } from "react-router-dom";
 import { ArrowLeft, Check, X, ShoppingCart, Sun, Zap, Moon, Clock, Shield, Sparkles, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LandingNav } from "@/components/landing";
-
-// Import sachet images
-import sachetDiaVertical from "@/assets/sachet-dia-vertical.png";
-import sachetTardeVertical from "@/assets/sachet-tarde-vertical.png";
-import sachetNoiteVertical from "@/assets/sachet-noite-vertical.png";
-import sachetPouringWater from "@/assets/sachet-pouring-water.png";
-import lifestyleProfessional from "@/assets/lifestyle-professional.png";
+import { SachetMockup } from "@/brand/ProductMockups";
 
 const products = {
   dia: {
     id: "dia",
-    name: "NZT Dia",
+    name: "VYR BOOT",
     tagline: "Ativação Matinal",
     period: "6h às 12h",
     heroDescription: "Fórmula desenvolvida para máxima ativação cognitiva nas primeiras horas do dia.",
-    fullDescription: "Desenvolvemos o NZT Dia pensando em quem precisa de foco e clareza mental logo pela manhã. Nossa fórmula combina nootrópicos de última geração para potencializar sua produtividade, sem os picos de ansiedade comuns em estimulantes tradicionais.",
-    detailText: "Apresentamos a você o NZT Dia, o suplemento que visa performance cognitiva e energia sustentável. Afinal, performance não é sinônimo de ansiedade e fadiga. Para nós da NZT, produtividade é sinônimo de equilíbrio e clareza.",
-    image: sachetDiaVertical,
+    fullDescription: "Desenvolvemos o VYR BOOT pensando em quem precisa de foco e clareza mental logo pela manhã. Nossa fórmula combina nootrópicos de última geração para potencializar sua produtividade, sem os picos de ansiedade comuns em estimulantes tradicionais.",
+    detailText: "Apresentamos a você o VYR BOOT, o suplemento que visa performance cognitiva e energia sustentável. Afinal, performance não é sinônimo de ansiedade e fadiga. Para nós da VYR, produtividade é sinônimo de equilíbrio e clareza.",
+    variant: "BOOT" as const,
     icon: Sun,
-    color: "from-amber-400 to-orange-500",
-    bgGlow: "bg-amber-500/20",
-    borderColor: "border-amber-500/30",
-    textColor: "text-amber-400",
-    bgColor: "bg-amber-500",
     benefits: [
       { icon: Brain, title: "Foco Intenso", description: "Clareza mental e concentração" },
       { icon: Zap, title: "Energia Sustentável", description: "Sem crash ou picos de ansiedade" },
@@ -58,19 +47,14 @@ const products = {
   },
   tarde: {
     id: "tarde",
-    name: "NZT Tarde",
+    name: "VYR HOLD",
     tagline: "Performance Sustentada",
     period: "12h às 18h",
     heroDescription: "Fórmula para manter a produtividade no período mais desafiador do dia.",
-    fullDescription: "Desenvolvemos o NZT Tarde para combater a fadiga pós-almoço e manter seu desempenho cognitivo estável. Nossa fórmula adaptogênica ajuda a resistir ao estresse e manter a clareza mental até o fim do expediente.",
-    detailText: "Apresentamos a você o NZT Tarde, o suplemento que visa performance sustentada ao longo do dia. Afinal, queda de energia não precisa fazer parte da sua rotina. Para nós da NZT, tarde é sinônimo de produtividade e resiliência.",
-    image: sachetTardeVertical,
+    fullDescription: "Desenvolvemos o VYR HOLD para combater a fadiga pós-almoço e manter seu desempenho cognitivo estável. Nossa fórmula adaptogênica ajuda a resistir ao estresse e manter a clareza mental até o fim do expediente.",
+    detailText: "Apresentamos a você o VYR HOLD, o suplemento que visa performance sustentada ao longo do dia. Afinal, queda de energia não precisa fazer parte da sua rotina. Para nós da VYR, tarde é sinônimo de produtividade e resiliência.",
+    variant: "HOLD" as const,
     icon: Zap,
-    color: "from-emerald-400 to-teal-500",
-    bgGlow: "bg-emerald-500/20",
-    borderColor: "border-emerald-500/30",
-    textColor: "text-emerald-400",
-    bgColor: "bg-emerald-500",
     benefits: [
       { icon: Zap, title: "Anti-Fadiga", description: "Combate à queda pós-almoço" },
       { icon: Brain, title: "Clareza Mental", description: "Produtividade sustentada" },
@@ -98,19 +82,14 @@ const products = {
   },
   noite: {
     id: "noite",
-    name: "NZT Noite",
+    name: "VYR CLEAR",
     tagline: "Recuperação Profunda",
     period: "20h às 6h",
     heroDescription: "Fórmula para otimizar a recuperação cognitiva durante o sono.",
-    fullDescription: "Desenvolvemos o NZT Noite pensando na recuperação cerebral noturna. Nossa fórmula promove sono reparador e consolidação de memórias, preparando seu cérebro para o próximo dia de alta performance.",
-    detailText: "Apresentamos a você o NZT Noite, o suplemento que visa recuperação cognitiva e sono de qualidade. Afinal, descanso não é sinônimo de perda de tempo. Para nós da NZT, noite é sinônimo de regeneração e preparo.",
-    image: sachetNoiteVertical,
+    fullDescription: "Desenvolvemos o VYR CLEAR pensando na recuperação cerebral noturna. Nossa fórmula promove sono reparador e consolidação de memórias, preparando seu cérebro para o próximo dia de alta performance.",
+    detailText: "Apresentamos a você o VYR CLEAR, o suplemento que visa recuperação cognitiva e sono de qualidade. Afinal, descanso não é sinônimo de perda de tempo. Para nós da VYR, noite é sinônimo de regeneração e preparo.",
+    variant: "CLEAR" as const,
     icon: Moon,
-    color: "from-violet-400 to-indigo-500",
-    bgGlow: "bg-violet-500/20",
-    borderColor: "border-violet-500/30",
-    textColor: "text-violet-400",
-    bgColor: "bg-violet-500",
     benefits: [
       { icon: Moon, title: "Sono Profundo", description: "Sono mais reparador" },
       { icon: Brain, title: "Consolidação", description: "Consolidação de memórias" },
@@ -147,57 +126,55 @@ export default function ProductDetail() {
   const IconComponent = product.icon;
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen vyr-gradient-bg">
       <LandingNav />
       
       {/* Hero Section */}
       <section className="pt-32 pb-16 px-4 relative overflow-hidden">
         {/* Background effects */}
-        <div className="absolute inset-0 bg-gradient-to-b from-violet-950/50 via-slate-950 to-slate-950" />
-        <div className={`absolute top-20 left-1/4 w-96 h-96 ${product.bgGlow} rounded-full blur-3xl`} />
-        <div className={`absolute top-40 right-1/4 w-80 h-80 ${product.bgGlow} rounded-full blur-3xl opacity-50`} />
+        <div className="absolute inset-0 vyr-gradient-radial opacity-60" />
+        <div className="absolute top-20 left-1/4 w-96 h-96 bg-vyr-accent/8 rounded-full blur-3xl" />
+        <div className="absolute top-40 right-1/4 w-80 h-80 bg-vyr-cyan/5 rounded-full blur-3xl" />
         
         <div className="relative z-10 max-w-7xl mx-auto">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm mb-8">
-            <Link to="/" className="text-slate-400 hover:text-white transition-colors">Início</Link>
-            <span className="text-slate-600">/</span>
-            <Link to="/produtos" className="text-slate-400 hover:text-white transition-colors">Produtos</Link>
-            <span className="text-slate-600">/</span>
-            <span className={product.textColor}>{product.name}</span>
+            <Link to="/" className="text-vyr-gray-400 hover:text-vyr-white transition-colors">Início</Link>
+            <span className="text-vyr-gray-600">/</span>
+            <Link to="/produtos" className="text-vyr-gray-400 hover:text-vyr-white transition-colors">Produtos</Link>
+            <span className="text-vyr-gray-600">/</span>
+            <span className="text-vyr-accent">{product.name}</span>
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Image */}
-            <div className="relative flex items-center justify-center">
-              <div className={`absolute inset-0 ${product.bgGlow} blur-3xl opacity-50`} />
-              <img 
-                src={product.image} 
-                alt={product.name}
-                className="relative z-10 max-h-[500px] w-auto object-contain drop-shadow-2xl"
-              />
+            {/* Sachet Mockup */}
+            <div className="relative flex items-center justify-center py-8">
+              <div className="absolute inset-0 bg-vyr-accent/5 blur-3xl opacity-50" />
+              <div className="relative z-10 transform scale-150 sm:scale-175">
+                <SachetMockup variant={product.variant} />
+              </div>
             </div>
             
             {/* Info */}
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">{product.name}</h1>
+              <h1 className="text-4xl md:text-5xl font-bold text-vyr-white mb-2 font-mono tracking-tight">{product.name}</h1>
               <div className="flex items-center gap-3 mb-6">
-                <span className={`px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r ${product.color} text-white`}>
+                <span className="px-3 py-1 rounded-full text-sm font-semibold bg-vyr-graphite border border-vyr-gray-600/50 text-vyr-gray-300">
                   {product.period}
                 </span>
-                <span className={`${product.textColor} font-medium`}>{product.tagline}</span>
+                <span className="text-vyr-accent font-medium">{product.tagline}</span>
               </div>
               
-              <p className="text-lg text-slate-300 mb-8">{product.heroDescription}</p>
+              <p className="text-lg text-vyr-gray-300 mb-8">{product.heroDescription}</p>
               
               {/* Price */}
               <div className="flex items-center gap-4 mb-6">
                 <div>
-                  <span className="text-sm text-slate-500 line-through block">{product.priceOld}</span>
-                  <span className="text-3xl font-bold text-white">{product.price}</span>
-                  <span className="text-slate-400 ml-2">/mês</span>
+                  <span className="text-sm text-vyr-gray-500 line-through block">{product.priceOld}</span>
+                  <span className="text-3xl font-bold text-vyr-white">{product.price}</span>
+                  <span className="text-vyr-gray-400 ml-2">/mês</span>
                 </div>
-                <span className="px-3 py-1 rounded-md bg-emerald-500/10 text-emerald-400 text-sm font-semibold">
+                <span className="px-3 py-1 rounded-md bg-vyr-accent/10 text-vyr-accent text-sm font-semibold">
                   -25% OFF
                 </span>
               </div>
@@ -206,7 +183,7 @@ export default function ProductDetail() {
               <div className="flex gap-4">
                 <Link to="/login?signup=true" className="flex-1">
                   <Button 
-                    className={`w-full py-6 text-base font-semibold rounded-xl bg-gradient-to-r ${product.color} hover:opacity-90 text-white shadow-lg transition-all duration-300`}
+                    className="w-full py-6 text-base font-semibold rounded-xl vyr-btn-accent shadow-lg shadow-vyr-accent/20 transition-all duration-300"
                   >
                     <ShoppingCart className="w-5 h-5 mr-2" />
                     Adicionar ao Carrinho
@@ -219,22 +196,22 @@ export default function ProductDetail() {
       </section>
       
       {/* Benefits Section */}
-      <section className="py-16 px-4 border-t border-slate-800">
+      <section className="py-16 px-4 border-t border-vyr-gray-800/50">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-center text-sm font-semibold text-slate-500 uppercase tracking-wider mb-8">
+          <h2 className="text-center text-sm font-semibold text-vyr-gray-500 uppercase tracking-wider mb-8">
             Benefícios do Produto
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {product.benefits.map((benefit, index) => (
               <div 
                 key={index}
-                className={`p-6 rounded-2xl border ${product.borderColor} bg-slate-900/50 backdrop-blur-sm`}
+                className="p-6 rounded-2xl vyr-card-graphite"
               >
-                <div className={`w-12 h-12 rounded-xl ${product.bgGlow} flex items-center justify-center mb-4`}>
-                  <benefit.icon className={`w-6 h-6 ${product.textColor}`} />
+                <div className="w-12 h-12 rounded-xl bg-vyr-accent/10 border border-vyr-accent/20 flex items-center justify-center mb-4">
+                  <benefit.icon className="w-6 h-6 text-vyr-accent vyr-icon-glow" />
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-1">{benefit.title}</h3>
-                <p className="text-sm text-slate-400">{benefit.description}</p>
+                <h3 className="text-lg font-semibold text-vyr-white mb-1">{benefit.title}</h3>
+                <p className="text-sm text-vyr-gray-400">{benefit.description}</p>
               </div>
             ))}
           </div>
@@ -246,25 +223,27 @@ export default function ProductDetail() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <p className="text-slate-400 leading-relaxed mb-8">
+              <p className="text-vyr-gray-400 leading-relaxed mb-8">
                 {product.fullDescription}
               </p>
-              <img 
-                src={lifestyleProfessional} 
-                alt="Lifestyle profissional"
-                className="rounded-2xl shadow-2xl"
-              />
+              <div className="vyr-card-graphite p-6 rounded-2xl">
+                <h4 className="text-vyr-accent font-semibold mb-3">Sistema VYR</h4>
+                <p className="text-vyr-gray-400 text-sm">
+                  Cada suplemento VYR foi projetado para trabalhar em sinergia com os demais, 
+                  criando um ciclo cognitivo completo de 24 horas.
+                </p>
+              </div>
             </div>
             <div className="space-y-8">
-              <img 
-                src={product.image} 
-                alt={product.name}
-                className="max-h-64 w-auto object-contain mx-auto drop-shadow-xl"
-              />
-              <p className={`text-slate-300 leading-relaxed`}>
+              <div className="flex justify-center">
+                <div className="transform scale-125">
+                  <SachetMockup variant={product.variant} />
+                </div>
+              </div>
+              <p className="text-vyr-gray-300 leading-relaxed text-center">
                 {product.detailText.split(product.name).map((part, i, arr) => (
                   i < arr.length - 1 ? (
-                    <span key={i}>{part}<span className={product.textColor}>{product.name}</span></span>
+                    <span key={i}>{part}<span className="text-vyr-accent font-semibold">{product.name}</span></span>
                   ) : part
                 ))}
               </p>
@@ -274,39 +253,37 @@ export default function ProductDetail() {
       </section>
       
       {/* Contains / Does Not Contain Section */}
-      <section className="py-16 px-4 border-t border-slate-800">
+      <section className="py-16 px-4 border-t border-vyr-gray-800/50">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
             {/* Contains */}
-            <div>
-              <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-6">Possui</h3>
+            <div className="vyr-card-graphite p-6 rounded-2xl">
+              <h3 className="text-sm font-semibold text-vyr-gray-500 uppercase tracking-wider mb-6">Possui</h3>
               <div className="space-y-3">
                 {product.contains.map((item, index) => (
                   <div key={index} className="flex items-center gap-3">
-                    <Check className={`w-5 h-5 ${product.textColor}`} />
-                    <span className={product.textColor}>{item}</span>
+                    <Check className="w-5 h-5 text-vyr-accent" />
+                    <span className="text-vyr-accent">{item}</span>
                   </div>
                 ))}
               </div>
             </div>
             
             {/* Image */}
-            <div className="flex justify-center">
-              <img 
-                src={product.image} 
-                alt={product.name}
-                className="max-h-48 w-auto object-contain drop-shadow-xl"
-              />
+            <div className="flex justify-center py-8">
+              <div className="transform scale-110">
+                <SachetMockup variant={product.variant} />
+              </div>
             </div>
             
             {/* Does Not Contain */}
-            <div className="text-right">
-              <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-6">Não Possui</h3>
+            <div className="vyr-card-graphite p-6 rounded-2xl text-right">
+              <h3 className="text-sm font-semibold text-vyr-gray-500 uppercase tracking-wider mb-6">Não Possui</h3>
               <div className="space-y-3">
                 {product.doesNotContain.map((item, index) => (
                   <div key={index} className="flex items-center justify-end gap-3">
-                    <span className="text-slate-400">{item}</span>
-                    <X className="w-5 h-5 text-red-400" />
+                    <span className="text-vyr-gray-400">{item}</span>
+                    <X className="w-5 h-5 text-red-400/70" />
                   </div>
                 ))}
               </div>
@@ -319,68 +296,75 @@ export default function ProductDetail() {
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-white mb-6">Como Usar</h2>
-              <p className={`${product.textColor} font-medium mb-4`}>{product.usage.instruction}</p>
-              <p className="text-slate-400 mb-6">{product.usage.recommendation}</p>
-              <p className="text-xs text-slate-500 leading-relaxed uppercase mb-6">
+            <div className="vyr-card-graphite p-8 rounded-2xl">
+              <h2 className="text-3xl font-bold text-vyr-white mb-6">Como Usar</h2>
+              <p className="text-vyr-accent font-medium mb-4">{product.usage.instruction}</p>
+              <p className="text-vyr-gray-400 mb-6">{product.usage.recommendation}</p>
+              <p className="text-xs text-vyr-gray-500 leading-relaxed uppercase mb-6">
                 {product.usage.warning}
               </p>
-              <div>
-                <h4 className="text-sm font-semibold text-slate-400 mb-2">Modo de conservação:</h4>
-                <p className="text-sm text-slate-500">{product.usage.storage}</p>
+              <div className="border-t border-vyr-gray-700/50 pt-4">
+                <h4 className="text-sm font-semibold text-vyr-gray-400 mb-2">Modo de conservação:</h4>
+                <p className="text-sm text-vyr-gray-500">{product.usage.storage}</p>
               </div>
             </div>
-            <div>
-              <img 
-                src={sachetPouringWater} 
-                alt="Como usar o sachê"
-                className="rounded-2xl shadow-2xl w-full"
-              />
+            <div className="flex justify-center">
+              <div className="vyr-card-graphite p-8 rounded-2xl">
+                <div className="flex items-center gap-4 mb-4">
+                  <Clock className="w-8 h-8 text-vyr-accent vyr-icon-glow" />
+                  <div>
+                    <p className="text-vyr-white font-semibold">Horário Ideal</p>
+                    <p className="text-vyr-gray-400 text-sm">{product.period}</p>
+                  </div>
+                </div>
+                <div className="transform scale-100">
+                  <SachetMockup variant={product.variant} />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
       
       {/* Ingredients Section */}
-      <section className={`py-16 px-4 bg-gradient-to-r ${product.color} relative`}>
-        <div className="absolute inset-0 bg-slate-950/30 backdrop-blur-sm" />
+      <section className="py-16 px-4 bg-vyr-graphite-dark relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-vyr-accent/5 via-transparent to-vyr-cyan/5" />
         <div className="relative z-10 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Ingredients List */}
             <div>
-              <h2 className="text-3xl font-bold text-white mb-6">Ingredientes</h2>
-              <p className="text-white/80 leading-relaxed">
+              <h2 className="text-3xl font-bold text-vyr-white mb-6">Ingredientes</h2>
+              <p className="text-vyr-gray-300 leading-relaxed">
                 {product.ingredientsList}
               </p>
             </div>
             
             {/* Nutrition Table */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-              <h3 className="text-lg font-bold text-white mb-4">Tabela Nutricional</h3>
-              <div className="text-sm text-white/80 mb-4">
+            <div className="vyr-card-graphite p-6 rounded-2xl">
+              <h3 className="text-lg font-bold text-vyr-white mb-4">Tabela Nutricional</h3>
+              <div className="text-sm text-vyr-gray-400 mb-4">
                 <p>Quantidade por porção: 5g (1 sachê)</p>
                 <p>Porções por embalagem: 30</p>
               </div>
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-white/20">
-                    <th className="text-left py-2 text-white/60 text-sm font-normal">Nutriente</th>
-                    <th className="text-right py-2 text-white/60 text-sm font-normal">Quantidade</th>
-                    <th className="text-right py-2 text-white/60 text-sm font-normal">%VD</th>
+                  <tr className="border-b border-vyr-gray-700/50">
+                    <th className="text-left py-2 text-vyr-gray-500 text-sm font-normal">Nutriente</th>
+                    <th className="text-right py-2 text-vyr-gray-500 text-sm font-normal">Quantidade</th>
+                    <th className="text-right py-2 text-vyr-gray-500 text-sm font-normal">%VD</th>
                   </tr>
                 </thead>
                 <tbody>
                   {product.nutritionTable.map((row, index) => (
-                    <tr key={index} className="border-b border-white/10">
-                      <td className="py-2 text-white">{row.nutrient}</td>
-                      <td className="py-2 text-white text-right">{row.amount}</td>
-                      <td className="py-2 text-white text-right">{row.vd}</td>
+                    <tr key={index} className="border-b border-vyr-gray-700/30">
+                      <td className="py-2 text-vyr-gray-300">{row.nutrient}</td>
+                      <td className="py-2 text-vyr-gray-300 text-right">{row.amount}</td>
+                      <td className="py-2 text-vyr-gray-300 text-right">{row.vd}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-              <p className="text-xs text-white/60 mt-4">
+              <p className="text-xs text-vyr-gray-500 mt-4">
                 (*) % Valores Diários de referência com base em uma dieta de 2.000kcal ou 8.400kJ. Seus valores diários podem ser maiores ou menores, dependendo das suas necessidades energéticas. (**) Valores diários não estabelecidos.
               </p>
             </div>
@@ -391,14 +375,14 @@ export default function ProductDetail() {
       {/* CTA Final */}
       <section className="py-16 px-4">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">Pronto para otimizar seu dia?</h2>
-          <p className="text-slate-400 mb-8">
-            Experimente o {product.name} e sinta a diferença na sua performance cognitiva.
+          <h2 className="text-2xl font-bold text-vyr-white mb-4">Pronto para otimizar seu dia?</h2>
+          <p className="text-vyr-gray-400 mb-8">
+            Experimente o <span className="text-vyr-accent font-semibold">{product.name}</span> e sinta a diferença na sua performance cognitiva.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/login?signup=true">
               <Button 
-                className={`px-8 py-6 text-base font-semibold rounded-xl bg-gradient-to-r ${product.color} hover:opacity-90 text-white shadow-lg transition-all duration-300`}
+                className="px-8 py-6 text-base font-semibold rounded-xl vyr-btn-accent shadow-lg shadow-vyr-accent/20 transition-all duration-300"
               >
                 <ShoppingCart className="w-5 h-5 mr-2" />
                 Comprar Agora
@@ -407,7 +391,7 @@ export default function ProductDetail() {
             <Link to="/produtos">
               <Button 
                 variant="outline"
-                className="px-8 py-6 text-base font-semibold rounded-xl border-slate-700 text-slate-300 hover:bg-slate-800 transition-all duration-300"
+                className="px-8 py-6 text-base font-semibold rounded-xl border-vyr-gray-600 text-vyr-gray-300 hover:bg-vyr-graphite hover:text-vyr-white hover:border-vyr-accent/50 transition-all duration-300"
               >
                 <ArrowLeft className="w-5 h-5 mr-2" />
                 Ver Outros Produtos
