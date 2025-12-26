@@ -66,10 +66,10 @@ export function Hero() {
           </a>
         </div>
 
-        {/* Performance Pillars Bar - with glow effect */}
-        <div className="inline-flex flex-col sm:flex-row items-stretch sm:items-center gap-0 rounded-sm bg-vyr-gray-800/60 backdrop-blur-sm border border-vyr-gray-700 overflow-hidden w-full sm:w-auto max-w-sm sm:max-w-none mx-auto vyr-glow">
+        {/* Performance Pillars Bar - with graphite style */}
+        <div className="inline-flex flex-col sm:flex-row items-stretch sm:items-center gap-0 rounded-sm vyr-card-graphite overflow-hidden w-full sm:w-auto max-w-sm sm:max-w-none mx-auto vyr-glow">
           <div className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-sm bg-vyr-gray-700 flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-sm bg-vyr-graphite flex items-center justify-center flex-shrink-0">
               <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-vyr-accent vyr-icon-glow" />
             </div>
             <div className="text-left">
@@ -78,12 +78,12 @@ export function Hero() {
             </div>
           </div>
           
-          <div className="hidden sm:block w-px h-16 bg-vyr-gray-700" />
-          <div className="sm:hidden w-full h-px bg-vyr-gray-700" />
+          <div className="hidden sm:block w-px h-16 bg-vyr-graphite" />
+          <div className="sm:hidden w-full h-px bg-vyr-graphite" />
           
           <div className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-sm bg-vyr-gray-700 flex items-center justify-center flex-shrink-0">
-              <Activity className="w-5 h-5 sm:w-6 sm:h-6 text-vyr-cyan vyr-icon-glow" />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-sm bg-vyr-graphite flex items-center justify-center flex-shrink-0">
+              <Activity className="w-5 h-5 sm:w-6 sm:h-6 text-vyr-accent vyr-icon-glow" />
             </div>
             <div className="text-left">
               <div className="text-base sm:text-lg font-medium text-vyr-white">Consistência</div>
@@ -91,12 +91,12 @@ export function Hero() {
             </div>
           </div>
           
-          <div className="hidden sm:block w-px h-16 bg-vyr-gray-700" />
-          <div className="sm:hidden w-full h-px bg-vyr-gray-700" />
+          <div className="hidden sm:block w-px h-16 bg-vyr-graphite" />
+          <div className="sm:hidden w-full h-px bg-vyr-graphite" />
           
           <div className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-sm bg-vyr-gray-700 flex items-center justify-center flex-shrink-0">
-              <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6 text-vyr-accentGlow vyr-icon-glow" />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-sm bg-vyr-graphite flex items-center justify-center flex-shrink-0">
+              <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6 text-vyr-accent vyr-icon-glow" />
             </div>
             <div className="text-left">
               <div className="text-base sm:text-lg font-medium text-vyr-white">Evolução</div>

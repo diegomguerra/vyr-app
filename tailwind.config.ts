@@ -88,6 +88,11 @@ export default {
           accentGlow: "hsl(var(--vyr-accent-glow))",
           cyan: "hsl(var(--vyr-cyan))",
           cyanGlow: "hsl(var(--vyr-cyan-glow))",
+          graphite: {
+            DEFAULT: "hsl(var(--vyr-graphite))",
+            light: "hsl(var(--vyr-graphite-light))",
+            dark: "hsl(var(--vyr-graphite-dark))",
+          },
         },
       },
       fontFamily: {

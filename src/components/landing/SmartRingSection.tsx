@@ -96,7 +96,7 @@ export function SmartRingSection() {
           <div className="relative flex justify-center">
             {/* Accent glow */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-80 h-80 rounded-full blur-3xl" style={{ background: 'radial-gradient(circle, hsl(var(--vyr-accent) / 0.15) 0%, hsl(var(--vyr-cyan) / 0.1) 50%, transparent 70%)' }} />
+              <div className="w-80 h-80 rounded-full blur-3xl" style={{ background: 'radial-gradient(circle, hsl(var(--vyr-graphite) / 0.3) 0%, hsl(var(--vyr-accent) / 0.1) 50%, transparent 70%)' }} />
             </div>
 
             {/* VYR NODE Visual */}
@@ -104,14 +104,14 @@ export function SmartRingSection() {
               <NodeShowcaseCompact />
               
               {/* Floating badges */}
-              <div className="absolute -top-4 -right-4 px-3 py-2 rounded-sm bg-vyr-gray-800 border border-vyr-gray-700">
+              <div className="absolute -top-4 -right-4 px-3 py-2 vyr-card-graphite">
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-vyr-cold-blue rounded-full animate-pulse opacity-60" />
+                  <div className="w-2 h-2 bg-vyr-accent rounded-full animate-pulse opacity-60" />
                   <span className="text-xs text-vyr-gray-300 font-mono">SENSOR 24/7</span>
                 </div>
               </div>
               
-              <div className="absolute -bottom-4 -left-4 px-3 py-2 rounded-sm bg-vyr-gray-800 border border-vyr-gray-700">
+              <div className="absolute -bottom-4 -left-4 px-3 py-2 vyr-card-graphite">
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-3 h-3 text-vyr-gray-400" />
                   <span className="text-xs text-vyr-gray-300 font-mono">DISCRETO</span>
@@ -133,8 +133,8 @@ export function SmartRingSection() {
 
             <div className="grid gap-4">
               {ringCapabilities.map(cap => (
-                <div key={cap.title} className="vyr-card-glow flex items-start gap-4 p-4">
-                  <div className="w-10 h-10 rounded-sm bg-vyr-gray-700 flex items-center justify-center flex-shrink-0">
+                <div key={cap.title} className="vyr-card-graphite flex items-start gap-4 p-4">
+                  <div className="w-10 h-10 rounded-sm bg-vyr-graphite flex items-center justify-center flex-shrink-0">
                     <cap.icon className="w-5 h-5 text-vyr-accent vyr-icon-glow" />
                   </div>
                   <div>
@@ -161,17 +161,17 @@ export function SmartRingSection() {
           {/* Steps */}
           <div className="relative max-w-4xl mx-auto">
             {/* Connection line */}
-            <div className="absolute top-12 left-0 right-0 h-px bg-vyr-gray-700" />
+            <div className="absolute top-12 left-0 right-0 h-px bg-vyr-graphite" />
 
             <div className="grid grid-cols-3 gap-4 relative">
               {evolutionSteps.map(step => (
                 <div key={step.step} className="relative text-center">
                   {/* Step circle */}
-                  <div className={`relative z-10 w-24 h-24 mx-auto mb-4 rounded-sm flex flex-col items-center justify-center ${step.highlight ? 'bg-vyr-white' : 'bg-vyr-gray-800 border border-vyr-gray-700'}`}>
+                  <div className={`relative z-10 w-24 h-24 mx-auto mb-4 rounded-sm flex flex-col items-center justify-center ${step.highlight ? 'bg-vyr-white' : 'vyr-card-graphite'}`}>
                     <span className={`text-2xl font-medium font-mono ${step.highlight ? 'text-vyr-black' : 'text-vyr-gray-400'}`}>
                       {step.step}
                     </span>
-                    {step.highlight && <TrendingUp className="w-4 h-4 text-vyr-gray-600 mt-1" />}
+                    {step.highlight && <TrendingUp className="w-4 h-4 text-vyr-graphite mt-1" />}
                   </div>
 
                   <h4 className={`font-medium mb-1 font-mono tracking-wider ${step.highlight ? 'text-vyr-white' : 'text-vyr-gray-300'}`}>
@@ -188,11 +188,11 @@ export function SmartRingSection() {
 
         {/* Bottom message */}
         <div className="mt-16 text-center">
-          <div className="inline-flex flex-col sm:flex-row items-center gap-4 px-8 py-5 rounded-sm bg-vyr-gray-800 border border-vyr-gray-700">
+          <div className="inline-flex flex-col sm:flex-row items-center gap-4 px-8 py-5 vyr-card-graphite">
             <span className="text-vyr-gray-400 font-medium text-lg">
               "O que não se mede, não se gerencia."
             </span>
-            <span className="hidden sm:block w-px h-6 bg-vyr-gray-700" />
+            <span className="hidden sm:block w-px h-6 bg-vyr-graphite" />
             <span className="text-vyr-white font-mono tracking-wider">
               Agora você pode medir.
             </span>

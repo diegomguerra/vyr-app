@@ -51,12 +51,12 @@ function SupplementBox({ supplement }: { supplement: typeof supplements[0] }) {
   return (
     <div className="relative group">
       {/* Caixa do suplemento */}
-      <div className={`relative p-4 sm:p-6 rounded-sm bg-vyr-gray-800 border ${supplement.borderColor} transition-all duration-300 group-hover:border-vyr-gray-400 group-hover:translate-y-[-4px]`}>
+      <div className={`relative p-4 sm:p-6 rounded-sm vyr-card-graphite transition-all duration-300 group-hover:translate-y-[-4px]`}>
         {/* Visual da caixa com mockup do sachê */}
         <div className="relative mb-4 sm:mb-6">
           {/* Caixa simulada com borda do produto */}
           <div className={`relative w-full aspect-[4/3] rounded-sm ${supplement.bgColor} p-[2px]`}>
-            <div className="w-full h-full rounded-sm bg-vyr-gray-900 flex flex-col items-center justify-center p-3 sm:p-4">
+            <div className="w-full h-full rounded-sm bg-vyr-graphite-dark flex flex-col items-center justify-center p-3 sm:p-4">
               {/* Label VYR */}
               <VYRLabel variant={supplement.variant} />
               <span className="text-[10px] sm:text-xs text-vyr-gray-500 mt-2 font-mono">{supplement.sachets}</span>
@@ -83,7 +83,7 @@ function SupplementBox({ supplement }: { supplement: typeof supplements[0] }) {
         <ul className="space-y-1.5 sm:space-y-2">
           {supplement.benefits.map((benefit) => (
             <li key={benefit} className="flex items-center gap-2 text-xs sm:text-sm text-vyr-gray-300">
-              <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-vyr-cyan vyr-icon-glow flex-shrink-0" />
+              <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-vyr-accent vyr-icon-glow flex-shrink-0" />
               {benefit}
             </li>
           ))}
@@ -170,8 +170,8 @@ export function SupplementsSection() {
 
         {/* Info bar */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-8 sm:mb-12">
-          <div className="flex items-center gap-3 p-3 sm:p-4 rounded-sm bg-vyr-gray-800 border border-vyr-gray-700">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-sm bg-vyr-gray-700 flex items-center justify-center flex-shrink-0">
+          <div className="flex items-center gap-3 p-3 sm:p-4 vyr-card-graphite">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-sm bg-vyr-graphite flex items-center justify-center flex-shrink-0">
               <Beaker className="w-4 h-4 sm:w-5 sm:h-5 text-vyr-gray-300" />
             </div>
             <div className="min-w-0">
@@ -179,8 +179,8 @@ export function SupplementsSection() {
               <p className="text-vyr-gray-500 text-[10px] sm:text-xs">Compostos de alta pureza</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 p-3 sm:p-4 rounded-sm bg-vyr-gray-800 border border-vyr-gray-700">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-sm bg-vyr-gray-700 flex items-center justify-center flex-shrink-0">
+          <div className="flex items-center gap-3 p-3 sm:p-4 vyr-card-graphite">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-sm bg-vyr-graphite flex items-center justify-center flex-shrink-0">
               <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-vyr-gray-300" />
             </div>
             <div className="min-w-0">
@@ -188,8 +188,8 @@ export function SupplementsSection() {
               <p className="text-vyr-gray-500 text-[10px] sm:text-xs">Baseada em estudos clínicos</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 p-3 sm:p-4 rounded-sm bg-vyr-gray-800 border border-vyr-gray-700">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-sm bg-vyr-gray-700 flex items-center justify-center flex-shrink-0">
+          <div className="flex items-center gap-3 p-3 sm:p-4 vyr-card-graphite">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-sm bg-vyr-graphite flex items-center justify-center flex-shrink-0">
               <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-vyr-gray-300" />
             </div>
             <div className="min-w-0">
@@ -201,12 +201,12 @@ export function SupplementsSection() {
 
         {/* Callout */}
         <div className="text-center">
-          <div className="inline-flex flex-col sm:flex-row items-center gap-3 sm:gap-4 px-5 sm:px-8 py-4 sm:py-5 rounded-sm bg-vyr-gray-800 border border-vyr-gray-700">
+          <div className="inline-flex flex-col sm:flex-row items-center gap-3 sm:gap-4 px-5 sm:px-8 py-4 sm:py-5 vyr-card-graphite">
             <div className="flex items-center gap-2">
               <span className="text-vyr-gray-400 text-sm">Ciclo completo:</span>
               <span className="text-vyr-white font-medium text-sm font-mono">90 sachês/mês</span>
             </div>
-            <div className="hidden sm:block w-px h-6 bg-vyr-gray-700" />
+            <div className="hidden sm:block w-px h-6 bg-vyr-graphite" />
             <div className="flex items-center gap-2 text-sm">
               <span className="text-vyr-gray-400">BOOT + HOLD + CLEAR</span>
               <span className="text-vyr-gray-300 font-medium">= Otimização 24h</span>

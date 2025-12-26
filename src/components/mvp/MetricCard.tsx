@@ -6,14 +6,14 @@ interface MetricCardProps {
 
 export function MetricCard({ metric }: MetricCardProps) {
   return (
-    <div className="bg-slate-900/50 border border-slate-700/30 rounded-xl p-2.5 sm:p-4">
-      <div className="text-xs sm:text-sm text-slate-400 truncate">{metric.key}</div>
-      <div className="text-lg sm:text-2xl font-semibold text-white mt-0.5 sm:mt-1">
+    <div className="vyr-card-graphite p-2.5 sm:p-4">
+      <div className="text-xs sm:text-sm text-vyr-gray-400 truncate font-mono">{metric.key}</div>
+      <div className="text-lg sm:text-2xl font-semibold text-vyr-white mt-0.5 sm:mt-1">
         {Number.isFinite(metric.value) ? metric.value : "--"}
-        <span className="text-xs sm:text-sm text-slate-500 ml-1 sm:ml-2">{metric.unit ?? ""}</span>
+        <span className="text-xs sm:text-sm text-vyr-gray-500 ml-1 sm:ml-2">{metric.unit ?? ""}</span>
       </div>
       {typeof metric.confidence === "number" && (
-        <div className="text-[10px] sm:text-xs text-slate-500 mt-1 sm:mt-2">
+        <div className="text-[10px] sm:text-xs text-vyr-gray-500 mt-1 sm:mt-2">
           Conf: {(metric.confidence * 100).toFixed(0)}%
         </div>
       )}
@@ -29,12 +29,12 @@ interface IndexCardProps {
 
 export function IndexCard({ label, value, icon }: IndexCardProps) {
   return (
-    <div className="bg-slate-900/50 border border-slate-700/30 rounded-xl p-2.5 sm:p-4">
-      <div className="flex items-center gap-1 sm:gap-2 text-[10px] sm:text-xs text-slate-400">
+    <div className="vyr-card-graphite p-2.5 sm:p-4">
+      <div className="flex items-center gap-1 sm:gap-2 text-[10px] sm:text-xs text-vyr-gray-400 font-mono">
         {icon && <span className="text-sm sm:text-base">{icon}</span>}
         <span className="truncate">{label}</span>
       </div>
-      <div className="text-xl sm:text-2xl font-semibold text-white mt-0.5 sm:mt-1">
+      <div className="text-xl sm:text-2xl font-semibold text-vyr-white mt-0.5 sm:mt-1">
         {typeof value === "number" ? value : "--"}
       </div>
     </div>
