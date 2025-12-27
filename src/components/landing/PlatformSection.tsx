@@ -8,8 +8,8 @@ const trackingPillars = [
     title: "Ativação & Clareza",
     period: "Manhã",
     icon: Sun,
-    bgColor: "bg-vyr-gray-100/10",
-    borderColor: "border-vyr-gray-100/20",
+    bgColor: "bg-vyr-gray-200/15",
+    borderColor: "border-vyr-gray-200/30",
     textColor: "text-vyr-gray-100",
     questions: ["Como foi seu foco nas primeiras horas?", "Clareza nas decisões matinais?", "Energia mental ao iniciar o dia?"]
   },
@@ -18,9 +18,9 @@ const trackingPillars = [
     title: "Sustentação & Resiliência",
     period: "Tarde",
     icon: Sunset,
-    bgColor: "bg-vyr-gray-500/10",
-    borderColor: "border-vyr-gray-500/20",
-    textColor: "text-vyr-gray-500",
+    bgColor: "bg-vyr-gray-400/15",
+    borderColor: "border-vyr-gray-400/30",
+    textColor: "text-vyr-gray-300",
     questions: ["Manteve o ritmo após o almoço?", "Resistência à fadiga cognitiva?", "Equilíbrio emocional sob pressão?"]
   },
   {
@@ -28,9 +28,9 @@ const trackingPillars = [
     title: "Recuperação Cognitiva",
     period: "Noite",
     icon: Moon,
-    bgColor: "bg-vyr-cold-blue/10",
-    borderColor: "border-vyr-cold-blue/20",
-    textColor: "text-vyr-cold-blue",
+    bgColor: "bg-vyr-accent/15",
+    borderColor: "border-vyr-accent/30",
+    textColor: "text-vyr-accent",
     questions: ["Qualidade do sono percebida?", "Facilidade para adormecer?", "Sensação ao acordar?"]
   }
 ];
@@ -89,17 +89,17 @@ export function PlatformSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-vyr-gray-500/10 border border-vyr-gray-500/20 mb-6">
-            <RefreshCw className="w-4 h-4 text-vyr-gray-100" />
-            <span className="text-sm font-medium text-vyr-gray-100 font-mono">Plataforma de Mensuração</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-vyr-gray-700/30 border border-vyr-gray-600/40 mb-6">
+            <RefreshCw className="w-4 h-4 text-vyr-gray-200" />
+            <span className="text-sm font-medium text-vyr-gray-200 font-mono">Plataforma de Mensuração</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-vyr-white mb-4">
             Transforme percepção em{" "}
-            <span className="text-vyr-gray-100">
+            <span className="text-vyr-gray-200">
               dados acionáveis
             </span>
           </h2>
-          <p className="text-vyr-gray-500 max-w-3xl mx-auto text-lg">
+          <p className="text-vyr-gray-400 max-w-3xl mx-auto text-lg">
             A plataforma captura seu relato após cada dose, construindo uma linha de base 
             única que revela como os nootrópicos impactam{" "}
             <span className="text-vyr-white font-medium">seu</span> desempenho específico.
@@ -113,18 +113,18 @@ export function PlatformSection() {
             <div className="absolute inset-0 bg-vyr-gray-500/10 blur-3xl -z-10 scale-95" />
             
             {/* Dashboard image with frame */}
-            <div className="relative rounded-2xl overflow-hidden border border-vyr-gray-500/20 shadow-2xl">
+            <div className="relative rounded-2xl overflow-hidden border border-vyr-gray-600/30 shadow-2xl">
               <img src={dashboardPreview} alt="VYR Dashboard - Painel de Performance Cognitiva" className="w-full h-auto" />
               {/* Subtle overlay gradient */}
               <div className="absolute inset-0 bg-gradient-to-t from-vyr-black/40 via-transparent to-transparent pointer-events-none" />
             </div>
             
             {/* Floating labels */}
-            <div className="absolute -left-4 top-1/4 px-3 py-2 rounded-lg bg-vyr-gray-900/90 border border-vyr-gray-500/20 hidden lg:block">
-              <span className="text-xs text-vyr-gray-100 font-medium font-mono">Métricas em tempo real</span>
+            <div className="absolute -left-4 top-1/4 px-3 py-2 rounded-lg bg-vyr-gray-900/90 border border-vyr-gray-600/30 hidden lg:block">
+              <span className="text-xs text-vyr-gray-200 font-medium font-mono">Métricas em tempo real</span>
             </div>
-            <div className="absolute -right-4 top-1/3 px-3 py-2 rounded-lg bg-vyr-gray-900/90 border border-vyr-gray-500/20 hidden lg:block">
-              <span className="text-xs text-vyr-gray-100 font-medium font-mono">Evolução visível</span>
+            <div className="absolute -right-4 top-1/3 px-3 py-2 rounded-lg bg-vyr-gray-900/90 border border-vyr-gray-600/30 hidden lg:block">
+              <span className="text-xs text-vyr-gray-200 font-medium font-mono">Evolução visível</span>
             </div>
           </div>
         </div>
@@ -132,7 +132,7 @@ export function PlatformSection() {
         {/* Os 3 Eixos de Mensuração */}
         <div className="mb-20">
           <div className="text-center mb-10">
-            <p className="text-sm uppercase tracking-widest mb-2 text-vyr-gray-500 font-mono">
+            <p className="text-sm uppercase tracking-widest mb-2 text-vyr-gray-400 font-mono">
               O que mensuramos
             </p>
             <h3 className="text-2xl font-bold text-vyr-white">
@@ -164,16 +164,16 @@ export function PlatformSection() {
                 {/* Questions */}
                 <ul className="space-y-2">
                   {pillar.questions.map((question, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm text-vyr-gray-500">
-                      <span className={`w-1.5 h-1.5 rounded-full mt-1.5 ${pillar.bgColor.replace('/10', '/50')}`} />
+                    <li key={idx} className="flex items-start gap-2 text-sm text-vyr-gray-400">
+                      <span className={`w-1.5 h-1.5 rounded-full mt-1.5 ${pillar.bgColor.replace('/15', '/60')}`} />
                       {question}
                     </li>
                   ))}
                 </ul>
 
                 {/* Visual escala */}
-                <div className="mt-4 pt-4 border-t border-vyr-gray-500/20">
-                  <div className="flex items-center justify-between text-xs text-vyr-gray-500 mb-2">
+                <div className="mt-4 pt-4 border-t border-vyr-gray-600/30">
+                  <div className="flex items-center justify-between text-xs text-vyr-gray-400 mb-2">
                     <span>Sua avaliação</span>
                     <span className={pillar.textColor}>1-10</span>
                   </div>
@@ -195,7 +195,7 @@ export function PlatformSection() {
         {/* Dashboard Preview Section */}
         <div className="mb-20">
           <div className="text-center mb-10">
-            <p className="text-sm uppercase tracking-widest mb-2 text-vyr-gray-500 font-mono">
+            <p className="text-sm uppercase tracking-widest mb-2 text-vyr-gray-400 font-mono">
               Visualize seus dados
             </p>
             <h3 className="text-2xl font-bold text-vyr-white">
@@ -205,24 +205,24 @@ export function PlatformSection() {
 
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Performance Chart */}
-            <div className="lg:col-span-2 p-6 rounded-2xl bg-vyr-gray-900/40 border border-vyr-gray-500/20">
+            <div className="lg:col-span-2 p-6 rounded-2xl bg-vyr-gray-900/40 border border-vyr-gray-600/30">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h4 className="text-vyr-white font-semibold">Evolução Semanal</h4>
-                  <p className="text-vyr-gray-500 text-sm">Foco, Energia e Clareza</p>
+                  <p className="text-vyr-gray-400 text-sm">Foco, Energia e Clareza</p>
                 </div>
                 <div className="flex items-center gap-4 text-xs font-mono">
                   <div className="flex items-center gap-1.5">
-                    <div className="w-2 h-2 rounded-full bg-vyr-gray-400" />
-                    <span className="text-vyr-gray-500">Foco</span>
+                    <div className="w-2 h-2 rounded-full bg-vyr-gray-300" />
+                    <span className="text-vyr-gray-400">Foco</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <div className="w-2 h-2 rounded-full bg-vyr-gray-600" />
-                    <span className="text-vyr-gray-500">Energia</span>
+                    <div className="w-2 h-2 rounded-full bg-vyr-gray-500" />
+                    <span className="text-vyr-gray-400">Energia</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <div className="w-2 h-2 rounded-full bg-vyr-accent" />
-                    <span className="text-vyr-gray-500">Clareza</span>
+                    <span className="text-vyr-gray-400">Clareza</span>
                   </div>
                 </div>
               </div>
@@ -247,7 +247,7 @@ export function PlatformSection() {
                 </div>
                 <div>
                   <h4 className="text-vyr-white font-semibold">Qualidade do Sono</h4>
-                  <p className="text-vyr-gray-500 text-xs font-mono">Últimos 7 dias</p>
+                  <p className="text-vyr-gray-400 text-xs font-mono">Últimos 7 dias</p>
                 </div>
               </div>
               <div className="h-32">
@@ -255,16 +255,16 @@ export function PlatformSection() {
                   <AreaChart data={sleepData}>
                     <defs>
                       <linearGradient id="sleepGradientVyr" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#3b4f63" stopOpacity={0.35} />
-                        <stop offset="95%" stopColor="#3b4f63" stopOpacity={0} />
+                        <stop offset="5%" stopColor="#4a6275" stopOpacity={0.4} />
+                        <stop offset="95%" stopColor="#4a6275" stopOpacity={0} />
                       </linearGradient>
                     </defs>
-                    <Area type="monotone" dataKey="qualidade" stroke="#3b4f63" strokeWidth={2} fill="url(#sleepGradientVyr)" />
+                    <Area type="monotone" dataKey="qualidade" stroke="#4a6275" strokeWidth={2} fill="url(#sleepGradientVyr)" />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
               <div className="mt-3 flex items-center justify-between">
-                <span className="text-vyr-gray-500 text-sm font-mono">Média</span>
+                <span className="text-vyr-gray-400 text-sm font-mono">Média</span>
                 <span className="text-vyr-accent font-bold text-lg font-mono">77%</span>
               </div>
             </div>
@@ -275,22 +275,22 @@ export function PlatformSection() {
             {/* Plasticidade Score */}
             <div className="p-5 rounded-2xl bg-vyr-graphite-dark/60 border border-vyr-gray-700/40">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-vyr-gray-500 text-sm font-mono">Plasticidade Cognitiva</span>
-                <span className="text-xs px-2 py-1 rounded-full bg-vyr-accent/10 text-vyr-accent font-mono border border-vyr-accent/20">+12%</span>
+                <span className="text-vyr-gray-400 text-sm font-mono">Plasticidade Cognitiva</span>
+                <span className="text-xs px-2 py-1 rounded-full bg-vyr-accent/15 text-vyr-accent font-mono border border-vyr-accent/30">+12%</span>
               </div>
               <div className="flex items-end gap-2">
                 <span className="text-3xl font-bold text-vyr-white font-mono">82</span>
-                <span className="text-vyr-gray-500 text-sm mb-1 font-mono">/100</span>
+                <span className="text-vyr-gray-400 text-sm mb-1 font-mono">/100</span>
               </div>
               <div className="mt-3 h-2 bg-vyr-gray-800 rounded-full overflow-hidden">
-                <div className="h-full w-[82%] bg-gradient-to-r from-vyr-gray-500 to-vyr-accent rounded-full" />
+                <div className="h-full w-[82%] bg-gradient-to-r from-vyr-gray-400 to-vyr-accent rounded-full" />
               </div>
             </div>
 
             {/* Weekly Trend */}
             <div className="p-5 rounded-2xl bg-vyr-graphite-dark/60 border border-vyr-gray-700/40">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-vyr-gray-500 text-sm font-mono">Tendência 6 Semanas</span>
+                <span className="text-vyr-gray-400 text-sm font-mono">Tendência 6 Semanas</span>
                 <TrendingUp className="w-4 h-4 text-vyr-accent" />
               </div>
               <div className="h-16">
@@ -310,32 +310,32 @@ export function PlatformSection() {
 
             {/* Ring Scores Preview */}
             <div className="p-5 rounded-2xl bg-vyr-graphite-dark/60 border border-vyr-gray-700/40">
-              <span className="text-vyr-gray-500 text-sm font-mono">Índices do Dia</span>
+              <span className="text-vyr-gray-400 text-sm font-mono">Índices do Dia</span>
               <div className="mt-3 flex items-center justify-around">
                 {/* Circular progress indicators */}
                 <div className="relative w-14 h-14">
                   <svg className="w-14 h-14 transform -rotate-90">
                     <circle cx="28" cy="28" r="24" stroke="#262626" strokeWidth="4" fill="none" />
-                    <circle cx="28" cy="28" r="24" stroke="#737373" strokeWidth="4" fill="none" strokeDasharray={`${0.85 * 150.8} 150.8`} strokeLinecap="round" />
+                    <circle cx="28" cy="28" r="24" stroke="#8a8a8a" strokeWidth="4" fill="none" strokeDasharray={`${0.85 * 150.8} 150.8`} strokeLinecap="round" />
                   </svg>
                   <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-vyr-white font-mono">85%</span>
                 </div>
                 <div className="relative w-14 h-14">
                   <svg className="w-14 h-14 transform -rotate-90">
                     <circle cx="28" cy="28" r="24" stroke="#262626" strokeWidth="4" fill="none" />
-                    <circle cx="28" cy="28" r="24" stroke="#404040" strokeWidth="4" fill="none" strokeDasharray={`${0.72 * 150.8} 150.8`} strokeLinecap="round" />
+                    <circle cx="28" cy="28" r="24" stroke="#6b6b6b" strokeWidth="4" fill="none" strokeDasharray={`${0.72 * 150.8} 150.8`} strokeLinecap="round" />
                   </svg>
                   <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-vyr-white font-mono">72%</span>
                 </div>
                 <div className="relative w-14 h-14">
                   <svg className="w-14 h-14 transform -rotate-90">
                     <circle cx="28" cy="28" r="24" stroke="#262626" strokeWidth="4" fill="none" />
-                    <circle cx="28" cy="28" r="24" stroke="#3b4f63" strokeWidth="4" fill="none" strokeDasharray={`${0.91 * 150.8} 150.8`} strokeLinecap="round" />
+                    <circle cx="28" cy="28" r="24" stroke="#4a6275" strokeWidth="4" fill="none" strokeDasharray={`${0.91 * 150.8} 150.8`} strokeLinecap="round" />
                   </svg>
                   <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-vyr-white font-mono">91%</span>
                 </div>
               </div>
-              <div className="mt-2 flex items-center justify-around text-xs text-vyr-gray-500 font-mono">
+              <div className="mt-2 flex items-center justify-around text-xs text-vyr-gray-400 font-mono">
                 <span>Ativação</span>
                 <span>Sustentação</span>
                 <span>Recuperação</span>
@@ -347,13 +347,13 @@ export function PlatformSection() {
         {/* Features da Plataforma */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           {platformFeatures.map(feature => (
-            <div key={feature.title} className="flex items-start gap-4 p-5 rounded-xl bg-vyr-gray-900/30 border border-vyr-gray-500/20">
-              <div className="w-12 h-12 rounded-xl bg-vyr-gray-500/15 flex items-center justify-center flex-shrink-0">
-                <feature.icon className="w-6 h-6 text-vyr-gray-100" />
+            <div key={feature.title} className="flex items-start gap-4 p-5 rounded-xl bg-vyr-gray-900/30 border border-vyr-gray-600/30">
+              <div className="w-12 h-12 rounded-xl bg-vyr-gray-600/20 flex items-center justify-center flex-shrink-0">
+                <feature.icon className="w-6 h-6 text-vyr-gray-200" />
               </div>
               <div>
                 <h4 className="text-vyr-white font-semibold mb-1">{feature.title}</h4>
-                <p className="text-vyr-gray-500 text-sm">{feature.description}</p>
+                <p className="text-vyr-gray-400 text-sm">{feature.description}</p>
               </div>
             </div>
           ))}
@@ -361,8 +361,8 @@ export function PlatformSection() {
 
         {/* Callout */}
         <div className="text-center">
-          <div className="inline-flex items-center gap-3 px-6 py-4 rounded-2xl bg-vyr-gray-900/30 border border-vyr-gray-500/20">
-            <span className="text-vyr-gray-500">Dados de relato são poderosos, mas</span>
+          <div className="inline-flex items-center gap-3 px-6 py-4 rounded-2xl bg-vyr-gray-900/30 border border-vyr-gray-600/30">
+            <span className="text-vyr-gray-400">Dados de relato são poderosos, mas</span>
             <span className="text-vyr-white font-semibold">dados fisiológicos são precisos →</span>
           </div>
         </div>

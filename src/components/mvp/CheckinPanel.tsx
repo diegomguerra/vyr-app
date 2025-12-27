@@ -57,7 +57,7 @@ export function CheckinPanel({ period, dateISO, onSave }: CheckinPanelProps) {
         {fields.map((f) => (
           <div key={f}>
             <div className="flex items-center justify-between text-xs sm:text-sm mb-1.5 sm:mb-2">
-              <span className="text-vyr-gray-500">{fieldLabel(f)}</span>
+              <span className="text-vyr-gray-300">{fieldLabel(f)}</span>
               <span className="text-vyr-white font-medium font-mono">{vals[f]}</span>
             </div>
             <Slider
@@ -66,14 +66,14 @@ export function CheckinPanel({ period, dateISO, onSave }: CheckinPanelProps) {
               min={0}
               max={10}
               step={1}
-              className="[&_[role=slider]]:bg-vyr-gray-100 [&_[role=slider]]:border-vyr-gray-500"
+              className="[&_[role=slider]]:bg-vyr-gray-100 [&_[role=slider]]:border-vyr-gray-400"
             />
           </div>
         ))}
       </div>
 
       <div className="mt-4 sm:mt-5">
-        <p className="text-[10px] sm:text-xs text-vyr-gray-500 mb-2">Contexto do dia</p>
+        <p className="text-[10px] sm:text-xs text-vyr-gray-400 mb-2">Contexto do dia</p>
         <ConfoundersToggle value={confounders} onChange={setConfounders} />
       </div>
 

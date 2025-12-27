@@ -22,9 +22,9 @@ export function TodayCard({ period, done, subtitle, onOpenCheckin }: TodayCardPr
         {periodIcons[period]}
         <h3 className="font-semibold text-sm sm:text-base text-vyr-white font-mono">{periodLabel(period)}</h3>
       </div>
-      <p className="text-[10px] sm:text-xs text-vyr-gray-500 mb-2 sm:mb-3">{subtitle}</p>
+      <p className="text-[10px] sm:text-xs text-vyr-gray-400 mb-2 sm:mb-3">{subtitle}</p>
       <div className="flex items-center justify-between gap-2">
-        <span className={`text-xs sm:text-sm ${done ? "text-vyr-accent" : "text-vyr-gray-500"}`}>
+        <span className={`text-xs sm:text-sm ${done ? "text-vyr-accent" : "text-vyr-gray-400"}`}>
           {done ? "✓ Feito" : "Pendente"}
         </span>
         <button 
