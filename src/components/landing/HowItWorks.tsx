@@ -1,20 +1,24 @@
-import { UserPlus, Activity, BarChart3 } from "lucide-react";
+import { Circle, BarChart3, Cpu } from "lucide-react";
 
 const steps = [
   {
-    icon: UserPlus,
-    title: "1. Configure seu Perfil",
-    description: "Complete a anamnese cognitiva e defina seus objetivos de alta performance cognitiva.",
-  },
-  {
-    icon: Activity,
-    title: "2. Use o Sistema",
-    description: "Suplementação por ciclo + VYR NODE + Registro diário. O sistema funciona de forma integrada.",
+    icon: Circle,
+    title: "Protocolo VYR",
+    description: "Você inicia com o protocolo BOOT, HOLD e CLEAR, organizado para sustentar foco, estabilidade e clareza mental ao longo do dia.",
+    note: "O sistema já foi desenhado para funcionar como um todo, sem escolhas confusas.",
   },
   {
     icon: BarChart3,
-    title: "3. Evolua com Dados",
-    description: "Painel de gestão cognitiva, correlações e insights personalizados. Compare apenas consigo mesmo.",
+    title: "Plataforma VYR",
+    description: "Registre doses, acompanhe sua evolução e construa histórico real de performance cognitiva.",
+    note: "Nesta fase, o sistema é guiado: consistente, previsível e estruturado. É o ponto de partida.",
+  },
+  {
+    icon: Cpu,
+    title: "Evolução com dados",
+    subtitle: "VYR Node",
+    description: "Ao integrar o VYR Node, o sistema deixa de ser apenas guiado e passa a ser adaptativo.",
+    note: "O VYR começa a correlacionar padrões fisiológicos, rotina e resposta individual ao protocolo. Aqui o sistema se torna completo.",
   },
 ];
 
@@ -27,7 +31,7 @@ export function HowItWorks() {
             Como Funciona
           </h2>
           <p className="text-vyr-gray-400 max-w-2xl mx-auto">
-            Uma jornada estruturada para sustentar e evoluir seu desempenho intelectual
+            Uma jornada estruturada do guiado ao adaptativo
           </p>
         </div>
 
@@ -39,19 +43,35 @@ export function HowItWorks() {
                 <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-px bg-vyr-gray-700" />
               )}
 
-              <div className="p-8 text-center relative z-10 rounded-sm bg-vyr-gray-800 border border-vyr-gray-700 hover:border-vyr-gray-600 transition-all duration-300">
+              <div className={`p-8 text-center relative z-10 rounded-sm border transition-all duration-300 h-full flex flex-col ${
+                index === 2 
+                  ? "bg-vyr-gray-800 border-vyr-white/20 hover:border-vyr-white/40" 
+                  : "bg-vyr-gray-800 border-vyr-gray-700 hover:border-vyr-gray-600"
+              }`}>
                 {/* Icon */}
-                <div className="w-16 h-16 mx-auto mb-6 rounded-sm bg-vyr-gray-700 flex items-center justify-center">
-                  <step.icon className="w-8 h-8 text-vyr-gray-300" />
+                <div className={`w-16 h-16 mx-auto mb-6 rounded-sm flex items-center justify-center ${
+                  index === 2 ? "bg-vyr-white" : "bg-vyr-gray-700"
+                }`}>
+                  <step.icon className={`w-8 h-8 ${index === 2 ? "text-vyr-black" : "text-vyr-gray-300"}`} />
                 </div>
 
                 {/* Content */}
-                <h3 className="text-xl font-medium text-vyr-white mb-3">
-                  {step.title}
-                </h3>
-                <p className="text-vyr-gray-400 text-sm leading-relaxed">
-                  {step.description}
-                </p>
+                <div className="flex-grow">
+                  <h3 className="text-xl font-medium text-vyr-white mb-1">
+                    {step.title}
+                  </h3>
+                  {step.subtitle && (
+                    <p className="text-sm font-mono text-vyr-gray-400 mb-3 tracking-wider">
+                      {step.subtitle}
+                    </p>
+                  )}
+                  <p className="text-vyr-gray-300 text-sm leading-relaxed mb-4">
+                    {step.description}
+                  </p>
+                  <p className="text-vyr-gray-500 text-xs leading-relaxed italic">
+                    {step.note}
+                  </p>
+                </div>
               </div>
             </div>
           ))}
