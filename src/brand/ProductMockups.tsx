@@ -60,6 +60,10 @@ export function SachetMockup({ variant, className = "" }: SachetMockupProps) {
         </div>
       </div>
       
+      {/* Spacer to maintain layout - label hidden */}
+      <span className="mt-4 text-sm tracking-[0.2em] font-medium invisible">
+        {label.name}
+      </span>
     </div>
   );
 }
