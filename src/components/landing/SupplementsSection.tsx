@@ -1,5 +1,7 @@
-import { Sun, Moon, Sunset, Zap, Shield, Beaker } from "lucide-react";
+import { Sun, Moon, Sunset, Zap, Shield, Beaker, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Label as VYRLabel, SachetMockup } from "@/brand";
+import { Button } from "@/components/ui/button";
 const supplements = [{
   id: "boot",
   name: "VYR BOOT",
@@ -12,7 +14,8 @@ const supplements = [{
   bgColor: "bg-vyr-gray-100",
   borderColor: "border-vyr-gray-300",
   textColor: "text-vyr-black",
-  sachets: "30 sachês"
+  sachets: "30 sachês",
+  link: "/produto/dia"
 }, {
   id: "hold",
   name: "VYR HOLD",
@@ -25,7 +28,8 @@ const supplements = [{
   bgColor: "bg-vyr-gray-600",
   borderColor: "border-vyr-gray-500",
   textColor: "text-vyr-white",
-  sachets: "30 sachês"
+  sachets: "30 sachês",
+  link: "/produto/tarde"
 }, {
   id: "clear",
   name: "VYR CLEAR",
@@ -38,7 +42,8 @@ const supplements = [{
   bgColor: "bg-vyr-coldBlue",
   borderColor: "border-vyr-gray-600",
   textColor: "text-vyr-white",
-  sachets: "30 sachês"
+  sachets: "30 sachês",
+  link: "/produto/noite"
 }];
 
 // Componente visual de caixa de suplemento usando mockups do brand
@@ -78,12 +83,20 @@ function SupplementBox({
         <p className="text-vyr-gray-400 text-xs sm:text-sm mb-3 sm:mb-4 leading-relaxed">{supplement.description}</p>
         
         {/* Benefícios */}
-        <ul className="space-y-1.5 sm:space-y-2">
+        <ul className="space-y-1.5 sm:space-y-2 mb-4 sm:mb-6">
           {supplement.benefits.map(benefit => <li key={benefit} className="flex items-center gap-2 text-xs sm:text-sm text-vyr-gray-300">
               <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-vyr-accent vyr-icon-glow flex-shrink-0" />
               {benefit}
             </li>)}
         </ul>
+
+        {/* Botão Saiba Mais */}
+        <Link to={supplement.link}>
+          <Button variant="outline" className="w-full py-2.5 text-xs sm:text-sm font-medium rounded-sm transition-all duration-300 bg-transparent hover:bg-vyr-gray-800 text-vyr-gray-300 hover:text-vyr-white border border-vyr-gray-700 hover:border-vyr-gray-500">
+            Saiba Mais
+            <ArrowRight className="w-3.5 h-3.5 ml-2" />
+          </Button>
+        </Link>
       </div>
     </div>;
 }
