@@ -49,19 +49,14 @@ export function Hero() {
           VYR é um sistema estruturado para gestão do estado cognitivo ao longo do dia. Combina suplementação nootrópica por ciclo, plataforma digital de mensuração e dados fisiológicos contínuos para expandir capacidade funcional com precisão.
         </p>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-16 px-4">
+        {/* CTA Button */}
+        <div className="flex items-center justify-center mb-10 sm:mb-16 px-4">
           <Link to="/como-funciona" className="w-full sm:w-auto">
             <Button size="lg" className="w-full sm:w-auto vyr-btn-accent px-8 sm:px-12 py-5 sm:py-7 text-base sm:text-lg rounded-sm group">
-              Começar agora
+              Conhecer o sistema
               <ArrowRight className="ml-2 sm:ml-3 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>
-          <a href="#sistema" className="w-full sm:w-auto">
-            <Button size="lg" variant="outline" className="w-full sm:w-auto bg-transparent px-8 sm:px-10 py-5 sm:py-7 text-base sm:text-lg rounded-sm border-vyr-gray-600 text-vyr-gray-300 hover:bg-vyr-gray-800 hover:border-vyr-accent/30 hover:text-vyr-white transition-all duration-300">
-              Conhecer o sistema
-            </Button>
-          </a>
         </div>
 
         {/* Performance Pillars Bar - with graphite style */}
