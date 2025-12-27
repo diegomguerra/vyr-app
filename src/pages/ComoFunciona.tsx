@@ -21,7 +21,8 @@ import {
   Smartphone,
   Watch,
   Database,
-  Layers
+  Layers,
+  CircleDot
 } from "lucide-react";
 
 // ========== SEÇÃO 1: SACHÊS ==========
@@ -36,12 +37,12 @@ const sachets = [
     accentColor: "text-vyr-gray-600",
     borderColor: "border-vyr-gray-300",
     periodo: "Manhã",
-    objetivo: "Ativação & Clareza",
-    descricao: "Atenção sustentada, foco executivo, memória de trabalho e clareza cognitiva.",
+    objetivo: "Estado inicial de ativação cognitiva",
+    descricao: "Indução do estado cognitivo inicial do dia, com suporte à atenção, memória operacional e clareza decisória. Atua prioritariamente em circuitos associados ao controle executivo e início da carga cognitiva.",
     areas: [
       { name: "Córtex Pré-Frontal", funcao: "Controle executivo" },
-      { name: "Hipocampo", funcao: "Memória" },
-      { name: "Córtex Temporal Medial", funcao: "Aprendizado" }
+      { name: "Hipocampo", funcao: "Memória de trabalho" },
+      { name: "Córtex Temporal Medial", funcao: "Aprendizagem" }
     ],
     componentes: [
       { nome: "Citicolina — 250 mg", funcao: "Atenção executiva, memória de trabalho" },
@@ -66,11 +67,11 @@ const sachets = [
     accentColor: "text-vyr-gray-300",
     borderColor: "border-vyr-gray-500",
     periodo: "Tarde",
-    objetivo: "Sustentação & Resiliência",
-    descricao: "Sustentar desempenho mental, reduzir fadiga cognitiva e manter estabilidade emocional.",
+    objetivo: "Manutenção de estado cognitivo sob carga",
+    descricao: "Manutenção do desempenho cognitivo ao longo do dia, com foco na sustentação do estado mental e redução da variabilidade cognitiva sob carga prolongada.",
     areas: [
-      { name: "Tronco Encefálico", funcao: "Vigília" },
       { name: "Córtex Pré-Frontal", funcao: "Sustentação" },
+      { name: "Tronco Encefálico", funcao: "Vigília" },
       { name: "Amígdala", funcao: "Regulação emocional" }
     ],
     componentes: [
@@ -91,11 +92,11 @@ const sachets = [
     accentColor: "text-vyr-gray-300",
     borderColor: "border-vyr-cold-blue/50",
     periodo: "Noite",
-    objetivo: "Recuperação Cognitiva",
-    descricao: "Redução de hiperatividade mental, recuperação neural, consolidação de memória e qualidade do sono.",
+    objetivo: "Redução de carga e recuperação neural",
+    descricao: "Redução progressiva da carga cognitiva e suporte a processos associados à recuperação neural, consolidação de memória e arquitetura do sono.",
     areas: [
       { name: "Hipotálamo", funcao: "Ritmo circadiano" },
-      { name: "Sistema Límbico", funcao: "Amígdala" },
+      { name: "Sistema Límbico", funcao: "Regulação emocional" },
       { name: "Hipocampo", funcao: "Consolidação de memória" }
     ],
     componentes: [
@@ -110,10 +111,10 @@ const sachets = [
 const entradaDados = [
   { icon: Target, label: "Qualidade de foco", desc: "Capacidade de concentração" },
   { icon: Sparkles, label: "Clareza mental", desc: "Nitidez do pensamento" },
-  { icon: Zap, label: "Energia mental", desc: "Disposição cognitiva" },
+  { icon: Zap, label: "Energia cognitiva", desc: "Disposição mental" },
   { icon: Activity, label: "Estresse percebido", desc: "Nível de pressão mental" },
   { icon: Moon, label: "Qualidade do sono", desc: "Descanso e recuperação" },
-  { icon: Sun, label: "Despertar mental", desc: "Clareza ao acordar" }
+  { icon: Sun, label: "Estado mental ao despertar", desc: "Clareza ao acordar" }
 ];
 
 // ========== SEÇÃO 3: VYR NODE ==========
@@ -121,7 +122,7 @@ const ringMetrics = [
   { icon: Heart, label: "Frequência cardíaca 24/7", desc: "Monitoramento contínuo" },
   { icon: Activity, label: "HRV", desc: "Variabilidade da frequência cardíaca" },
   { icon: TrendingUp, label: "Estresse fisiológico", desc: "Medição objetiva" },
-  { icon: Moon, label: "Sono automático", desc: "Tracking sem esforço" },
+  { icon: Moon, label: "Arquitetura do sono", desc: "Tracking automático" },
   { icon: Zap, label: "Atividade diária", desc: "Movimento e energia" },
   { icon: Thermometer, label: "Temperatura corporal", desc: "Padrões térmicos" },
   { icon: Wind, label: "SpO₂", desc: "Saturação de oxigênio" },
@@ -130,25 +131,21 @@ const ringMetrics = [
 
 // ========== SEÇÃO 4: INTEGRAÇÃO ==========
 const integracaoDia = [
-  { acao: "Maior eficiência do PFC", impacto: "Menor esforço cognitivo", metrica: "HRV mais estável" },
-  { acao: "Aumento de atenção", impacto: "Menor ativação simpática", metrica: "Redução de estresse basal" },
-  { acao: "Clareza mental", impacto: "Ritmo cardíaco organizado", metrica: "FC 24h mais estável" },
-  { acao: "Menor ruído mental", impacto: "Melhor eficiência energética", metrica: "VO₂ estimado / atividade" }
+  { acao: "Atividade autonômica mais estável", metrica: "HRV estabilizado" },
+  { acao: "Atenção sustentada", metrica: "FC 24h mais estável" },
+  { acao: "Clareza cognitiva matinal", metrica: "Redução de estresse basal" }
 ];
 
 const integracaoTarde = [
-  { acao: "Regulação da amígdala", impacto: "Menos picos de estresse", metrica: "HRV Stress" },
-  { acao: "Sustentação do alerta", impacto: "Energia sem hiperexcitação", metrica: "FC + atividade estáveis" },
-  { acao: "Resiliência ao cansaço", impacto: "Menor queda cognitiva", metrica: "All-Day Activity" },
-  { acao: "Menor fadiga mental", impacto: "Menor ativação simpática tardia", metrica: "Temperatura / HRV" }
+  { acao: "Redução de variabilidade sob carga", metrica: "HRV Stress" },
+  { acao: "Sustentação do estado cognitivo", metrica: "FC + atividade estáveis" },
+  { acao: "Menor fadiga mental ao final do dia", metrica: "Temperatura / HRV" }
 ];
 
 const integracaoNoite = [
-  { acao: "Redução do eixo HPA", impacto: "Menor cortisol noturno", metrica: "HRV noturno ↑" },
-  { acao: "Relaxamento límbico", impacto: "Sono mais profundo", metrica: "Auto Sleep Tracking" },
-  { acao: "Consolidação de memória", impacto: "Melhor arquitetura do sono", metrica: "Fases do sono" },
-  { acao: "Recuperação neural", impacto: "Menor inflamação basal", metrica: "Temperatura noturna" },
-  { acao: "Estabilidade autonômica", impacto: "Melhor recuperação", metrica: "FC noturna ↓" }
+  { acao: "Redução de ativação noturna", metrica: "HRV noturno ↑" },
+  { acao: "Consolidação de memória", metrica: "Fases do sono" },
+  { acao: "Recuperação neural mais consistente", metrica: "FC noturna ↓" }
 ];
 
 export default function ComoFunciona() {
@@ -157,41 +154,91 @@ export default function ComoFunciona() {
       <LandingNav />
       
       {/* Hero */}
-      <section className="pt-24 sm:pt-32 pb-12 sm:pb-20 relative overflow-hidden">
+      <section className="pt-24 sm:pt-32 pb-12 sm:pb-16 relative overflow-hidden">
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
         <div className="absolute inset-0 vyr-gradient-radial" />
         
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <span className="vyr-badge-accent mb-4 sm:mb-6">
             <Layers className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            <span className="text-xs sm:text-sm font-mono tracking-wider">SISTEMA INTEGRADO DE PERFORMANCE</span>
+            <span className="text-xs sm:text-sm font-mono tracking-wider">COGNITIVE PERFORMANCE SYSTEM</span>
           </span>
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium text-vyr-white mb-4 sm:mb-6">
             Como Funciona o{" "}
             <span className="font-mono tracking-wider text-gradient-accent">VYR SYSTEM</span>
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-vyr-gray-400 max-w-3xl mx-auto leading-relaxed px-2">
-            Três pilares integrados: Sachês que modulam o cérebro, VYR NODE que capta respostas fisiológicas, 
-            e Plataforma que transforma dados em clareza, resiliência e recuperação mensuráveis.
+            O VYR é um sistema integrado de gestão do estado cognitivo. Ele opera a partir da combinação de modulação neurofuncional, registro consciente de estados e, opcionalmente, mensuração fisiológica contínua.
+          </p>
+        </div>
+      </section>
+
+      {/* ARQUITETURA DO SISTEMA - Ponto de Ancoragem */}
+      <section className="py-12 sm:py-16 px-4 border-y border-vyr-accent/20 bg-vyr-graphite-dark/50">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl font-medium text-vyr-white mb-4">
+              Arquitetura do Sistema
+            </h2>
+            <p className="text-lg sm:text-xl text-vyr-gray-300 font-medium">
+              O VYR SYSTEM é estruturado em três camadas independentes e integráveis.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
+            <div className="p-6 vyr-card-graphite border-l-2 border-l-vyr-gray-100">
+              <div className="flex items-center gap-3 mb-3">
+                <span className="w-8 h-8 rounded-sm bg-vyr-gray-100/10 flex items-center justify-center text-vyr-gray-100 font-mono font-bold text-sm">1</span>
+                <Zap className="w-5 h-5 text-vyr-gray-100" />
+              </div>
+              <h3 className="font-mono text-vyr-white font-medium mb-2">Modulação Cognitiva</h3>
+              <p className="text-sm text-vyr-gray-400">Sachês nootrópicos estruturados por período do dia</p>
+            </div>
+            
+            <div className="p-6 vyr-card-graphite border-l-2 border-l-vyr-accent">
+              <div className="flex items-center gap-3 mb-3">
+                <span className="w-8 h-8 rounded-sm bg-vyr-accent/10 flex items-center justify-center text-vyr-accent font-mono font-bold text-sm">2</span>
+                <Smartphone className="w-5 h-5 text-vyr-accent" />
+              </div>
+              <h3 className="font-mono text-vyr-white font-medium mb-2">Registro de Estado</h3>
+              <p className="text-sm text-vyr-gray-400">Plataforma digital para percepção consciente</p>
+            </div>
+            
+            <div className="p-6 vyr-card-graphite border-l-2 border-l-vyr-coldBlue">
+              <div className="flex items-center gap-3 mb-3">
+                <span className="w-8 h-8 rounded-sm bg-vyr-coldBlue/10 flex items-center justify-center text-vyr-coldBlue font-mono font-bold text-sm">3</span>
+                <Watch className="w-5 h-5 text-vyr-coldBlue" />
+              </div>
+              <h3 className="font-mono text-vyr-white font-medium mb-2">Mensuração Fisiológica</h3>
+              <p className="text-sm text-vyr-gray-400">VYR NODE — opcional</p>
+            </div>
+          </div>
+          
+          <p className="text-center text-vyr-gray-400 text-sm sm:text-base">
+            Cada camada adiciona informação ao sistema. Nenhuma invalida a anterior.
           </p>
         </div>
       </section>
 
       {/* Quick Nav */}
-      <section className="py-4 sm:py-6 px-4 border-y border-vyr-graphite/50 bg-vyr-graphite-dark/50 overflow-x-auto">
+      <section className="py-4 sm:py-6 px-4 border-b border-vyr-graphite/50 bg-vyr-graphite-dark/30 overflow-x-auto">
         <div className="max-w-5xl mx-auto">
           <div className="flex justify-start sm:justify-center gap-2 sm:gap-3 min-w-max sm:min-w-0">
-            <a href="#saches" className="px-3 sm:px-5 py-2 sm:py-2.5 rounded-sm vyr-card-graphite flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-vyr-gray-300 hover:text-vyr-white whitespace-nowrap transition-all">
-              <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-vyr-accent vyr-icon-glow" />
-              <span>Sachês</span>
+            <a href="#camada1" className="px-3 sm:px-5 py-2 sm:py-2.5 rounded-sm vyr-card-graphite flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-vyr-gray-300 hover:text-vyr-white whitespace-nowrap transition-all">
+              <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-vyr-gray-100" />
+              <span>Camada 1</span>
             </a>
-            <a href="#dados" className="px-3 sm:px-5 py-2 sm:py-2.5 rounded-sm vyr-card-graphite flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-vyr-gray-300 hover:text-vyr-white whitespace-nowrap transition-all">
-              <Smartphone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-vyr-accent vyr-icon-glow" />
-              <span>Dados</span>
+            <a href="#camada2" className="px-3 sm:px-5 py-2 sm:py-2.5 rounded-sm vyr-card-graphite flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-vyr-gray-300 hover:text-vyr-white whitespace-nowrap transition-all">
+              <Smartphone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-vyr-accent" />
+              <span>Camada 2</span>
             </a>
-            <a href="#ring" className="px-3 sm:px-5 py-2 sm:py-2.5 rounded-sm vyr-card-graphite flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-vyr-gray-300 hover:text-vyr-white whitespace-nowrap transition-all">
-              <Watch className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-vyr-accent vyr-icon-glow" />
-              <span>VYR NODE</span>
+            <a href="#camada3" className="px-3 sm:px-5 py-2 sm:py-2.5 rounded-sm vyr-card-graphite flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-vyr-gray-300 hover:text-vyr-white whitespace-nowrap transition-all">
+              <Watch className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-vyr-coldBlue" />
+              <span>Camada 3</span>
+            </a>
+            <a href="#pratica" className="px-3 sm:px-5 py-2 sm:py-2.5 rounded-sm vyr-card-graphite flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-vyr-gray-300 hover:text-vyr-white whitespace-nowrap transition-all">
+              <CircleDot className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-vyr-accent vyr-icon-glow" />
+              <span>Na Prática</span>
             </a>
             <a href="#integracao" className="px-3 sm:px-5 py-2 sm:py-2.5 rounded-sm vyr-card-graphite flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-vyr-gray-300 hover:text-vyr-white whitespace-nowrap transition-all">
               <Database className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-vyr-accent vyr-icon-glow" />
@@ -201,16 +248,22 @@ export default function ComoFunciona() {
         </div>
       </section>
 
-      {/* SEÇÃO 1: SACHÊS */}
-      <section id="saches" className="py-20 px-4">
+      {/* CAMADA 1: MODULAÇÃO COGNITIVA (SACHÊS) */}
+      <section id="camada1" className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
+            <span className="vyr-badge-accent mb-6">
+              <Zap className="w-4 h-4" />
+              <span className="font-mono tracking-wider">CAMADA 1</span>
+            </span>
             <h2 className="text-3xl sm:text-4xl font-medium text-vyr-white mb-4">
-              Como Funcionam os <span className="text-gradient-accent">Sachês</span>
+              Modulação <span className="text-gradient-accent">Cognitiva</span>
             </h2>
-            <p className="text-vyr-gray-400 max-w-2xl mx-auto">
-              Os sachês atuam modulando sistemas neurofuncionais, não "sintomas". 
-              Cada período tem um objetivo fisiológico distinto, alinhado ao ritmo circadiano.
+            <p className="text-vyr-gray-400 max-w-2xl mx-auto mb-4">
+              A primeira camada do VYR atua na modulação direta do estado cognitivo por meio de sachês nootrópicos estruturados por período do dia.
+            </p>
+            <p className="text-vyr-gray-300 max-w-2xl mx-auto font-medium">
+              Cada sachê corresponde a um estado operacional específico do ciclo cognitivo. Essa camada é suficiente para operar o sistema.
             </p>
           </div>
 
@@ -228,7 +281,7 @@ export default function ComoFunciona() {
                     {/* Header */}
                     <div className="lg:w-1/3">
                       <div className="flex items-center gap-6 mb-4">
-                        {/* Mockup visual do sachê - Larger */}
+                        {/* Mockup visual do sachê */}
                         <div className="scale-90 sm:scale-100">
                           <SachetMockup variant={sachet.variant} />
                         </div>
@@ -251,7 +304,7 @@ export default function ComoFunciona() {
                       {/* Áreas do cérebro */}
                       <div className="space-y-2">
                         <h4 className="text-xs font-semibold text-vyr-gray-500 uppercase tracking-wide mb-3">
-                          Áreas Cerebrais Moduladas
+                          Áreas Moduladas
                         </h4>
                         {sachet.areas.map((area, i) => (
                           <div key={i} className="flex items-center gap-2 text-sm">
@@ -288,20 +341,23 @@ export default function ComoFunciona() {
         </div>
       </section>
 
-      {/* SEÇÃO 2: ENTRADA DE DADOS */}
-      <section id="dados" className="py-20 px-4 bg-vyr-graphite-dark/30">
+      {/* CAMADA 2: REGISTRO DE ESTADO (SEM VYR NODE) */}
+      <section id="camada2" className="py-20 px-4 bg-vyr-graphite-dark/30">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <span className="vyr-badge-accent mb-6">
               <Smartphone className="w-4 h-4" />
-              <span className="font-mono tracking-wider">SEM VYR NODE</span>
+              <span className="font-mono tracking-wider">CAMADA 2 — PONTO DE ENTRADA NATURAL</span>
             </span>
             <h2 className="text-3xl sm:text-4xl font-medium text-vyr-white mb-4">
-              Entrada de Dados na <span className="text-gradient-accent">Plataforma</span>
+              Registro de <span className="text-gradient-accent">Estado</span>
+              <span className="text-lg sm:text-xl text-vyr-gray-500 font-normal ml-3">(Sem VYR NODE)</span>
             </h2>
-            <p className="text-vyr-gray-400 max-w-2xl mx-auto">
-              Usuários sem VYR NODE alimentam a plataforma via <strong className="text-vyr-white">percepção consciente</strong>, 
-              o que é fundamental para criar um baseline subjetivo.
+            <p className="text-vyr-gray-400 max-w-2xl mx-auto mb-4">
+              Na ausência do VYR NODE, o sistema opera a partir do registro consciente dos estados cognitivos percebidos pelo usuário.
+            </p>
+            <p className="text-vyr-gray-300 max-w-2xl mx-auto font-medium">
+              Esta é a forma mais direta de entrada no sistema e representa o núcleo funcional do VYR.
             </p>
           </div>
 
@@ -317,10 +373,10 @@ export default function ComoFunciona() {
             ))}
           </div>
 
-          <div className="vyr-card-graphite p-8">
-            <h3 className="text-xl font-medium text-vyr-white mb-6">
-              Por que a percepção é importante?
-            </h3>
+          <div className="vyr-card-graphite p-8 border-l-2 border-l-vyr-accent">
+            <p className="text-vyr-gray-300 leading-relaxed mb-6">
+              Essa camada permite operar o VYR de forma completa, com análise baseada em percepção consciente e histórico de estados.
+            </p>
             <div className="grid sm:grid-cols-3 gap-6">
               <div className="flex items-start gap-3">
                 <div className="w-8 h-8 rounded-sm bg-vyr-graphite flex items-center justify-center flex-shrink-0">
@@ -328,7 +384,7 @@ export default function ComoFunciona() {
                 </div>
                 <div>
                   <span className="font-medium text-vyr-white block mb-1">Baseline subjetivo</span>
-                  <span className="text-sm text-vyr-gray-500">A percepção é seu ponto de partida pessoal</span>
+                  <span className="text-sm text-vyr-gray-500">Linha de base inicial do sistema</span>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -336,8 +392,8 @@ export default function ComoFunciona() {
                   <Check className="w-4 h-4 text-vyr-accent vyr-icon-glow" />
                 </div>
                 <div>
-                  <span className="font-medium text-vyr-white block mb-1">Controle interno</span>
-                  <span className="text-sm text-vyr-gray-500">Referência para comparação futura</span>
+                  <span className="font-medium text-vyr-white block mb-1">Histórico de estados</span>
+                  <span className="text-sm text-vyr-gray-500">Acompanhamento de variações</span>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -345,8 +401,8 @@ export default function ComoFunciona() {
                   <Check className="w-4 h-4 text-vyr-accent vyr-icon-glow" />
                 </div>
                 <div>
-                  <span className="font-medium text-vyr-white block mb-1">Validação cruzada</span>
-                  <span className="text-sm text-vyr-gray-500">Quando combinada com dados objetivos</span>
+                  <span className="font-medium text-vyr-white block mb-1">Sistema operacional</span>
+                  <span className="text-sm text-vyr-gray-500">Precisão subjetiva, mas funcional</span>
                 </div>
               </div>
             </div>
@@ -354,34 +410,37 @@ export default function ComoFunciona() {
         </div>
       </section>
 
-      {/* SEÇÃO 3: VYR NODE */}
-      <section id="ring" className="py-20 px-4">
+      {/* CAMADA 3: MENSURAÇÃO FISIOLÓGICA CONTÍNUA (VYR NODE) */}
+      <section id="camada3" className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <span className="vyr-badge-accent mb-6">
               <Watch className="w-4 h-4" />
-              <span className="font-mono tracking-wider">MONITORAMENTO FISIOLÓGICO</span>
+              <span className="font-mono tracking-wider">CAMADA 3 — OPCIONAL</span>
             </span>
             <h2 className="text-3xl sm:text-4xl font-medium text-vyr-white mb-4">
-              <span className="font-mono tracking-wider text-gradient-accent">VYR NODE</span>
+              Mensuração Fisiológica <span className="text-gradient-accent">Contínua</span>
+              <span className="text-lg sm:text-xl text-vyr-gray-500 font-normal ml-3">(VYR NODE)</span>
             </h2>
-            <p className="text-vyr-gray-400 max-w-2xl mx-auto">
-              O VYR NODE é um instrumento técnico de coleta contínua, não um acessório. 
-              Capta marcadores fisiológicos objetivos que complementam seus registros subjetivos.
+            <p className="text-vyr-gray-400 max-w-2xl mx-auto mb-4">
+              O VYR NODE é um instrumento técnico de mensuração fisiológica contínua. Não é um acessório. Não substitui o registro consciente.
+            </p>
+            <p className="text-vyr-gray-300 max-w-2xl mx-auto font-medium">
+              Ele complementa e valida os estados registrados com dados fisiológicos objetivos.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
             <div className="order-2 md:order-1 flex justify-center">
-              {/* VYR NODE Visual CSS-based */}
               <NodeVisual size="lg" />
             </div>
             <div className="order-1 md:order-2">
+              <h3 className="text-lg font-medium text-vyr-white mb-6">O VYR NODE captura:</h3>
               <div className="grid sm:grid-cols-2 gap-4">
                 {ringMetrics.map((metric, i) => (
                   <div key={i} className="p-4 vyr-card-graphite">
                     <div className="w-10 h-10 rounded-sm bg-vyr-graphite flex items-center justify-center mb-3">
-                      <metric.icon className="w-5 h-5 text-vyr-accent vyr-icon-glow" />
+                      <metric.icon className="w-5 h-5 text-vyr-coldBlue" />
                     </div>
                     <h3 className="font-medium text-vyr-white text-sm mb-1">{metric.label}</h3>
                     <p className="text-xs text-vyr-gray-500">{metric.desc}</p>
@@ -390,23 +449,100 @@ export default function ComoFunciona() {
               </div>
             </div>
           </div>
+
+          <div className="vyr-card-graphite p-8 border-l-2 border-l-vyr-coldBlue max-w-4xl mx-auto">
+            <p className="text-vyr-gray-300 leading-relaxed">
+              Essa camada amplia a precisão do sistema e permite correlação entre estado percebido e resposta fisiológica real.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* SEÇÃO 4: INTEGRAÇÃO */}
-      <section id="integracao" className="py-20 px-4 bg-vyr-graphite-dark/30">
+      {/* COMO FUNCIONA NA PRÁTICA */}
+      <section id="pratica" className="py-20 px-4 bg-vyr-graphite-dark/30">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <span className="vyr-badge-accent mb-6">
+              <CircleDot className="w-4 h-4" />
+              <span className="font-mono tracking-wider">OPERAÇÃO</span>
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-medium text-vyr-white mb-4">
+              Como Funciona na <span className="text-gradient-accent">Prática</span>
+            </h2>
+            <p className="text-vyr-gray-300 max-w-2xl mx-auto font-medium text-lg">
+              A operação do VYR não muda. O que muda é o nível de instrumentação.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            {/* SEM VYR NODE */}
+            <div className="vyr-card-graphite p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-sm bg-vyr-accent/10 flex items-center justify-center">
+                  <Smartphone className="w-5 h-5 text-vyr-accent" />
+                </div>
+                <h3 className="text-xl font-mono font-medium text-vyr-white">SEM VYR NODE</h3>
+              </div>
+              
+              <div className="flex items-center gap-3 text-sm text-vyr-gray-400 mb-6 font-mono">
+                <span className="px-2 py-1 bg-vyr-graphite rounded-sm">Sachês</span>
+                <ArrowRight className="w-4 h-4" />
+                <span className="px-2 py-1 bg-vyr-graphite rounded-sm">Registro consciente</span>
+                <ArrowRight className="w-4 h-4" />
+                <span className="px-2 py-1 bg-vyr-graphite rounded-sm">Histórico</span>
+              </div>
+              
+              <p className="text-vyr-gray-400 leading-relaxed">
+                O usuário opera o sistema com base na própria percepção, construindo uma linha de base subjetiva.
+              </p>
+            </div>
+
+            {/* COM VYR NODE */}
+            <div className="vyr-card-graphite p-8 border border-vyr-coldBlue/30">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-sm bg-vyr-coldBlue/10 flex items-center justify-center">
+                  <Watch className="w-5 h-5 text-vyr-coldBlue" />
+                </div>
+                <h3 className="text-xl font-mono font-medium text-vyr-white">COM VYR NODE</h3>
+              </div>
+              
+              <div className="flex items-center gap-2 text-sm text-vyr-gray-400 mb-6 font-mono flex-wrap">
+                <span className="px-2 py-1 bg-vyr-graphite rounded-sm">Sachês</span>
+                <ArrowRight className="w-4 h-4" />
+                <span className="px-2 py-1 bg-vyr-graphite rounded-sm">Registro</span>
+                <ArrowRight className="w-4 h-4" />
+                <span className="px-2 py-1 bg-vyr-coldBlue/20 rounded-sm text-vyr-coldBlue">Dados fisiológicos</span>
+                <ArrowRight className="w-4 h-4" />
+                <span className="px-2 py-1 bg-vyr-coldBlue/20 rounded-sm text-vyr-coldBlue">Correlação</span>
+              </div>
+              
+              <p className="text-vyr-gray-400 leading-relaxed">
+                O sistema passa a operar com validação objetiva, reduzindo viés perceptivo e ampliando capacidade analítica.
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <p className="text-vyr-gray-400 text-lg">
+              Nenhum modo invalida o outro. <span className="text-vyr-white font-medium">O NODE expande o sistema. Não o redefine.</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* INTEGRAÇÃO SACHÊ + VYR NODE */}
+      <section id="integracao" className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <span className="vyr-badge-accent mb-6">
               <Database className="w-4 h-4" />
-              <span className="font-mono tracking-wider">CORRELAÇÕES INTELIGENTES</span>
+              <span className="font-mono tracking-wider">TRÊS CAMADAS ATIVAS</span>
             </span>
             <h2 className="text-3xl sm:text-4xl font-medium text-vyr-white mb-4">
               Integração Sachê + <span className="text-gradient-accent">VYR NODE</span>
             </h2>
-            <p className="text-vyr-gray-400 max-w-2xl mx-auto">
-              Quando o VYR NODE está ativo, cada sachet gera sinais fisiológicos rastreáveis. 
-              Aqui está o que esperamos observar em cada período.
+            <p className="text-vyr-gray-400 max-w-3xl mx-auto">
+              Quando as três camadas estão ativas, o sistema permite observar correlações entre modulação cognitiva, estado percebido e resposta fisiológica. Abaixo estão exemplos de padrões esperados por período.
             </p>
           </div>
 
@@ -416,11 +552,10 @@ export default function ComoFunciona() {
               <Sun className="w-6 h-6 text-vyr-gray-100" />
               <h3 className="text-xl font-mono font-medium text-vyr-white tracking-wide">VYR BOOT + VYR NODE</h3>
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid sm:grid-cols-3 gap-4">
               {integracaoDia.map((item, i) => (
-                <div key={i} className="p-4 vyr-card-graphite">
-                  <div className="text-sm font-medium text-vyr-white mb-2">{item.acao}</div>
-                  <div className="text-xs text-vyr-gray-500 mb-2">{item.impacto}</div>
+                <div key={i} className="p-5 vyr-card-graphite">
+                  <div className="text-sm font-medium text-vyr-white mb-3">{item.acao}</div>
                   <div className="text-xs text-vyr-accent font-mono">{item.metrica}</div>
                 </div>
               ))}
@@ -433,11 +568,10 @@ export default function ComoFunciona() {
               <Sunset className="w-6 h-6 text-vyr-graphite-light" />
               <h3 className="text-xl font-mono font-medium text-vyr-white tracking-wide">VYR HOLD + VYR NODE</h3>
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid sm:grid-cols-3 gap-4">
               {integracaoTarde.map((item, i) => (
-                <div key={i} className="p-4 vyr-card-graphite">
-                  <div className="text-sm font-medium text-vyr-white mb-2">{item.acao}</div>
-                  <div className="text-xs text-vyr-gray-500 mb-2">{item.impacto}</div>
+                <div key={i} className="p-5 vyr-card-graphite">
+                  <div className="text-sm font-medium text-vyr-white mb-3">{item.acao}</div>
                   <div className="text-xs text-vyr-accent font-mono">{item.metrica}</div>
                 </div>
               ))}
@@ -447,18 +581,21 @@ export default function ComoFunciona() {
           {/* VYR CLEAR Integration */}
           <div className="mb-12">
             <div className="flex items-center gap-3 mb-6">
-              <Moon className="w-6 h-6 text-vyr-accent vyr-icon-glow" />
+              <Moon className="w-6 h-6 text-vyr-coldBlue" />
               <h3 className="text-xl font-mono font-medium text-vyr-white tracking-wide">VYR CLEAR + VYR NODE</h3>
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div className="grid sm:grid-cols-3 gap-4">
               {integracaoNoite.map((item, i) => (
-                <div key={i} className="p-4 rounded-sm backdrop-blur-sm border transition-all duration-300" style={{ background: 'linear-gradient(145deg, hsl(var(--vyr-accent) / 0.15) 0%, hsl(var(--vyr-graphite-dark) / 0.6) 100%)', borderColor: 'hsl(var(--vyr-accent) / 0.3)' }}>
-                  <div className="text-sm font-medium text-vyr-white mb-2">{item.acao}</div>
-                  <div className="text-xs text-vyr-gray-500 mb-2">{item.impacto}</div>
-                  <div className="text-xs text-vyr-accent font-mono">{item.metrica}</div>
+                <div key={i} className="p-5 rounded-sm backdrop-blur-sm border transition-all duration-300" style={{ background: 'linear-gradient(145deg, hsl(var(--vyr-accent) / 0.15) 0%, hsl(var(--vyr-graphite-dark) / 0.6) 100%)', borderColor: 'hsl(var(--vyr-accent) / 0.3)' }}>
+                  <div className="text-sm font-medium text-vyr-white mb-3">{item.acao}</div>
+                  <div className="text-xs text-vyr-coldBlue font-mono">{item.metrica}</div>
                 </div>
               ))}
             </div>
+          </div>
+
+          <div className="text-center text-vyr-gray-500 text-sm">
+            "Esperados" não significa garantidos. O sistema observa, não promete.
           </div>
         </div>
       </section>
@@ -467,10 +604,10 @@ export default function ComoFunciona() {
       <section className="py-20 px-4 border-t border-vyr-graphite/50">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-medium text-vyr-white mb-6">
-            Pronto para Otimizar sua <span className="text-gradient-accent">Performance</span>?
+            Pronto para Estruturar sua <span className="text-gradient-accent">Gestão Cognitiva</span>?
           </h2>
           <p className="text-vyr-gray-400 mb-8 max-w-xl mx-auto">
-            Escolha o plano que melhor se adapta às suas necessidades e comece sua jornada de otimização cognitiva.
+            O VYR não entrega estados ideais. Ele fornece estrutura, dados e histórico para gestão consciente do estado cognitivo.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/rotina-completa">
