@@ -92,7 +92,7 @@ function MobileNav() {
         {NAV_ITEMS.map((item) => (
           <Link
             key={item.to}
-            href={item.to}
+            to={item.to}
             className="flex flex-col items-center gap-0.5 px-4 py-2 rounded-sm text-vyr-gray-400 hover:text-vyr-white hover:bg-vyr-graphite/50 transition-all min-w-0"
           >
             <span className="text-lg">{item.icon}</span>
