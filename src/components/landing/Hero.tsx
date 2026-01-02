@@ -2,26 +2,19 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroBrainDashboard from "@/assets/hero-brain-dashboard.png";
-
 export function Hero() {
-  return (
-    <section
-      id="hero"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden vyr-gradient-bg"
-    >
+  return <section id="hero" className="min-h-screen flex items-center justify-center relative overflow-hidden vyr-gradient-bg">
       {/* Radial gradient overlay */}
       <div className="absolute inset-0 vyr-gradient-radial" />
 
       {/* Subtle grid pattern */}
-      <div className="absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage: `
+      <div className="absolute inset-0 opacity-[0.02]" style={{
+      backgroundImage: `
             linear-gradient(hsl(var(--vyr-gray-400) / 0.3) 1px, transparent 1px),
             linear-gradient(90deg, hsl(var(--vyr-gray-400) / 0.3) 1px, transparent 1px)
           `,
-          backgroundSize: '80px 80px'
-        }}
-      />
+      backgroundSize: '80px 80px'
+    }} />
 
       {/* Accent line top */}
       <div className="absolute top-0 left-0 right-0 vyr-accent-line" />
@@ -31,11 +24,7 @@ export function Hero() {
         
         {/* Hero Image - Full width */}
         <div className="relative w-full mb-12 lg:mb-16 animate-fade-in">
-          <img 
-            src={heroBrainDashboard} 
-            alt="VYR System - Fluidez mental e dashboard cognitivo" 
-            className="w-full h-auto object-contain max-h-[60vh] mx-auto"
-          />
+          <img src={heroBrainDashboard} alt="VYR System - Fluidez mental e dashboard cognitivo" className="w-full h-auto object-contain max-h-[60vh] mx-auto" />
         </div>
 
         {/* Text Content - Centered below image */}
@@ -47,7 +36,7 @@ export function Hero() {
           </div>
 
           {/* Main Title */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-medium text-foreground mb-6 tracking-tight leading-[1.1]">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-medium mb-6 tracking-tight leading-[1.1] text-secondary-foreground">
             Mais fluidez mental.
             <span className="block text-muted-foreground mt-2">Menos esforço invisível.</span>
           </h1>
@@ -83,7 +72,7 @@ export function Hero() {
             <div className="flex items-center gap-3">
               <div className="w-2.5 h-2.5 rounded-sm bg-[hsl(var(--vyr-boot))]" />
               <div className="flex flex-col">
-                <span className="uppercase tracking-[0.15em] font-medium text-foreground text-xs">BOOT</span>
+                <span className="uppercase tracking-[0.15em] font-medium text-xs text-primary-foreground">BOOT</span>
                 <span className="text-muted-foreground text-[11px]">Ativação com leveza</span>
               </div>
             </div>
@@ -91,7 +80,7 @@ export function Hero() {
             <div className="flex items-center gap-3">
               <div className="w-2.5 h-2.5 rounded-sm bg-[hsl(var(--vyr-graphite-light))]" />
               <div className="flex flex-col">
-                <span className="uppercase tracking-[0.15em] font-medium text-foreground text-xs">HOLD</span>
+                <span className="uppercase tracking-[0.15em] font-medium text-xs text-primary-foreground">HOLD</span>
                 <span className="text-muted-foreground text-[11px]">Constância sob carga</span>
               </div>
             </div>
@@ -99,13 +88,12 @@ export function Hero() {
             <div className="flex items-center gap-3">
               <div className="w-2.5 h-2.5 rounded-sm bg-[hsl(var(--vyr-accent))]" />
               <div className="flex flex-col">
-                <span className="uppercase tracking-[0.15em] font-medium text-foreground text-xs">CLEAR</span>
+                <span className="uppercase tracking-[0.15em] font-medium text-xs text-primary-foreground">CLEAR</span>
                 <span className="text-muted-foreground text-[11px]">Descompressão cognitiva</span>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 }
