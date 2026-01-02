@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
@@ -34,7 +34,7 @@ const queryClient = new QueryClient();
 
 function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
-  
+
   return (
     <button
       onClick={toggleTheme}
@@ -67,8 +67,8 @@ function Header({ codigo }: { codigo?: string }) {
         </div>
         <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
           <ThemeToggle />
-          <button 
-            className="px-3 py-2 sm:px-4 sm:py-2.5 rounded-sm text-xs sm:text-sm font-medium text-vyr-gray-300 hover:text-vyr-white hover:bg-vyr-graphite/50 border border-vyr-graphite/50 transition-all" 
+          <button
+            className="px-3 py-2 sm:px-4 sm:py-2.5 rounded-sm text-xs sm:text-sm font-medium text-vyr-gray-300 hover:text-vyr-white hover:bg-vyr-graphite/50 border border-vyr-graphite/50 transition-all"
             onClick={handleLogout}
           >
             Sair
@@ -112,13 +112,13 @@ function AuthenticatedApp() {
     const initParticipante = async () => {
       try {
         let p = await getParticipante();
-        
+
         // Se não existe participante, cria um novo
         if (!p) {
           await createParticipante({});
           p = await getParticipante();
         }
-        
+
         setParticipante(p);
       } catch (error) {
         console.error("Error initializing participante:", error);
@@ -180,13 +180,13 @@ const App = () => {
 
   useEffect(() => {
     // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setLoading(false);
-      }
-    );
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
 
     // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -212,7 +212,7 @@ const App = () => {
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <BrowserRouter>
+          <Router>
             <ScrollToTop />
             <Routes>
               {/* Public routes */}
@@ -229,17 +229,17 @@ const App = () => {
               <Route path="/como-funciona" element={<ComoFunciona />} />
               <Route path="/labs" element={user ? <Navigate to="/app" replace /> : <VYRLabs />} />
               <Route path="/login" element={<Navigate to="/labs" replace />} />
-              
+
               {/* Protected routes */}
-              <Route 
-                path="/app/*" 
-                element={user ? <AuthenticatedApp /> : <Navigate to="/login" replace />} 
+              <Route
+                path="/app/*"
+                element={user ? <AuthenticatedApp /> : <Navigate to="/login" replace />}
               />
-              
+
               {/* Fallback */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
-          </BrowserRouter>
+          </Router>
         </TooltipProvider>
       </QueryClientProvider>
     </ThemeProvider>
