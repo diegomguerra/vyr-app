@@ -54,7 +54,7 @@ const SACHETS = [
     period: "Noite",
     icon: Moon,
     tagline: "Descompressão cognitiva",
-    benefit: "Desaceleração inteligente. Mais clareza ao acordar. O dia seguinte começa mais leve.",
+    benefit: "Ajuda o sistema a desacelerar para recuperar melhor. Menos resíduo mental. Mais leveza no dia seguinte.",
     usage: "Tomar 1-2 horas antes de dormir",
     bgColor: "bg-[#1E293B]",
     textColor: "text-vyr-white",
@@ -71,9 +71,9 @@ const SACHETS = [
 
 function SachetCard({ sachet }: { sachet: typeof SACHETS[0] }) {
   const Icon = sachet.icon;
-
+  
   return (
-    <div className="relative group h-full">
+    <div className="relative group">
       <div className="relative p-4 sm:p-6 rounded-sm vyr-card-graphite transition-all duration-300 group-hover:translate-y-[-4px] h-full flex flex-col">
         {/* Visual da caixa com mockup do sachê */}
         <div className="relative mb-6 sm:mb-8">
@@ -94,47 +94,43 @@ function SachetCard({ sachet }: { sachet: typeof SACHETS[0] }) {
           </div>
         </div>
         
-        <div className="flex flex-col h-full">
-          {/* Conteúdo */}
-          <div className="flex-1 flex flex-col">
-            <p className="text-vyr-gray-300 font-medium text-xs sm:text-sm mb-1.5 sm:mb-2">{sachet.tagline}</p>
-            <p className="text-vyr-gray-400 text-xs sm:text-sm mb-3 sm:mb-4 leading-relaxed">{sachet.benefit}</p>
-
-            {/* Como usar */}
-            <div className="pt-3 border-t border-vyr-graphite/50 mb-4">
-              <span className="text-[10px] font-mono text-vyr-gray-500 uppercase tracking-wider">
-                Como usar
-              </span>
-              <p className="text-xs text-vyr-gray-400 mt-1">{sachet.usage}</p>
-            </div>
-
-            {/* Composição */}
-            <div className="pt-3 border-t border-vyr-graphite/50 flex-1">
-              <span className="text-[10px] font-mono text-vyr-gray-500 uppercase tracking-wider">
-                Composição
-              </span>
-              <ul className="mt-2 space-y-1">
-                {sachet.composition.map((item, i) => (
-                  <li key={i} className="flex items-center gap-2 text-xs text-vyr-gray-400">
-                    <Zap className="w-2.5 h-2.5 text-vyr-accent vyr-icon-glow flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Botão Saiba Mais */}
-          <Link to={sachet.link} className="mt-6 block">
-            <Button
-              variant="outline"
-              className="w-full justify-center py-2.5 text-xs sm:text-sm font-medium rounded-sm transition-all duration-300 bg-transparent hover:bg-vyr-gray-800 text-vyr-gray-300 hover:text-vyr-white border border-vyr-gray-700 hover:border-vyr-gray-500"
-            >
-              Saiba Mais
-              <ArrowRight className="w-3.5 h-3.5 ml-2" />
-            </Button>
-          </Link>
+        {/* Conteúdo */}
+        <p className="text-vyr-gray-300 font-medium text-xs sm:text-sm mb-1.5 sm:mb-2">{sachet.tagline}</p>
+        <p className="text-vyr-gray-400 text-xs sm:text-sm mb-3 sm:mb-4 leading-relaxed">{sachet.benefit}</p>
+        
+        {/* Como usar */}
+        <div className="pt-3 border-t border-vyr-graphite/50 mb-4">
+          <span className="text-[10px] font-mono text-vyr-gray-500 uppercase tracking-wider">
+            Como usar
+          </span>
+          <p className="text-xs text-vyr-gray-400 mt-1">{sachet.usage}</p>
         </div>
+        
+        {/* Composição */}
+        <div className="pt-3 border-t border-vyr-graphite/50 mb-6 flex-1">
+          <span className="text-[10px] font-mono text-vyr-gray-500 uppercase tracking-wider">
+            Composição
+          </span>
+          <ul className="mt-2 space-y-1">
+            {sachet.composition.map((item, i) => (
+              <li key={i} className="flex items-center gap-2 text-xs text-vyr-gray-400">
+                <Zap className="w-2.5 h-2.5 text-vyr-accent vyr-icon-glow flex-shrink-0" />
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Botão Saiba Mais */}
+        <Link to={sachet.link} className="mt-auto">
+          <Button 
+            variant="outline" 
+            className="w-full py-2.5 text-xs sm:text-sm font-medium rounded-sm transition-all duration-300 bg-transparent hover:bg-vyr-gray-800 text-vyr-gray-300 hover:text-vyr-white border border-vyr-gray-700 hover:border-vyr-gray-500"
+          >
+            Saiba Mais
+            <ArrowRight className="w-3.5 h-3.5 ml-2" />
+          </Button>
+        </Link>
       </div>
     </div>
   );
@@ -185,9 +181,9 @@ export default function VYRNutrition() {
 
         {/* Sachets Grid */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 sm:mt-24">
-          <div className="grid md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+          <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
             {SACHETS.map((sachet, index) => (
-              <ScrollReveal key={sachet.id} delay={index * 100} className="h-full">
+              <ScrollReveal key={sachet.id} delay={index * 100}>
                 <SachetCard sachet={sachet} />
               </ScrollReveal>
             ))}
