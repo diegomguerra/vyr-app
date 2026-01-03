@@ -1,4 +1,3 @@
-import { Quote } from "lucide-react";
 const testimonials = [{
   name: "Rafael M.",
   role: "Trader | B3",
@@ -53,7 +52,7 @@ export function Testimonials() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map((testimonial, index) => <div key={index} className="relative group p-6 rounded-sm bg-vyr-gray-800 border border-vyr-gray-700 hover:border-vyr-gray-600 transition-all duration-300">
               {/* Quote Icon */}
-              <Quote className="w-8 h-8 mb-4 bg-primary-foreground text-sidebar" />
+              
               
               {/* Content */}
               <p className="text-vyr-gray-300 leading-relaxed mb-6">
