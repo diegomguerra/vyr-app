@@ -53,7 +53,7 @@ export function Hero() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
             <Link to="/como-funciona">
               <Button size="lg" className="vyr-btn-accent px-8 sm:px-10 py-6 text-base rounded-sm group">
-                Conheça o VYR SYSTEM
+                Começar minha jornada
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
