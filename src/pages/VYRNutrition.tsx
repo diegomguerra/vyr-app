@@ -14,7 +14,7 @@ const SACHETS = [
     period: "Manhã",
     icon: Sun,
     tagline: "Ativação com leveza",
-    benefit: "Ajuda a iniciar o dia com clareza, sem aceleração excessiva. Menos inércia mental. Mais prontidão limpa.",
+    benefit: "Ajuda a iniciar o dia com clareza, menos atrito mental. Mais energia limpa.",
     usage: "Tomar ao acordar, em jejum ou com café",
     bgColor: "bg-vyr-gray-100",
     textColor: "text-vyr-black",

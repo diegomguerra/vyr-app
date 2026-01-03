@@ -10,7 +10,7 @@ const supplements = [{
   icon: Sun,
   period: "Manhã",
   tagline: "Ativação com leveza",
-  description: "Ajuda a iniciar o dia com clareza, sem aceleração excessiva. Menos inércia mental. Mais prontidão limpa.",
+  description: "Ajuda a iniciar o dia com clareza, menos atrito mental. Mais energia limpa.",
   benefits: ["Atenção mais estável", "Menos esforço para começar", "Clareza sem tensão"],
   bgColor: "bg-vyr-gray-100",
   borderColor: "border-vyr-gray-300",
