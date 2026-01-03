@@ -82,12 +82,13 @@ export function BrainLogo({
         src={dataUrl ?? src}
         alt={alt}
         className={cn(
-          "select-none animate-spin3d",
+          "select-none animate-spin3d animate-glow-pulse",
           className
         )}
         style={{
           transformStyle: "preserve-3d",
           backfaceVisibility: "hidden",
+          animation: "spin3d 8s ease-in-out infinite, glow-pulse 3s ease-in-out infinite",
         }}
         loading="eager"
         decoding="async"

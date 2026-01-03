@@ -135,6 +135,14 @@ export default {
           "0%, 100%": { transform: "translateY(0) rotateY(-8deg)" },
           "50%": { transform: "translateY(-10px) rotateY(8deg)" },
         },
+        "glow-pulse": {
+          "0%, 100%": { 
+            filter: "drop-shadow(0 0 20px rgba(56, 189, 248, 0.3)) drop-shadow(0 0 40px rgba(56, 189, 248, 0.15))",
+          },
+          "50%": { 
+            filter: "drop-shadow(0 0 35px rgba(56, 189, 248, 0.5)) drop-shadow(0 0 60px rgba(56, 189, 248, 0.25))",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -143,6 +151,7 @@ export default {
         "slide-in": "slide-in 0.3s ease-out",
         spin3d: "spin3d 8s ease-in-out infinite",
         float3d: "float3d 6s ease-in-out infinite",
+        "glow-pulse": "glow-pulse 3s ease-in-out infinite",
       },
     },
   },
