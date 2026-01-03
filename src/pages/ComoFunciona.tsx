@@ -2,155 +2,229 @@ import { Link } from "react-router-dom";
 import { LandingNav, Footer } from "@/components/landing";
 import { Button } from "@/components/ui/button";
 import { SachetMockup, NodeVisual } from "@/brand";
-import { 
-  Brain, 
-  Zap, 
-  Moon, 
-  Sun, 
-  Sunset, 
-  Activity, 
-  Heart, 
-  Thermometer,
-  Wind,
-  TrendingUp,
-  BarChart3,
-  Target,
-  Sparkles,
-  ArrowRight,
-  Check,
-  Smartphone,
-  Watch,
-  Database,
-  Layers,
-  CircleDot
-} from "lucide-react";
+import { Brain, Zap, Moon, Sun, Sunset, Activity, Heart, Thermometer, Wind, TrendingUp, BarChart3, Target, Sparkles, ArrowRight, Check, Smartphone, Watch, Database, Layers, CircleDot } from "lucide-react";
 
 // ========== SEÇÃO 1: SACHÊS ==========
-const sachets = [
-  {
-    id: "dia",
-    name: "VYR BOOT",
-    variant: "BOOT" as const,
-    icon: Sun,
-    bgColor: "bg-vyr-gray-100",
-    textColor: "text-vyr-black",
-    accentColor: "text-vyr-gray-600",
-    borderColor: "border-vyr-gray-300",
-    periodo: "Manhã",
-    objetivo: "Início com energia limpa.",
-    descricao: "Início com energia limpa. Clareza para começar sem peso mental.",
-    areas: [
-      { name: "Córtex Pré-Frontal", funcao: "Controle executivo" },
-      { name: "Hipocampo", funcao: "Memória de trabalho" },
-      { name: "Córtex Temporal Medial", funcao: "Aprendizagem" }
-    ],
-    componentes: [
-      { nome: "Citicolina — 250 mg", funcao: "Atenção executiva, memória de trabalho" },
-      { nome: "Fosfatidilserina — 200 mg", funcao: "Velocidade cognitiva, processamento executivo" },
-      { nome: "Bacopa monnieri — 400 mg", funcao: "Consolidação de memória, aprendizado" },
-      { nome: "L-Teanina — 100 mg", funcao: "Atenção calma, redução de ruído cognitivo" },
-      { nome: "Teacrina — 100 mg", funcao: "Energia mental sustentada" },
-      { nome: "PQQ — 10 mg", funcao: "Neuroplasticidade, suporte mitocondrial" },
-      { nome: "Creatina — 3 g", funcao: "Reserva energética neuronal" },
-      { nome: "Vitamina B6 — 25 mg", funcao: "Síntese de neurotransmissores" },
-      { nome: "Vitamina B9 — 400 mcg", funcao: "Metilação e função neural" },
-      { nome: "Vitamina B12 — 500 mcg", funcao: "Manutenção da mielina" }
-    ]
-  },
-  {
-    id: "tarde",
-    name: "VYR HOLD",
-    variant: "HOLD" as const,
-    icon: Sunset,
-    bgColor: "bg-vyr-gray-600",
-    textColor: "text-vyr-white",
-    accentColor: "text-vyr-gray-300",
-    borderColor: "border-vyr-gray-500",
-    periodo: "Tarde",
-    objetivo: "Sustentação sem desgaste.",
-    descricao: "Sustentação sem desgaste. Energia estável para manter foco e decisão.",
-    areas: [
-      { name: "Córtex Pré-Frontal", funcao: "Sustentação" },
-      { name: "Tronco Encefálico", funcao: "Vigília" },
-      { name: "Amígdala", funcao: "Regulação emocional" }
-    ],
-    componentes: [
-      { nome: "Teacrina — 100 mg", funcao: "Estado de alerta estável, energia mental" },
-      { nome: "L-Teanina — 100 mg", funcao: "Controle do estresse cognitivo, foco relaxado" },
-      { nome: "L-Taurina — 250 mg", funcao: "Modulação neural, redução de excitotoxicidade" },
-      { nome: "Cafeína — 25 mg", funcao: "Alerta suave, sem picos" },
-      { nome: "Bicarbonato de sódio — 1,4 g", funcao: "Tampão ácido-base, performance" }
-    ]
-  },
-  {
-    id: "noite",
-    name: "VYR CLEAR",
-    variant: "CLEAR" as const,
-    icon: Moon,
-    bgColor: "bg-[#1E293B]",
-    textColor: "text-vyr-white",
-    accentColor: "text-vyr-gray-300",
-    borderColor: "border-[#1E293B]/50",
-    periodo: "Noite",
-    objetivo: "Desaceleração inteligente.",
-    descricao: "Desaceleração inteligente. Menos resíduo mental. Mais leveza no dia seguinte.",
-    areas: [
-      { name: "Hipotálamo", funcao: "Ritmo circadiano" },
-      { name: "Sistema Límbico", funcao: "Regulação emocional" },
-      { name: "Hipocampo", funcao: "Consolidação de memória" }
-    ],
-    componentes: [
-      { nome: "N-acetilcisteína (NAC) — 600 mg", funcao: "Regulação glutamatérgica, recuperação sináptica" },
-      { nome: "Ashwagandha — 300 mg", funcao: "Modulação do estresse, redução de ativação límbica" },
-      { nome: "Magnésio quelato — 200 mg", funcao: "Relaxamento neural, transição sono-vigília" }
-    ]
-  }
-];
+const sachets = [{
+  id: "dia",
+  name: "VYR BOOT",
+  variant: "BOOT" as const,
+  icon: Sun,
+  bgColor: "bg-vyr-gray-100",
+  textColor: "text-vyr-black",
+  accentColor: "text-vyr-gray-600",
+  borderColor: "border-vyr-gray-300",
+  periodo: "Manhã",
+  objetivo: "Início com energia limpa.",
+  descricao: "Início com energia limpa. Clareza para começar sem peso mental.",
+  areas: [{
+    name: "Córtex Pré-Frontal",
+    funcao: "Controle executivo"
+  }, {
+    name: "Hipocampo",
+    funcao: "Memória de trabalho"
+  }, {
+    name: "Córtex Temporal Medial",
+    funcao: "Aprendizagem"
+  }],
+  componentes: [{
+    nome: "Citicolina — 250 mg",
+    funcao: "Atenção executiva, memória de trabalho"
+  }, {
+    nome: "Fosfatidilserina — 200 mg",
+    funcao: "Velocidade cognitiva, processamento executivo"
+  }, {
+    nome: "Bacopa monnieri — 400 mg",
+    funcao: "Consolidação de memória, aprendizado"
+  }, {
+    nome: "L-Teanina — 100 mg",
+    funcao: "Atenção calma, redução de ruído cognitivo"
+  }, {
+    nome: "Teacrina — 100 mg",
+    funcao: "Energia mental sustentada"
+  }, {
+    nome: "PQQ — 10 mg",
+    funcao: "Neuroplasticidade, suporte mitocondrial"
+  }, {
+    nome: "Creatina — 3 g",
+    funcao: "Reserva energética neuronal"
+  }, {
+    nome: "Vitamina B6 — 25 mg",
+    funcao: "Síntese de neurotransmissores"
+  }, {
+    nome: "Vitamina B9 — 400 mcg",
+    funcao: "Metilação e função neural"
+  }, {
+    nome: "Vitamina B12 — 500 mcg",
+    funcao: "Manutenção da mielina"
+  }]
+}, {
+  id: "tarde",
+  name: "VYR HOLD",
+  variant: "HOLD" as const,
+  icon: Sunset,
+  bgColor: "bg-vyr-gray-600",
+  textColor: "text-vyr-white",
+  accentColor: "text-vyr-gray-300",
+  borderColor: "border-vyr-gray-500",
+  periodo: "Tarde",
+  objetivo: "Sustentação sem desgaste.",
+  descricao: "Sustentação sem desgaste. Energia estável para manter foco e decisão.",
+  areas: [{
+    name: "Córtex Pré-Frontal",
+    funcao: "Sustentação"
+  }, {
+    name: "Tronco Encefálico",
+    funcao: "Vigília"
+  }, {
+    name: "Amígdala",
+    funcao: "Regulação emocional"
+  }],
+  componentes: [{
+    nome: "Teacrina — 100 mg",
+    funcao: "Estado de alerta estável, energia mental"
+  }, {
+    nome: "L-Teanina — 100 mg",
+    funcao: "Controle do estresse cognitivo, foco relaxado"
+  }, {
+    nome: "L-Taurina — 250 mg",
+    funcao: "Modulação neural, redução de excitotoxicidade"
+  }, {
+    nome: "Cafeína — 25 mg",
+    funcao: "Alerta suave, sem picos"
+  }, {
+    nome: "Bicarbonato de sódio — 1,4 g",
+    funcao: "Tampão ácido-base, performance"
+  }]
+}, {
+  id: "noite",
+  name: "VYR CLEAR",
+  variant: "CLEAR" as const,
+  icon: Moon,
+  bgColor: "bg-[#1E293B]",
+  textColor: "text-vyr-white",
+  accentColor: "text-vyr-gray-300",
+  borderColor: "border-[#1E293B]/50",
+  periodo: "Noite",
+  objetivo: "Desaceleração inteligente.",
+  descricao: "Desaceleração inteligente. Menos resíduo mental. Mais leveza no dia seguinte.",
+  areas: [{
+    name: "Hipotálamo",
+    funcao: "Ritmo circadiano"
+  }, {
+    name: "Sistema Límbico",
+    funcao: "Regulação emocional"
+  }, {
+    name: "Hipocampo",
+    funcao: "Consolidação de memória"
+  }],
+  componentes: [{
+    nome: "N-acetilcisteína (NAC) — 600 mg",
+    funcao: "Regulação glutamatérgica, recuperação sináptica"
+  }, {
+    nome: "Ashwagandha — 300 mg",
+    funcao: "Modulação do estresse, redução de ativação límbica"
+  }, {
+    nome: "Magnésio quelato — 200 mg",
+    funcao: "Relaxamento neural, transição sono-vigília"
+  }]
+}];
 
 // ========== SEÇÃO 2: ENTRADA DE DADOS ==========
-const entradaDados = [
-  { icon: Target, label: "Qualidade de foco", desc: "Capacidade de concentração" },
-  { icon: Sparkles, label: "Clareza mental", desc: "Nitidez do pensamento" },
-  { icon: Zap, label: "Energia cognitiva", desc: "Disposição mental" },
-  { icon: Activity, label: "Estresse percebido", desc: "Nível de pressão mental" },
-  { icon: Moon, label: "Qualidade do sono", desc: "Descanso e recuperação" },
-  { icon: Sun, label: "Estado mental ao despertar", desc: "Clareza ao acordar" }
-];
+const entradaDados = [{
+  icon: Target,
+  label: "Qualidade de foco",
+  desc: "Capacidade de concentração"
+}, {
+  icon: Sparkles,
+  label: "Clareza mental",
+  desc: "Nitidez do pensamento"
+}, {
+  icon: Zap,
+  label: "Energia cognitiva",
+  desc: "Disposição mental"
+}, {
+  icon: Activity,
+  label: "Estresse percebido",
+  desc: "Nível de pressão mental"
+}, {
+  icon: Moon,
+  label: "Qualidade do sono",
+  desc: "Descanso e recuperação"
+}, {
+  icon: Sun,
+  label: "Estado mental ao despertar",
+  desc: "Clareza ao acordar"
+}];
 
 // ========== SEÇÃO 3: VYR NODE ==========
-const ringMetrics = [
-  { icon: Heart, label: "Frequência cardíaca 24/7", desc: "Monitoramento contínuo" },
-  { icon: Activity, label: "HRV", desc: "Variabilidade da frequência cardíaca" },
-  { icon: TrendingUp, label: "Estresse fisiológico", desc: "Medição objetiva" },
-  { icon: Moon, label: "Arquitetura do sono", desc: "Tracking automático" },
-  { icon: Zap, label: "Atividade diária", desc: "Movimento e energia" },
-  { icon: Thermometer, label: "Temperatura corporal", desc: "Padrões térmicos" },
-  { icon: Wind, label: "SpO₂", desc: "Saturação de oxigênio" },
-  { icon: BarChart3, label: "VO₂ estimado", desc: "Capacidade aeróbica" }
-];
+const ringMetrics = [{
+  icon: Heart,
+  label: "Frequência cardíaca 24/7",
+  desc: "Monitoramento contínuo"
+}, {
+  icon: Activity,
+  label: "HRV",
+  desc: "Variabilidade da frequência cardíaca"
+}, {
+  icon: TrendingUp,
+  label: "Estresse fisiológico",
+  desc: "Medição objetiva"
+}, {
+  icon: Moon,
+  label: "Arquitetura do sono",
+  desc: "Tracking automático"
+}, {
+  icon: Zap,
+  label: "Atividade diária",
+  desc: "Movimento e energia"
+}, {
+  icon: Thermometer,
+  label: "Temperatura corporal",
+  desc: "Padrões térmicos"
+}, {
+  icon: Wind,
+  label: "SpO₂",
+  desc: "Saturação de oxigênio"
+}, {
+  icon: BarChart3,
+  label: "VO₂ estimado",
+  desc: "Capacidade aeróbica"
+}];
 
 // ========== SEÇÃO 4: INTEGRAÇÃO ==========
-const integracaoDia = [
-  { acao: "Atividade autonômica mais estável", metrica: "HRV estabilizado" },
-  { acao: "Atenção sustentada", metrica: "FC 24h mais estável" },
-  { acao: "Clareza cognitiva matinal", metrica: "Redução de estresse basal" }
-];
-
-const integracaoTarde = [
-  { acao: "Redução de variabilidade sob carga", metrica: "HRV Stress" },
-  { acao: "Sustentação do estado cognitivo", metrica: "FC + atividade estáveis" },
-  { acao: "Menor fadiga mental ao final do dia", metrica: "Temperatura / HRV" }
-];
-
-const integracaoNoite = [
-  { acao: "Redução de ativação noturna", metrica: "HRV noturno ↑" },
-  { acao: "Consolidação de memória", metrica: "Fases do sono" },
-  { acao: "Recuperação neural mais consistente", metrica: "FC noturna ↓" }
-];
-
+const integracaoDia = [{
+  acao: "Atividade autonômica mais estável",
+  metrica: "HRV estabilizado"
+}, {
+  acao: "Atenção sustentada",
+  metrica: "FC 24h mais estável"
+}, {
+  acao: "Clareza cognitiva matinal",
+  metrica: "Redução de estresse basal"
+}];
+const integracaoTarde = [{
+  acao: "Redução de variabilidade sob carga",
+  metrica: "HRV Stress"
+}, {
+  acao: "Sustentação do estado cognitivo",
+  metrica: "FC + atividade estáveis"
+}, {
+  acao: "Menor fadiga mental ao final do dia",
+  metrica: "Temperatura / HRV"
+}];
+const integracaoNoite = [{
+  acao: "Redução de ativação noturna",
+  metrica: "HRV noturno ↑"
+}, {
+  acao: "Consolidação de memória",
+  metrica: "Fases do sono"
+}, {
+  acao: "Recuperação neural mais consistente",
+  metrica: "FC noturna ↓"
+}];
 export default function ComoFunciona() {
-  return (
-    <div className="min-h-screen vyr-gradient-bg">
+  return <div className="min-h-screen vyr-gradient-bg">
       <LandingNav />
       
       {/* Hero */}
@@ -267,11 +341,7 @@ export default function ComoFunciona() {
           </div>
 
           <div className="space-y-8">
-            {sachets.map((sachet) => (
-              <div 
-                key={sachet.id} 
-                className="relative rounded-sm vyr-card-graphite overflow-hidden"
-              >
+            {sachets.map(sachet => <div key={sachet.id} className="relative rounded-sm vyr-card-graphite overflow-hidden">
                 {/* Top bar */}
                 <div className={`absolute top-0 left-0 w-full h-1 ${sachet.bgColor}`} />
                 
@@ -305,13 +375,11 @@ export default function ComoFunciona() {
                         <h4 className="text-xs font-semibold text-vyr-gray-500 uppercase tracking-wide mb-3">
                           Áreas Moduladas
                         </h4>
-                        {sachet.areas.map((area, i) => (
-                          <div key={i} className="flex items-center gap-2 text-sm">
+                        {sachet.areas.map((area, i) => <div key={i} className="flex items-center gap-2 text-sm">
                             <Brain className="w-3.5 h-3.5 text-vyr-accent vyr-icon-glow" />
                             <span className="text-vyr-white font-medium">{area.name}</span>
                             <span className="text-vyr-gray-500">— {area.funcao}</span>
-                          </div>
-                        ))}
+                          </div>)}
                       </div>
                     </div>
 
@@ -321,21 +389,18 @@ export default function ComoFunciona() {
                         Componentes & Funções
                       </h4>
                       <div className="grid sm:grid-cols-2 gap-3">
-                        {sachet.componentes.map((comp, i) => (
-                          <div key={i} className="flex items-start gap-2 p-3 rounded-sm bg-vyr-graphite/30 border border-vyr-graphite/50">
+                        {sachet.componentes.map((comp, i) => <div key={i} className="flex items-start gap-2 p-3 rounded-sm bg-vyr-graphite/30 border border-vyr-graphite/50">
                             <Check className="w-4 h-4 text-vyr-accent vyr-icon-glow mt-0.5 flex-shrink-0" />
                             <div>
                               <div className="text-sm text-vyr-white font-medium">{comp.nome}</div>
                               <div className="text-xs text-vyr-gray-500">{comp.funcao}</div>
                             </div>
-                          </div>
-                        ))}
+                          </div>)}
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              </div>)}
           </div>
         </div>
       </section>
@@ -361,15 +426,13 @@ export default function ComoFunciona() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
-            {entradaDados.map((item, i) => (
-              <div key={i} className="p-5 vyr-card-graphite">
+            {entradaDados.map((item, i) => <div key={i} className="p-5 vyr-card-graphite">
                 <div className="w-10 h-10 rounded-sm bg-vyr-graphite flex items-center justify-center mb-3">
                   <item.icon className="w-5 h-5 text-vyr-accent vyr-icon-glow" />
                 </div>
                 <h3 className="font-medium text-vyr-white mb-1">{item.label}</h3>
                 <p className="text-sm text-vyr-gray-500">{item.desc}</p>
-              </div>
-            ))}
+              </div>)}
           </div>
 
           <div className="vyr-card-graphite p-8 border-l-2 border-l-vyr-accent">
@@ -436,15 +499,13 @@ export default function ComoFunciona() {
             <div className="order-1 md:order-2">
               <h3 className="text-lg font-medium text-vyr-white mb-6">O VYR NODE captura:</h3>
               <div className="grid sm:grid-cols-2 gap-4">
-                {ringMetrics.map((metric, i) => (
-                  <div key={i} className="p-4 vyr-card-graphite">
+                {ringMetrics.map((metric, i) => <div key={i} className="p-4 vyr-card-graphite">
                     <div className="w-10 h-10 rounded-sm bg-vyr-graphite flex items-center justify-center mb-3">
                       <metric.icon className="w-5 h-5 text-vyr-coldBlue" />
                     </div>
                     <h3 className="font-medium text-vyr-white text-sm mb-1">{metric.label}</h3>
                     <p className="text-xs text-vyr-gray-500">{metric.desc}</p>
-                  </div>
-                ))}
+                  </div>)}
               </div>
             </div>
           </div>
@@ -510,9 +571,9 @@ export default function ComoFunciona() {
                 <ArrowRight className="w-4 h-4" />
                 <span className="px-2 py-1 bg-vyr-graphite rounded-sm">Registro</span>
                 <ArrowRight className="w-4 h-4" />
-                <span className="px-2 py-1 bg-vyr-coldBlue/20 rounded-sm text-vyr-coldBlue">Dados fisiológicos</span>
+                <span className="px-2 py-1 bg-vyr-coldBlue/20 rounded-sm text-primary-foreground">Dados fisiológicos</span>
                 <ArrowRight className="w-4 h-4" />
-                <span className="px-2 py-1 bg-vyr-coldBlue/20 rounded-sm text-vyr-coldBlue">Correlação</span>
+                <span className="px-2 py-1 bg-vyr-coldBlue/20 rounded-sm text-primary-foreground">Correlação</span>
               </div>
               
               <p className="text-vyr-gray-400 leading-relaxed">
@@ -552,12 +613,10 @@ export default function ComoFunciona() {
               <h3 className="text-xl font-mono font-medium text-vyr-white tracking-wide">VYR BOOT + VYR NODE</h3>
             </div>
             <div className="grid sm:grid-cols-3 gap-4">
-              {integracaoDia.map((item, i) => (
-                <div key={i} className="p-5 vyr-card-graphite">
+              {integracaoDia.map((item, i) => <div key={i} className="p-5 vyr-card-graphite">
                   <div className="text-sm font-medium text-vyr-white mb-3">{item.acao}</div>
-                  <div className="text-xs text-vyr-accent font-mono">{item.metrica}</div>
-                </div>
-              ))}
+                  <div className="text-xs font-mono text-neutral-400">{item.metrica}</div>
+                </div>)}
             </div>
           </div>
 
@@ -568,12 +627,10 @@ export default function ComoFunciona() {
               <h3 className="text-xl font-mono font-medium text-vyr-white tracking-wide">VYR HOLD + VYR NODE</h3>
             </div>
             <div className="grid sm:grid-cols-3 gap-4">
-              {integracaoTarde.map((item, i) => (
-                <div key={i} className="p-5 vyr-card-graphite">
+              {integracaoTarde.map((item, i) => <div key={i} className="p-5 vyr-card-graphite">
                   <div className="text-sm font-medium text-vyr-white mb-3">{item.acao}</div>
-                  <div className="text-xs text-vyr-accent font-mono">{item.metrica}</div>
-                </div>
-              ))}
+                  <div className="text-xs font-mono text-neutral-400">{item.metrica}</div>
+                </div>)}
             </div>
           </div>
 
@@ -584,12 +641,13 @@ export default function ComoFunciona() {
               <h3 className="text-xl font-mono font-medium text-vyr-white tracking-wide">VYR CLEAR + VYR NODE</h3>
             </div>
             <div className="grid sm:grid-cols-3 gap-4">
-              {integracaoNoite.map((item, i) => (
-                <div key={i} className="p-5 rounded-sm backdrop-blur-sm border transition-all duration-300" style={{ background: 'linear-gradient(145deg, hsl(var(--vyr-accent) / 0.15) 0%, hsl(var(--vyr-graphite-dark) / 0.6) 100%)', borderColor: 'hsl(var(--vyr-accent) / 0.3)' }}>
+              {integracaoNoite.map((item, i) => <div key={i} className="p-5 rounded-sm backdrop-blur-sm border transition-all duration-300" style={{
+              background: 'linear-gradient(145deg, hsl(var(--vyr-accent) / 0.15) 0%, hsl(var(--vyr-graphite-dark) / 0.6) 100%)',
+              borderColor: 'hsl(var(--vyr-accent) / 0.3)'
+            }}>
                   <div className="text-sm font-medium text-vyr-white mb-3">{item.acao}</div>
                   <div className="text-xs text-vyr-coldBlue font-mono">{item.metrica}</div>
-                </div>
-              ))}
+                </div>)}
             </div>
           </div>
 
@@ -628,6 +686,5 @@ export default function ComoFunciona() {
       </section>
 
       <Footer />
-    </div>
-  );
+    </div>;
 }
