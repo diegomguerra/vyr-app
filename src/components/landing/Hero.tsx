@@ -32,7 +32,7 @@ export function Hero() {
           {/* Badge */}
           <div className="inline-flex vyr-badge-accent mb-8">
             <div className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
-            <span className="uppercase text-cyan-700">Performance Cognitiva Guiada</span>
+            <span className="uppercase text-cyan-700">Operação VYR</span>
           </div>
 
           {/* Main Title */}
