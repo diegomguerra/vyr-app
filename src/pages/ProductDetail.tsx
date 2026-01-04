@@ -1,5 +1,5 @@
 import { Link, useParams, Navigate } from "react-router-dom";
-import { ArrowLeft, Check, X, Sun, Zap, Moon, Clock, Shield, Sparkles, Brain } from "lucide-react";
+import { ArrowLeft, Check, X, Sun, Zap, Moon, Clock, Shield, Sparkles, Brain, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LandingNav } from "@/components/landing";
 import { SachetMockup } from "@/brand/ProductMockups";
