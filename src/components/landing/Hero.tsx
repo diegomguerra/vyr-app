@@ -57,7 +57,7 @@ export function Hero() {
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <Link to="/sistema-completo" className="text-muted-foreground hover:text-foreground transition-colors text-sm flex items-center gap-2 group">
+            <Link to="/como-funciona" className="text-muted-foreground hover:text-foreground transition-colors text-sm flex items-center gap-2 group">
               Ver como funciona
               <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
             </Link>
