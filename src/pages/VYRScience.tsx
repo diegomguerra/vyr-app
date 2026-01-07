@@ -4,7 +4,65 @@ import { Button } from "@/components/ui/button";
 import { LandingNav } from "@/components/landing/LandingNav";
 import { Footer } from "@/components/landing/Footer";
 import { ScrollReveal } from "@/components/labs";
+import { useEffect, useState, useMemo } from "react";
 
+// Floating particles component
+function FloatingParticles() {
+  const particles = useMemo(() => 
+    Array.from({ length: 40 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 2 + 1,
+      duration: Math.random() * 20 + 30,
+      delay: Math.random() * -20,
+    })), []
+  );
+
+  return (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+      {particles.map((p) => (
+        <div
+          key={p.id}
+          className="absolute rounded-full bg-foreground/[0.03] animate-float-particle"
+          style={{
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            width: `${p.size}px`,
+            height: `${p.size}px`,
+            animationDuration: `${p.duration}s`,
+            animationDelay: `${p.delay}s`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+// Section divider component
+function SectionDivider({ variant = "default" }: { variant?: "default" | "accent" }) {
+  return (
+    <div className="relative h-px w-full overflow-hidden">
+      {/* Base line */}
+      <div className="absolute inset-0 bg-border/20" />
+      
+      {/* Animated gradient line */}
+      <div 
+        className={`absolute inset-0 bg-gradient-to-r from-transparent via-muted-foreground/30 to-transparent
+          animate-slide-divider`}
+        style={{ width: '200%', marginLeft: '-50%' }}
+      />
+      
+      {/* Center accent dot */}
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div className={`w-1.5 h-1.5 rounded-full ${variant === "accent" ? "bg-foreground/20" : "bg-muted-foreground/20"}`} />
+      </div>
+      
+      {/* Side fade lines */}
+      <div className="absolute left-1/2 top-0 h-full w-32 -translate-x-1/2 bg-gradient-to-r from-transparent via-muted-foreground/10 to-transparent" />
+    </div>
+  );
+}
 const PILLARS = [
   {
     icon: Brain,
@@ -70,6 +128,9 @@ export default function VYRScience() {
     <div className="min-h-screen bg-background">
       <LandingNav />
       
+      {/* Floating particles */}
+      <FloatingParticles />
+      
       {/* Grid pattern background */}
       <div 
         className="fixed inset-0 opacity-[0.015] pointer-events-none"
@@ -82,7 +143,7 @@ export default function VYRScience() {
         }}
       />
 
-      <main className="relative">
+      <main className="relative z-10">
         {/* HERO */}
         <section className="min-h-[85vh] flex items-center">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -122,6 +183,9 @@ export default function VYRScience() {
             </ScrollReveal>
           </div>
         </section>
+
+        {/* DIVIDER 1 */}
+        <SectionDivider />
 
         {/* O QUE É / O QUE NÃO É */}
         <section className="py-24 sm:py-32">
@@ -167,6 +231,9 @@ export default function VYRScience() {
           </div>
         </section>
 
+        {/* DIVIDER 2 */}
+        <SectionDivider variant="accent" />
+
         {/* 3 PILARES */}
         <section className="py-24 sm:py-32">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -207,7 +274,8 @@ export default function VYRScience() {
           </div>
         </section>
 
-        {/* O QUE MEDIMOS */}
+        {/* DIVIDER 3 */}
+        <SectionDivider />
         <section className="py-24 sm:py-32 bg-card/20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ScrollReveal>
@@ -248,6 +316,9 @@ export default function VYRScience() {
           </div>
         </section>
 
+        {/* DIVIDER 4 */}
+        <SectionDivider variant="accent" />
+
         {/* CIÊNCIA ≠ PROMESSA */}
         <section className="py-24 sm:py-32">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -276,6 +347,9 @@ export default function VYRScience() {
             </ScrollReveal>
           </div>
         </section>
+
+        {/* DIVIDER 5 */}
+        <SectionDivider />
 
         {/* FUNDAMENTOS */}
         <section className="py-24 sm:py-32 bg-card/20">
@@ -311,6 +385,9 @@ export default function VYRScience() {
             </ScrollReveal>
           </div>
         </section>
+
+        {/* DIVIDER 6 */}
+        <SectionDivider variant="accent" />
 
         {/* BLOCO FINAL */}
         <section className="py-24 sm:py-32">
