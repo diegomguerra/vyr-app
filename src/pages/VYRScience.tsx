@@ -180,17 +180,22 @@ export default function VYRScience() {
             
             <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
               {PILLARS.map((pillar, i) => (
-                <ScrollReveal key={i}>
-                  <div className="h-full bg-card/20 border border-border/30 rounded-sm p-6 sm:p-8 space-y-5">
-                    <pillar.icon className="w-6 h-6 text-muted-foreground/60" strokeWidth={1.5} />
-                    <h3 className="text-lg font-medium text-foreground leading-tight">
-                      {pillar.title}
-                    </h3>
-                    <p className="text-sm text-muted-foreground/80 leading-relaxed whitespace-pre-line">
-                      {pillar.description}
-                    </p>
-                  </div>
-                </ScrollReveal>
+                <div 
+                  key={i}
+                  className="h-full bg-card/20 border border-border/30 rounded-sm p-6 sm:p-8 space-y-5 opacity-0 animate-fade-in"
+                  style={{ 
+                    animationDelay: `${i * 150}ms`,
+                    animationFillMode: 'forwards'
+                  }}
+                >
+                  <pillar.icon className="w-6 h-6 text-muted-foreground/60" strokeWidth={1.5} />
+                  <h3 className="text-lg font-medium text-foreground leading-tight">
+                    {pillar.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground/80 leading-relaxed whitespace-pre-line">
+                    {pillar.description}
+                  </p>
+                </div>
               ))}
             </div>
           </div>
