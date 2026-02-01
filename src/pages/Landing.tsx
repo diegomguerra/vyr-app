@@ -15,6 +15,7 @@ import {
 export default function Landing() {
   return (
     <div className="min-h-screen bg-background">
+      <div>SYNC VYR APP ✅</div>
       <LandingNav />
       <Hero />
       {/* 1. Suplementos - O produto base */}
