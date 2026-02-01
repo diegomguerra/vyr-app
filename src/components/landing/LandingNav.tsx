@@ -31,13 +31,13 @@ export function LandingNav() {
             <NavDropdown trigger="VYR" items={VYR_SUBMENU_ITEMS} />
             <Link
               to="/como-funciona"
-              className="text-muted-foreground hover:text-foreground transition-colors text-xl font-mono tracking-wide leading-none"
+              className="text-muted-foreground hover:text-foreground transition-colors text-xl font-medium tracking-tight leading-none"
             >
               Como Funciona
             </Link>
             <Link
               to="/science"
-              className="text-muted-foreground hover:text-foreground transition-colors text-xl font-mono tracking-wide leading-none"
+              className="text-muted-foreground hover:text-foreground transition-colors text-xl font-medium tracking-tight leading-none"
             >
               VYR Science
             </Link>
@@ -49,7 +49,7 @@ export function LandingNav() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-muted-foreground hover:text-foreground text-xl font-mono tracking-wide px-3 sm:px-4 h-12"
+                className="text-muted-foreground hover:text-foreground text-xl font-medium tracking-tight px-3 sm:px-4 h-12"
               >
                 VYR Labs
               </Button>
@@ -57,7 +57,7 @@ export function LandingNav() {
             <Link to="/labs?signup=true">
               <Button
                 size="sm"
-                className="bg-foreground hover:bg-foreground/90 text-background text-xl font-mono tracking-wide px-4 sm:px-5 h-12"
+                className="bg-foreground hover:bg-foreground/90 text-background text-xl font-medium tracking-tight px-4 sm:px-5 h-12"
               >
                 Começar
               </Button>
@@ -86,26 +86,26 @@ export function LandingNav() {
             />
             <Link
               to="/como-funciona"
-              className="block py-3 text-muted-foreground hover:text-foreground transition-colors text-lg font-mono tracking-wide leading-none border-b border-border/30"
+              className="block py-3 text-muted-foreground hover:text-foreground transition-colors text-lg font-medium tracking-tight leading-none border-b border-border/30"
               onClick={() => setMobileMenuOpen(false)}
             >
               Como Funciona
             </Link>
             <Link
               to="/science"
-              className="block py-3 text-muted-foreground hover:text-foreground transition-colors text-lg font-mono tracking-wide leading-none border-b border-border/30"
+              className="block py-3 text-muted-foreground hover:text-foreground transition-colors text-lg font-medium tracking-tight leading-none border-b border-border/30"
               onClick={() => setMobileMenuOpen(false)}
             >
               VYR Science
             </Link>
             <div className="pt-4 flex gap-2">
               <Link to="/labs" className="flex-1" onClick={() => setMobileMenuOpen(false)}>
-                <Button variant="outline" size="sm" className="w-full text-lg font-mono tracking-wide h-12">
+                <Button variant="outline" size="sm" className="w-full text-lg font-medium tracking-tight h-12">
                   VYR Labs
                 </Button>
               </Link>
               <Link to="/labs?signup=true" className="flex-1" onClick={() => setMobileMenuOpen(false)}>
-                <Button size="sm" className="w-full bg-foreground hover:bg-foreground/90 text-background text-lg font-mono tracking-wide h-12">
+                <Button size="sm" className="w-full bg-foreground hover:bg-foreground/90 text-background text-lg font-medium tracking-tight h-12">
                   Começar
                 </Button>
               </Link>
