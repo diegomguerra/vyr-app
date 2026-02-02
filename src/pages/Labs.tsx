@@ -1,14 +1,15 @@
-// VYR Labs - Labs (Nível 2 - Ambiente técnico)
+// VYR Labs - Labs (Memória Inteligente)
+// Histórico rico com estado dominante e nota do sistema
 
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Clock, FileText, Bell } from "lucide-react";
-import type { Checkpoint, DailyReview } from "@/lib/vyr-types";
-import { formatDate, formatTime } from "@/lib/vyr-store";
+import type { Checkpoint, DailyReview, HistoryDay } from "@/lib/vyr-types";
+import { formatDate, formatDateShort, formatTime } from "@/lib/vyr-store";
 
 type LabsTab = "historico" | "checkpoints" | "revisoes" | "sinais";
 
 interface LabsProps {
-  historyByDay: { date: string; score: number }[];
+  historyByDay: HistoryDay[];
   checkpoints: Checkpoint[];
   dailyReviews: DailyReview[];
   onBack: () => void;
@@ -74,20 +75,39 @@ export default function Labs({
 
       {/* Content */}
       <div className="px-6 py-4">
-        {/* Histórico */}
+        {/* Histórico RICO */}
         {activeTab === "historico" && (
-          <div className="space-y-2">
+          <div className="space-y-3">
             {historyByDay.map((day) => (
               <div
                 key={day.date}
-                className="flex items-center justify-between px-4 py-4 bg-vyr-bg-surface rounded-xl"
+                className="bg-vyr-bg-surface rounded-2xl p-4"
               >
-                <span className="text-vyr-text-secondary text-base">
-                  {formatDate(day.date)}
-                </span>
-                <span className="text-vyr-text-primary text-lg font-medium">
-                  {day.score}
-                </span>
+                {/* Data e Score */}
+                <div className="flex items-start justify-between mb-3">
+                  <span className="text-vyr-text-primary text-base font-medium">
+                    {formatDate(day.date)}
+                  </span>
+                  <span className="text-vyr-text-primary text-2xl font-medium">
+                    {day.score}
+                  </span>
+                </div>
+                
+                {/* Estado dominante */}
+                <p className="text-vyr-text-muted text-xs tracking-wider uppercase mb-1">
+                  Estado dominante
+                </p>
+                <p className="text-vyr-text-secondary text-sm mb-3">
+                  {day.dominantState}
+                </p>
+                
+                {/* Nota do sistema */}
+                <p className="text-vyr-text-muted text-xs tracking-wider uppercase mb-1">
+                  Nota do sistema
+                </p>
+                <p className="text-vyr-text-secondary text-sm">
+                  {day.systemNote}
+                </p>
               </div>
             ))}
           </div>
@@ -95,7 +115,7 @@ export default function Labs({
 
         {/* Checkpoints */}
         {activeTab === "checkpoints" && (
-          <div className="space-y-2">
+          <div className="space-y-3">
             {checkpoints.length === 0 ? (
               <p className="text-vyr-text-muted text-center py-8">
                 Nenhum checkpoint registrado
@@ -104,17 +124,21 @@ export default function Labs({
               checkpoints.map((cp) => (
                 <div
                   key={cp.id}
-                  className="px-4 py-4 bg-vyr-bg-surface rounded-xl"
+                  className="px-4 py-4 bg-vyr-bg-surface rounded-2xl"
                 >
-                  <div className="flex items-center gap-2 mb-1">
+                  <div className="flex items-center gap-2 mb-2">
                     <Clock className="w-4 h-4 text-vyr-text-muted" />
-                    <span className="text-vyr-text-muted text-sm">
-                      {formatDate(cp.timestamp)} • {formatTime(cp.timestamp)}
+                    <span className="text-vyr-text-primary text-sm font-medium">
+                      {formatDateShort(cp.timestamp)} — {formatTime(cp.timestamp)}
                     </span>
                   </div>
-                  {cp.note && (
-                    <p className="text-vyr-text-secondary text-base mt-2">
+                  {cp.note ? (
+                    <p className="text-vyr-text-secondary text-base">
                       {cp.note}
+                    </p>
+                  ) : (
+                    <p className="text-vyr-text-muted text-sm italic">
+                      Sem observação
                     </p>
                   )}
                 </div>
@@ -125,7 +149,7 @@ export default function Labs({
 
         {/* Revisões */}
         {activeTab === "revisoes" && (
-          <div className="space-y-2">
+          <div className="space-y-3">
             {dailyReviews.length === 0 ? (
               <p className="text-vyr-text-muted text-center py-8">
                 Nenhuma revisão registrada
@@ -135,11 +159,11 @@ export default function Labs({
                 <button
                   key={review.id}
                   onClick={() => onReviewTap(review)}
-                  className="w-full flex items-center justify-between px-4 py-4 bg-vyr-bg-surface rounded-xl transition-colors active:bg-vyr-stroke-divider"
+                  className="w-full flex items-center justify-between px-4 py-4 bg-vyr-bg-surface rounded-2xl transition-colors active:bg-vyr-stroke-divider"
                 >
                   <div className="flex items-center gap-3">
                     <FileText className="w-5 h-5 text-vyr-text-muted" />
-                    <span className="text-vyr-text-secondary text-base">
+                    <span className="text-vyr-text-primary text-base font-medium">
                       {formatDate(review.date)}
                     </span>
                   </div>
@@ -153,27 +177,31 @@ export default function Labs({
         {/* Sinais do sistema */}
         {activeTab === "sinais" && (
           <div className="space-y-4">
-            <p className="text-vyr-text-muted text-sm mb-4">
+            <p className="text-vyr-text-secondary text-sm mb-4 leading-relaxed">
               Configure quais sinais do sistema deseja receber.
             </p>
 
             <SignalToggle
               label="Sistema pronto para iniciar foco."
+              description="Notifica quando há janela cognitiva favorável."
               checked={signals.foco}
               onChange={(v) => setSignals((s) => ({ ...s, foco: v }))}
             />
             <SignalToggle
               label="Mudança de estado detectada."
+              description="Alerta sobre variações significativas."
               checked={signals.mudanca}
               onChange={(v) => setSignals((s) => ({ ...s, mudanca: v }))}
             />
             <SignalToggle
               label="Janela ideal para sustentação disponível."
+              description="Indica momento para ativar HOLD."
               checked={signals.sustentacao}
               onChange={(v) => setSignals((s) => ({ ...s, sustentacao: v }))}
             />
             <SignalToggle
               label="Encerramento cognitivo disponível."
+              description="Sugere transição para recuperação."
               checked={signals.encerramento}
               onChange={(v) => setSignals((s) => ({ ...s, encerramento: v }))}
             />
@@ -184,27 +212,34 @@ export default function Labs({
   );
 }
 
-// Toggle para sinais
+// Toggle para sinais COM descrição
 function SignalToggle({
   label,
+  description,
   checked,
   onChange,
 }: {
   label: string;
+  description: string;
   checked: boolean;
   onChange: (value: boolean) => void;
 }) {
   return (
-    <div className="flex items-center justify-between px-4 py-4 bg-vyr-bg-surface rounded-xl">
-      <div className="flex items-center gap-3 flex-1 min-w-0">
-        <Bell className="w-5 h-5 text-vyr-text-muted flex-shrink-0" />
-        <span className="text-vyr-text-secondary text-sm leading-snug">
-          {label}
-        </span>
+    <div className="flex items-start justify-between px-4 py-4 bg-vyr-bg-surface rounded-2xl gap-3">
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-1">
+          <Bell className="w-4 h-4 text-vyr-text-muted flex-shrink-0" />
+          <span className="text-vyr-text-primary text-sm font-medium">
+            {label}
+          </span>
+        </div>
+        <p className="text-vyr-text-muted text-xs leading-relaxed pl-6">
+          {description}
+        </p>
       </div>
       <button
         onClick={() => onChange(!checked)}
-        className={`relative w-12 h-7 rounded-full transition-colors flex-shrink-0 ml-3 ${
+        className={`relative w-12 h-7 rounded-full transition-colors flex-shrink-0 ${
           checked ? "bg-vyr-accent-action" : "bg-vyr-stroke-divider"
         }`}
         aria-checked={checked}

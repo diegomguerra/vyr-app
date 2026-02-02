@@ -1,4 +1,5 @@
 // VYR Labs - Ação do Momento (BOOT/HOLD/CLEAR)
+// Texto expandido: o que vai acontecer + o que esperar
 
 import { ChevronLeft, Play } from "lucide-react";
 import type { MomentAction } from "@/lib/vyr-types";
@@ -27,21 +28,26 @@ export default function MomentActionPage({ action, onBack, onConfirm }: MomentAc
       </div>
 
       {/* Conteúdo central */}
-      <div className="flex-1 flex flex-col items-center justify-center text-center px-4">
+      <div className="flex-1 flex flex-col items-center justify-center px-4">
         {/* Título */}
-        <h1 className="text-vyr-text-primary text-2xl font-medium mb-4">
+        <h1 className="text-vyr-text-primary text-2xl font-medium mb-4 text-center">
           {copy.title}
         </h1>
 
         {/* Texto do sistema */}
-        <p className="text-vyr-text-secondary text-base mb-2">
+        <p className="text-vyr-text-secondary text-base mb-6 text-center">
           {copy.systemText}
         </p>
 
-        {/* Subtexto */}
-        <p className="text-vyr-text-muted text-sm mb-16">
-          {copy.subText}
-        </p>
+        {/* Texto expandido - O QUE VAI ACONTECER */}
+        <div className="bg-vyr-bg-surface rounded-2xl p-5 mb-8 max-w-sm">
+          <p className="text-vyr-text-secondary text-base leading-relaxed mb-4">
+            {copy.expandedText}
+          </p>
+          <p className="text-vyr-text-muted text-sm leading-relaxed">
+            {copy.expectation}
+          </p>
+        </div>
       </div>
 
       {/* CTA */}

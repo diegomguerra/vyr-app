@@ -1,4 +1,5 @@
-// VYR Labs - Revisão do Dia
+// VYR Labs - Revisão do Dia (Com valor gerado)
+// Estrutura: Início + Ao longo + Encerramento + Valor + Fechamento
 
 import { ChevronLeft } from "lucide-react";
 import type { DailyReview } from "@/lib/vyr-types";
@@ -25,26 +26,52 @@ export default function DayReview({ review, onBack }: DayReviewProps) {
         </h1>
       </div>
 
-      {/* Narrativa */}
-      <div className="flex-1 flex flex-col justify-center px-4">
-        <div className="space-y-6 text-center">
+      {/* Narrativa estruturada */}
+      <div className="flex-1 px-2">
+        {/* Bloco 1 - Início do dia */}
+        <div className="mb-8">
+          <p className="text-vyr-text-muted text-xs tracking-wider uppercase mb-2">
+            Início do dia
+          </p>
           <p className="text-vyr-text-secondary text-base leading-relaxed">
             {review.narrativeStart}
           </p>
+        </div>
+
+        {/* Bloco 2 - Ao longo do dia */}
+        <div className="mb-8">
+          <p className="text-vyr-text-muted text-xs tracking-wider uppercase mb-2">
+            Ao longo do dia
+          </p>
           <p className="text-vyr-text-secondary text-base leading-relaxed">
             {review.narrativeMiddle}
+          </p>
+        </div>
+
+        {/* Bloco 3 - Encerramento */}
+        <div className="mb-10">
+          <p className="text-vyr-text-muted text-xs tracking-wider uppercase mb-2">
+            Encerramento
           </p>
           <p className="text-vyr-text-secondary text-base leading-relaxed">
             {review.narrativeEnd}
           </p>
         </div>
 
-        {/* Linha final */}
-        <div className="mt-12 pt-8 border-t border-vyr-stroke-divider">
-          <p className="text-vyr-text-muted text-sm text-center italic">
-            {review.closingLine}
+        {/* Divider */}
+        <div className="h-px bg-vyr-stroke-divider mb-10" />
+
+        {/* Valor gerado pelo sistema */}
+        <div className="mb-8">
+          <p className="text-vyr-text-secondary text-base leading-relaxed">
+            {review.valueGenerated}
           </p>
         </div>
+
+        {/* Linha final */}
+        <p className="text-vyr-text-muted text-sm italic">
+          {review.closingLine}
+        </p>
       </div>
     </div>
   );

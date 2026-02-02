@@ -1,10 +1,11 @@
-// VYR Labs - Mock Store (dados locais conforme spec)
+// VYR Labs - Mock Store (dados ricos conforme prompt definitivo)
 
 import { useState, useCallback } from "react";
-import type { VYRState, Checkpoint, DailyReview, ActionLog, MomentAction } from "./vyr-types";
+import type { VYRState, Checkpoint, DailyReview, ActionLog, MomentAction, HistoryDay } from "./vyr-types";
 
-// Estado inicial mock
+// Estado inicial mock - RICO EM SIGNIFICADO
 const initialState: VYRState = {
+  // Estado base
   vyrStateScore: 78,
   stateLabel: "Energia estável",
   pillars: {
@@ -12,11 +13,42 @@ const initialState: VYRState = {
     clareza: 5,
     estabilidade: 3,
   },
+  
+  // Card 1 - Estado Geral
+  microDescription: "Foco sustentado com boa clareza mental.",
+  
+  // Card 2 - Leitura do Sistema
+  systemReading: {
+    whyScore: "Clareza elevada e energia controlada.",
+    limitingFactor: "O limitante hoje é a estabilidade ao longo do tempo.",
+    dayRisk: "Evite sobrecarga cognitiva prolongada.",
+  },
+  
+  // Card 3 - Hoje isso significa
+  todayMeaning: [
+    "Boa capacidade de manter foco contínuo",
+    "Melhor desempenho com pausas estratégicas",
+  ],
+  
+  // Card 4 - Ação
+  momentAction: "HOLD",
+  momentActionTitle: "Ativar HOLD",
+  actionConsequence: "Manter foco estável pelas próximas horas, priorizando economia cognitiva.",
+  
+  // Detalhe de Estado - Pilares interpretados
+  pillarDescriptions: {
+    energia: "Energia disponível, porém controlada.",
+    clareza: "Boa capacidade de foco e processamento.",
+    estabilidade: "Sustentação moderada ao longo do tempo.",
+  },
+  
+  // Detalhe de Estado - Diagnóstico
+  systemDiagnosis: "O sistema indica um estado favorável para execução. O principal cuidado hoje é evitar longos períodos sem pausa.",
+  
+  // Legado
   contextInsight: "Ritmo consistente. Ajustes finos tendem a funcionar melhor.",
-  momentAction: "BOOT",
-  momentActionTitle: "Iniciar BOOT",
-  momentActionSystemText: "Sistema pronto para iniciar foco.",
-  momentActionSubText: "Ativação cognitiva leve e progressiva.",
+  momentActionSystemText: "Janela de sustentação detectada.",
+  momentActionSubText: "Manutenção do estado atual.",
 };
 
 // Checkpoints mock
@@ -32,14 +64,15 @@ const initialCheckpoints: Checkpoint[] = [
   },
 ];
 
-// Reviews mock
+// Reviews mock - COM VALOR GERADO
 const initialReviews: DailyReview[] = [
   {
     id: "rev-1",
     date: new Date(Date.now() - 86400000).toISOString().slice(0, 10),
     narrativeStart: "Você iniciou o dia com estabilidade moderada.",
-    narrativeMiddle: "Ajustou o ritmo ao longo do dia.",
-    narrativeEnd: "Encerrou com clareza funcional.",
+    narrativeMiddle: "Ajustou o ritmo conforme as demandas cognitivas.",
+    narrativeEnd: "Finalizou o dia com clareza funcional.",
+    valueGenerated: "O sistema manteve coerência entre estado e estratégia ao longo do dia.",
     closingLine: "Ciclo concluído.",
   },
 ];
@@ -47,29 +80,67 @@ const initialReviews: DailyReview[] = [
 // Action logs mock
 const initialActionLogs: ActionLog[] = [];
 
-// Textos por tipo de ação
+// Histórico por dia - RICO
+const initialHistoryByDay: HistoryDay[] = [
+  { 
+    date: new Date().toISOString().slice(0, 10), 
+    score: 78,
+    dominantState: "foco sustentado",
+    systemNote: "dia consistente, sem quedas abruptas"
+  },
+  { 
+    date: new Date(Date.now() - 86400000).toISOString().slice(0, 10), 
+    score: 72,
+    dominantState: "energia moderada",
+    systemNote: "ajustes ao longo do dia"
+  },
+  { 
+    date: new Date(Date.now() - 86400000 * 2).toISOString().slice(0, 10), 
+    score: 81,
+    dominantState: "clareza elevada",
+    systemNote: "bom aproveitamento da janela matinal"
+  },
+  { 
+    date: new Date(Date.now() - 86400000 * 3).toISOString().slice(0, 10), 
+    score: 68,
+    dominantState: "recuperação",
+    systemNote: "padrão esperado após dia intenso"
+  },
+  { 
+    date: new Date(Date.now() - 86400000 * 4).toISOString().slice(0, 10), 
+    score: 75,
+    dominantState: "sustentação",
+    systemNote: "ritmo estável mantido"
+  },
+];
+
+// Textos expandidos por tipo de ação
 export const ACTION_COPY: Record<MomentAction, {
   title: string;
   systemText: string;
-  subText: string;
+  expandedText: string;
+  expectation: string;
   buttonText: string;
 }> = {
   BOOT: {
     title: "Início de ciclo",
     systemText: "Sistema pronto para iniciar foco.",
-    subText: "Ativação cognitiva leve e progressiva.",
+    expandedText: "O sistema irá iniciar ativação cognitiva gradual, preparando sua capacidade de processamento para as próximas horas.",
+    expectation: "Você deve esperar uma sensação de clareza progressiva nos próximos minutos.",
     buttonText: "Entrar em BOOT",
   },
   HOLD: {
     title: "Sustentação",
     systemText: "Janela de sustentação detectada.",
-    subText: "Manutenção do estado atual.",
+    expandedText: "O sistema irá priorizar estabilidade cognitiva, evitando picos e quedas bruscas de energia.",
+    expectation: "Você deve esperar uma sensação de constância ao longo das próximas horas.",
     buttonText: "Ativar HOLD",
   },
   CLEAR: {
     title: "Encerramento",
     systemText: "Encerramento cognitivo disponível.",
-    subText: "Transição para recuperação.",
+    expandedText: "O sistema irá facilitar a transição para um estado de recuperação, reduzindo gradualmente a carga cognitiva.",
+    expectation: "Você deve esperar uma sensação de desaceleração suave e preparação para descanso.",
     buttonText: "Iniciar CLEAR",
   },
 };
@@ -80,6 +151,7 @@ export function useVYRStore() {
   const [checkpoints, setCheckpoints] = useState<Checkpoint[]>(initialCheckpoints);
   const [dailyReviews] = useState<DailyReview[]>(initialReviews);
   const [actionLogs, setActionLogs] = useState<ActionLog[]>(initialActionLogs);
+  const [historyByDay] = useState<HistoryDay[]>(initialHistoryByDay);
 
   const addCheckpoint = useCallback((note?: string) => {
     const newCheckpoint: Checkpoint = {
@@ -106,6 +178,7 @@ export function useVYRStore() {
           momentAction: "HOLD",
           momentActionTitle: "Ativar HOLD",
           stateLabel: "Em foco",
+          actionConsequence: "Manter foco estável pelas próximas horas, priorizando economia cognitiva.",
         };
       }
       if (action === "HOLD") {
@@ -114,6 +187,7 @@ export function useVYRStore() {
           momentAction: "CLEAR",
           momentActionTitle: "Iniciar CLEAR",
           stateLabel: "Sustentando",
+          actionConsequence: "Facilitar transição para recuperação, preservando o que foi construído.",
         };
       }
       if (action === "CLEAR") {
@@ -122,20 +196,12 @@ export function useVYRStore() {
           momentAction: "BOOT",
           momentActionTitle: "Iniciar BOOT",
           stateLabel: "Recuperando",
+          actionConsequence: "Iniciar novo ciclo quando o sistema indicar prontidão.",
         };
       }
       return prev;
     });
   }, []);
-
-  // Histórico por dia (mock)
-  const historyByDay = [
-    { date: new Date().toISOString().slice(0, 10), score: state.vyrStateScore },
-    { date: new Date(Date.now() - 86400000).toISOString().slice(0, 10), score: 72 },
-    { date: new Date(Date.now() - 86400000 * 2).toISOString().slice(0, 10), score: 81 },
-    { date: new Date(Date.now() - 86400000 * 3).toISOString().slice(0, 10), score: 68 },
-    { date: new Date(Date.now() - 86400000 * 4).toISOString().slice(0, 10), score: 75 },
-  ];
 
   return {
     state,
@@ -156,8 +222,14 @@ export function getGreeting(name: string = "Diego"): string {
   return `Boa noite, ${name}`;
 }
 
-// Função para formatar data
+// Função para formatar data (formato rico)
 export function formatDate(date: Date | string): string {
+  const d = typeof date === "string" ? new Date(date) : date;
+  return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "long" });
+}
+
+// Função para formatar data curta
+export function formatDateShort(date: Date | string): string {
   const d = typeof date === "string" ? new Date(date) : date;
   return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
 }
