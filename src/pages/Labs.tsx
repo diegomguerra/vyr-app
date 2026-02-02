@@ -1,11 +1,11 @@
 // VYR Labs - Labs (Visual Whoop-inspired)
-// Memória inteligente com ring gauges, cards visuais e gráfico de evolução
+// Memória inteligente com ring gauges, cards visuais, gráfico de evolução e padrões
 
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Clock, FileText, Bell, TrendingUp } from "lucide-react";
-import type { Checkpoint, DailyReview, HistoryDay } from "@/lib/vyr-types";
+import type { Checkpoint, DailyReview, HistoryDay, DetectedPattern } from "@/lib/vyr-types";
 import { formatDate, formatDateShort, formatTime } from "@/lib/vyr-store";
-import { EvolutionChart } from "@/components/vyr";
+import { EvolutionChart, PatternCard } from "@/components/vyr";
 
 type LabsTab = "historico" | "checkpoints" | "revisoes" | "sinais";
 
@@ -13,6 +13,7 @@ interface LabsProps {
   historyByDay: HistoryDay[];
   checkpoints: Checkpoint[];
   dailyReviews: DailyReview[];
+  detectedPatterns?: DetectedPattern[];
   onBack: () => void;
   onReviewTap: (review: DailyReview) => void;
 }
@@ -115,6 +116,7 @@ export default function Labs({
   historyByDay,
   checkpoints,
   dailyReviews,
+  detectedPatterns = [],
   onBack,
   onReviewTap,
 }: LabsProps) {
@@ -170,12 +172,17 @@ export default function Labs({
 
       {/* Content */}
       <div className="px-5 py-4">
-        {/* Histórico com Gráfico de Evolução + Lista */}
+        {/* Histórico com Gráfico de Evolução + Padrões + Lista */}
         {activeTab === "historico" && (
           <div className="space-y-4">
             {/* Gráfico de Evolução */}
             {historyByDay.length > 1 && (
               <EvolutionChart history={historyByDay} />
+            )}
+
+            {/* Padrões Detectados (NOVO) */}
+            {detectedPatterns.length > 0 && (
+              <PatternCard patterns={detectedPatterns} />
             )}
 
             {/* Lista de dias */}
