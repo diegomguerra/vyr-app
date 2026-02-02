@@ -7,20 +7,24 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
-import { Beaker } from "lucide-react";
-
-// Pages
 import Login from "./pages/Login";
-import Home from "./pages/Home";
-import StateDetail from "./pages/StateDetail";
-import MomentAction from "./pages/MomentAction";
-import Checkpoint from "./pages/Checkpoint";
-import DayReview from "./pages/DayReview";
-import Labs from "./pages/Labs";
+import Dashboard from "./pages/Dashboard";
+import Onboarding from "./pages/Onboarding";
+import Profile from "./pages/Profile";
+import Welcome from "./pages/Welcome";
+import { AppHeader } from "@/components/AppHeader";
+import { NavSidebar } from "./components/nzt";
+import { getParticipante, createParticipante } from "./lib/api";
+import { ThemeProvider } from "./hooks/use-theme";
+import type { Participante } from "./lib/types";
 
-// Store
-import { useVYRStore, getGreeting } from "./lib/vyr-store";
-import type { DailyReview } from "./lib/vyr-types";
+const queryClient = new QueryClient();
+
+const NAV_ITEMS = [
+  { to: "/painel", label: "Painel", icon: "📊" },
+  { to: "/anamnese", label: "Anamnese", icon: "📋" },
+  { to: "/perfil", label: "Perfil", icon: "👤" },
+];
 
 const queryClient = new QueryClient();
 
@@ -84,28 +88,12 @@ function VYRApp() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-vyr-bg-primary safe-area-top safe-area-bottom">
-      {/* Ícone Labs (canto superior direito) - sempre visível na Home */}
-      {screen === "home" && (
-        <button
-          onClick={goLabs}
-          className="fixed top-4 right-4 z-40 p-3 rounded-full bg-vyr-bg-surface transition-colors active:bg-vyr-stroke-divider"
-          aria-label="Abrir Labs"
-        >
-          <Beaker className="w-5 h-5 text-vyr-text-muted" />
-        </button>
-      )}
-
-      {/* Feedback de ação confirmada */}
-      {actionConfirmed && (
-        <div className="fixed top-4 left-4 right-16 z-40 px-4 py-3 bg-vyr-bg-surface rounded-xl animate-fade-in">
-          <p className="text-vyr-text-secondary text-sm text-center">
-            {state.momentAction === "HOLD" 
-              ? "BOOT iniciado" 
-              : state.momentAction === "CLEAR" 
-                ? "HOLD ativado" 
-                : "CLEAR iniciado"}
-          </p>
+    <div className="min-h-screen vyr-gradient-bg">
+      <AppHeader codigo={participante?.codigo} />
+      <div className="max-w-7xl mx-auto flex flex-col lg:grid lg:grid-cols-[220px_1fr] gap-4 p-3 sm:p-4 pb-24 lg:pb-4">
+        {/* Sidebar - hidden on mobile, shown on desktop */}
+        <div className="hidden lg:block">
+          <NavSidebar />
         </div>
       )}
 

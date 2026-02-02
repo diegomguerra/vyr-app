@@ -1,8 +1,8 @@
-// VYR Labs - Login (Tela de entrada minimalista)
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "@/hooks/use-toast";
+import { LoginLayout } from "@/components/LoginLayout";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -79,66 +79,15 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-vyr-bg-primary flex flex-col items-center justify-center px-6 py-8 safe-area-top safe-area-bottom">
-      {/* Logo / Título */}
-      <div className="mb-12 text-center">
-        <h1 className="text-vyr-text-primary text-2xl font-medium tracking-tight mb-2">
-          VYR Labs
-        </h1>
-        <p className="text-vyr-text-muted text-sm">
-          Gestão cognitiva simplificada
-        </p>
-      </div>
-
-      {/* Formulário */}
-      <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
-        <div>
-          <label className="block text-vyr-text-muted text-sm mb-2">
-            Email
-          </label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="seu@email.com"
-            className="w-full px-4 py-3.5 bg-vyr-bg-surface border border-vyr-stroke-divider rounded-xl text-vyr-text-primary placeholder:text-vyr-text-muted focus:outline-none focus:border-vyr-accent-action transition-colors"
-            autoComplete="email"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-vyr-text-muted text-sm mb-2">
-            Senha
-          </label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
-            className="w-full px-4 py-3.5 bg-vyr-bg-surface border border-vyr-stroke-divider rounded-xl text-vyr-text-primary placeholder:text-vyr-text-muted focus:outline-none focus:border-vyr-accent-action transition-colors"
-            autoComplete={isSignUp ? "new-password" : "current-password"}
-            required
-            minLength={6}
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full px-4 py-4 rounded-xl bg-vyr-accent-action text-white font-medium transition-all active:scale-[0.98] active:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed mt-6"
-        >
-          {loading ? "Carregando..." : isSignUp ? "Criar conta" : "Entrar"}
-        </button>
-      </form>
-
-      {/* Toggle sign up / sign in */}
-      <button
-        onClick={() => setIsSignUp(!isSignUp)}
-        className="mt-8 text-vyr-text-muted text-sm transition-colors active:text-vyr-text-secondary"
-      >
-        {isSignUp ? "Já tem conta? Entrar" : "Não tem conta? Criar"}
-      </button>
-    </div>
+    <LoginLayout
+      email={email}
+      password={password}
+      isLoading={isLoading}
+      isSignUp={isSignUp}
+      onEmailChange={setEmail}
+      onPasswordChange={setPassword}
+      onSubmit={handleSubmit}
+      onToggleSignUp={() => setIsSignUp(!isSignUp)}
+    />
   );
 }
