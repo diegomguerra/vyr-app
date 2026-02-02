@@ -1,6 +1,9 @@
 // VYR Labs - Types (versão rica em significado)
 
 export type MomentAction = "BOOT" | "HOLD" | "CLEAR";
+export type ActivityLevel = "low" | "medium" | "high";
+export type PillarType = "energia" | "clareza" | "estabilidade";
+export type ContextStatus = "favorable" | "attention" | "limiting";
 
 export interface VYRPillars {
   energia: number; // 0-5
@@ -80,6 +83,92 @@ export interface ActionLog {
   timestamp: Date;
   action: MomentAction;
 }
+
+// ===== NOVOS TIPOS - BIOMARCADORES E ENGINE =====
+
+// Dados crus da pulseira (NUNCA exibidos ao usuário)
+export interface WearableData {
+  date: string;
+  rhr: number;                    // 55-80 bpm típico
+  hrvIndex: number;               // 0-100 (normalizado)
+  sleepDuration: number;          // em horas decimais
+  sleepQuality: number;           // 0-100
+  sleepRegularity: number;        // -60 a +60 min vs média
+  awakenings: number;             // 0-10+
+  previousDayActivity: ActivityLevel;
+  stressScore: number;            // 0-100
+}
+
+// Estado computado pela VYR Engine
+export interface ComputedState {
+  // Pilares derivados (0-5)
+  pillars: VYRPillars;
+  
+  // Score final (0-100)
+  vyrScore: number;
+  
+  // Interpretações
+  stateLabel: string;
+  dominantPillar: PillarType;
+  limitingPillar: PillarType;
+  
+  // Ação recomendada
+  recommendedAction: MomentAction;
+  actionReason: string;
+}
+
+// Contexto fisiológico qualitativo (o que o usuário VÊ)
+export interface ContextItem {
+  label: string;
+  status: ContextStatus;
+}
+
+export interface PhysiologicalContext {
+  items: ContextItem[];
+}
+
+// Janela cognitiva (proativo)
+export interface CognitiveWindow {
+  available: boolean;
+  duration: string;         // "3-4 horas"
+  suggestion: string;       // "Considere priorizar tarefas que exigem concentração"
+}
+
+// Transição sugerida
+export interface SuggestedTransition {
+  available: boolean;
+  targetAction: MomentAction;
+  reason: string;
+}
+
+// Contexto completo do dia
+export interface DayContext {
+  date: string;
+  wearableData: WearableData;
+  computedState: ComputedState;
+  physiologicalContext: PhysiologicalContext;
+  cognitiveWindow: CognitiveWindow;
+  suggestedTransition: SuggestedTransition;
+  sachetsUsed: MomentAction[];
+  checkpoints: Checkpoint[];
+}
+
+// Padrão detectado (para Labs)
+export interface DetectedPattern {
+  id: string;
+  description: string;
+  correlation?: string;    // "positiva" | "negativa"
+  period: string;          // "Últimos 14 dias"
+}
+
+// Confirmação de sachê
+export interface SachetConfirmation {
+  action: MomentAction;
+  timestamp: Date;
+  nextReadingIn: string;   // "aproximadamente 2-3 horas"
+}
+
+// ===== STORE TYPES =====
 
 export interface VYRStore {
   state: VYRState;

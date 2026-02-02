@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { LoginLayout } from "@/components/LoginLayout";
 
 export default function Login() {
+  const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
@@ -82,7 +83,7 @@ export default function Login() {
     <LoginLayout
       email={email}
       password={password}
-      isLoading={isLoading}
+      isLoading={loading}
       isSignUp={isSignUp}
       onEmailChange={setEmail}
       onPasswordChange={setPassword}

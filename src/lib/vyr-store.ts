@@ -1,116 +1,92 @@
-// VYR Labs - Mock Store (dados ricos conforme prompt definitivo)
+// VYR Labs - Mock Store (integrado com Engine v3)
+// Usa dados simulados de wearable para gerar estado
 
-import { useState, useCallback } from "react";
-import type { VYRState, Checkpoint, DailyReview, ActionLog, MomentAction, HistoryDay } from "./vyr-types";
+import { useState, useCallback, useMemo } from "react";
+import type { 
+  VYRState, 
+  Checkpoint, 
+  DailyReview, 
+  ActionLog, 
+  MomentAction, 
+  HistoryDay,
+  DayContext,
+  SachetConfirmation,
+  DetectedPattern,
+} from "./vyr-types";
+import { computeState } from "./vyr-engine";
+import { 
+  generateSystemReading, 
+  generatePillarDescriptions, 
+  generateSystemDiagnosis,
+  generateTodayMeaning,
+  generatePhysiologicalContext,
+  generateCognitiveWindow,
+  generateSuggestedTransition,
+  detectPatterns,
+} from "./vyr-interpreter";
+import { generate30DayHistory, toHistoryDay, DEMO_SCENARIOS } from "./vyr-mock-data";
 
-// Estado inicial mock - RICO EM SIGNIFICADO
-const initialState: VYRState = {
-  // Estado base
-  vyrStateScore: 78,
-  stateLabel: "Energia estável",
-  pillars: {
-    energia: 4,
-    clareza: 5,
-    estabilidade: 3,
-  },
+// Gera estado VYR completo a partir de dados de wearable
+function buildVYRState(context: DayContext, currentAction: MomentAction): VYRState {
+  const { computedState, wearableData } = context;
   
-  // Card 1 - Estado Geral
-  microDescription: "Foco sustentado com boa clareza mental.",
+  // Gera interpretações
+  const systemReading = generateSystemReading(computedState, wearableData);
+  const pillarDescriptions = generatePillarDescriptions(computedState);
+  const systemDiagnosis = generateSystemDiagnosis(computedState, wearableData);
+  const todayMeaning = generateTodayMeaning(computedState, wearableData);
   
-  // Card 2 - Leitura do Sistema
-  systemReading: {
-    whyScore: "Clareza elevada e energia controlada.",
-    limitingFactor: "O limitante hoje é a estabilidade ao longo do tempo.",
-    dayRisk: "Evite sobrecarga cognitiva prolongada.",
-  },
+  // Mapeia ação para label
+  const actionLabels: Record<MomentAction, string> = {
+    BOOT: "Iniciar BOOT",
+    HOLD: "Ativar HOLD",
+    CLEAR: "Iniciar CLEAR",
+  };
   
-  // Card 3 - Hoje isso significa
-  todayMeaning: [
-    "Boa capacidade de manter foco contínuo",
-    "Melhor desempenho com pausas estratégicas",
-  ],
-  
-  // Card 4 - Ação
-  momentAction: "HOLD",
-  momentActionTitle: "Ativar HOLD",
-  actionConsequence: "Manter foco estável pelas próximas horas, priorizando economia cognitiva.",
-  
-  // Detalhe de Estado - Pilares interpretados
-  pillarDescriptions: {
-    energia: "Energia disponível, porém controlada.",
-    clareza: "Boa capacidade de foco e processamento.",
-    estabilidade: "Sustentação moderada ao longo do tempo.",
-  },
-  
-  // Detalhe de Estado - Diagnóstico
-  systemDiagnosis: "O sistema indica um estado favorável para execução. O principal cuidado hoje é evitar longos períodos sem pausa.",
-  
-  // Legado
-  contextInsight: "Ritmo consistente. Ajustes finos tendem a funcionar melhor.",
-  momentActionSystemText: "Janela de sustentação detectada.",
-  momentActionSubText: "Manutenção do estado atual.",
-};
+  const actionConsequences: Record<MomentAction, string> = {
+    BOOT: "Iniciar ativação cognitiva gradual para as próximas horas.",
+    HOLD: "Manter foco estável pelas próximas horas, priorizando economia cognitiva.",
+    CLEAR: "Facilitar transição para recuperação, preservando o que foi construído.",
+  };
 
-// Checkpoints mock
-const initialCheckpoints: Checkpoint[] = [
-  {
-    id: "cp-1",
-    timestamp: new Date(Date.now() - 86400000 * 2),
-    note: "Manhã com clareza elevada",
-  },
-  {
-    id: "cp-2",
-    timestamp: new Date(Date.now() - 86400000),
-  },
-];
+  return {
+    vyrStateScore: computedState.vyrScore,
+    stateLabel: computedState.stateLabel,
+    pillars: computedState.pillars,
+    microDescription: `${computedState.stateLabel} com ${computedState.dominantPillar} como ponto forte.`,
+    systemReading,
+    todayMeaning,
+    momentAction: currentAction,
+    momentActionTitle: actionLabels[currentAction],
+    actionConsequence: actionConsequences[currentAction],
+    pillarDescriptions,
+    systemDiagnosis,
+    // Legado
+    contextInsight: systemReading.whyScore,
+    momentActionSystemText: computedState.actionReason,
+    momentActionSubText: systemReading.limitingFactor,
+  };
+}
 
-// Reviews mock - COM VALOR GERADO
+// Reviews mock
 const initialReviews: DailyReview[] = [
   {
     id: "rev-1",
     date: new Date(Date.now() - 86400000).toISOString().slice(0, 10),
-    narrativeStart: "Você iniciou o dia com estabilidade moderada.",
-    narrativeMiddle: "Ajustou o ritmo conforme as demandas cognitivas.",
-    narrativeEnd: "Finalizou o dia com clareza funcional.",
-    valueGenerated: "O sistema manteve coerência entre estado e estratégia ao longo do dia.",
-    closingLine: "Ciclo concluído.",
+    narrativeStart: "Você iniciou o dia com energia moderada e clareza preservada.",
+    narrativeMiddle: "O ciclo BOOT foi ativado às 08:45. Transição para HOLD às 14:20 manteve estabilidade.",
+    narrativeEnd: "CLEAR ativado às 19:30. O sistema registrou fechamento adequado do ciclo.",
+    valueGenerated: "O sistema manteve coerência entre estado e estratégia ao longo do dia. Boa adequação detectada.",
+    closingLine: "Ciclo concluído com sucesso.",
   },
-];
-
-// Action logs mock
-const initialActionLogs: ActionLog[] = [];
-
-// Histórico por dia - RICO
-const initialHistoryByDay: HistoryDay[] = [
-  { 
-    date: new Date().toISOString().slice(0, 10), 
-    score: 78,
-    dominantState: "foco sustentado",
-    systemNote: "dia consistente, sem quedas abruptas"
-  },
-  { 
-    date: new Date(Date.now() - 86400000).toISOString().slice(0, 10), 
-    score: 72,
-    dominantState: "energia moderada",
-    systemNote: "ajustes ao longo do dia"
-  },
-  { 
-    date: new Date(Date.now() - 86400000 * 2).toISOString().slice(0, 10), 
-    score: 81,
-    dominantState: "clareza elevada",
-    systemNote: "bom aproveitamento da janela matinal"
-  },
-  { 
-    date: new Date(Date.now() - 86400000 * 3).toISOString().slice(0, 10), 
-    score: 68,
-    dominantState: "recuperação",
-    systemNote: "padrão esperado após dia intenso"
-  },
-  { 
-    date: new Date(Date.now() - 86400000 * 4).toISOString().slice(0, 10), 
-    score: 75,
-    dominantState: "sustentação",
-    systemNote: "ritmo estável mantido"
+  {
+    id: "rev-2",
+    date: new Date(Date.now() - 86400000 * 2).toISOString().slice(0, 10),
+    narrativeStart: "Início com clareza elevada e boa reserva energética.",
+    narrativeMiddle: "Dia de alta produtividade. O sistema suportou demandas intensas.",
+    narrativeEnd: "Encerramento no horário adequado preservou a recuperação.",
+    valueGenerated: "Excelente aproveitamento da janela cognitiva disponível.",
+    closingLine: "Padrão consistente.",
   },
 ];
 
@@ -145,13 +121,66 @@ export const ACTION_COPY: Record<MomentAction, {
   },
 };
 
-// Hook para gerenciar o store
+// Hook para gerenciar o store com engine integrada
 export function useVYRStore() {
-  const [state, setState] = useState<VYRState>(initialState);
-  const [checkpoints, setCheckpoints] = useState<Checkpoint[]>(initialCheckpoints);
-  const [dailyReviews] = useState<DailyReview[]>(initialReviews);
-  const [actionLogs, setActionLogs] = useState<ActionLog[]>(initialActionLogs);
-  const [historyByDay] = useState<HistoryDay[]>(initialHistoryByDay);
+  // Gera histórico de 30 dias
+  const history = useMemo(() => generate30DayHistory(), []);
+  
+  // Contexto do dia atual
+  const [todayContext] = useState<DayContext>(history[0]);
+  
+  // Ação atual (pode ser alterada pelo usuário)
+  const [currentAction, setCurrentAction] = useState<MomentAction>(
+    todayContext.computedState.recommendedAction
+  );
+  
+  // Horas desde última ação (para transições)
+  const [hoursSinceLastAction, setHoursSinceLastAction] = useState(0);
+  
+  // Checkpoints
+  const [checkpoints, setCheckpoints] = useState<Checkpoint[]>(todayContext.checkpoints);
+  
+  // Action logs
+  const [actionLogs, setActionLogs] = useState<ActionLog[]>([]);
+  
+  // Confirmação de sachê
+  const [sachetConfirmation, setSachetConfirmation] = useState<SachetConfirmation | null>(null);
+  
+  // Estado VYR derivado
+  const state = useMemo(() => 
+    buildVYRState(todayContext, currentAction),
+    [todayContext, currentAction]
+  );
+  
+  // Histórico simplificado para UI
+  const historyByDay = useMemo(() => 
+    history.slice(0, 7).map(toHistoryDay),
+    [history]
+  );
+  
+  // Contexto fisiológico
+  const physiologicalContext = useMemo(() => 
+    generatePhysiologicalContext(todayContext.wearableData),
+    [todayContext]
+  );
+  
+  // Janela cognitiva
+  const cognitiveWindow = useMemo(() => 
+    generateCognitiveWindow(todayContext.computedState),
+    [todayContext]
+  );
+  
+  // Transição sugerida
+  const suggestedTransition = useMemo(() => 
+    generateSuggestedTransition(currentAction, todayContext.computedState, hoursSinceLastAction),
+    [currentAction, todayContext, hoursSinceLastAction]
+  );
+  
+  // Padrões detectados
+  const detectedPatterns = useMemo(() => 
+    detectPatterns(history),
+    [history]
+  );
 
   const addCheckpoint = useCallback((note?: string) => {
     const newCheckpoint: Checkpoint = {
@@ -170,47 +199,53 @@ export function useVYRStore() {
     };
     setActionLogs((prev) => [newLog, ...prev]);
 
-    // Atualiza estado baseado na ação
-    setState((prev) => {
-      if (action === "BOOT") {
-        return {
-          ...prev,
-          momentAction: "HOLD",
-          momentActionTitle: "Ativar HOLD",
-          stateLabel: "Em foco",
-          actionConsequence: "Manter foco estável pelas próximas horas, priorizando economia cognitiva.",
-        };
-      }
-      if (action === "HOLD") {
-        return {
-          ...prev,
-          momentAction: "CLEAR",
-          momentActionTitle: "Iniciar CLEAR",
-          stateLabel: "Sustentando",
-          actionConsequence: "Facilitar transição para recuperação, preservando o que foi construído.",
-        };
-      }
-      if (action === "CLEAR") {
-        return {
-          ...prev,
-          momentAction: "BOOT",
-          momentActionTitle: "Iniciar BOOT",
-          stateLabel: "Recuperando",
-          actionConsequence: "Iniciar novo ciclo quando o sistema indicar prontidão.",
-        };
-      }
-      return prev;
+    // Mostra confirmação
+    setSachetConfirmation({
+      action,
+      timestamp: new Date(),
+      nextReadingIn: action === "BOOT" ? "2-3 horas" : action === "HOLD" ? "3-4 horas" : "amanhã",
     });
+
+    // Atualiza próxima ação
+    const nextAction: MomentAction = 
+      action === "BOOT" ? "HOLD" : 
+      action === "HOLD" ? "CLEAR" : 
+      "BOOT";
+    
+    setCurrentAction(nextAction);
+    setHoursSinceLastAction(0);
   }, []);
 
+  const dismissConfirmation = useCallback(() => {
+    setSachetConfirmation(null);
+  }, []);
+
+  const activateTransition = useCallback((action: MomentAction) => {
+    logAction(action);
+  }, [logAction]);
+
   return {
+    // Estado principal
     state,
     checkpoints,
-    dailyReviews,
+    dailyReviews: initialReviews,
     actionLogs,
     historyByDay,
+    
+    // Novos dados da engine
+    physiologicalContext,
+    cognitiveWindow,
+    suggestedTransition,
+    detectedPatterns,
+    sachetConfirmation,
+    todayContext,
+    fullHistory: history,
+    
+    // Actions
     addCheckpoint,
     logAction,
+    dismissConfirmation,
+    activateTransition,
   };
 }
 

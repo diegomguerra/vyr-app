@@ -1,25 +1,57 @@
 // VYR Labs - Home (Visual Whoop-inspired)
-// Ring central + 3 pilares + Insight + Ação + Delta vs ontem
+// Ring central + 3 pilares + Contexto + Insight + Janela Cognitiva + Ação
 
 import { ChevronRight } from "lucide-react";
-import { StateRing, PillarRing, InsightCard, ActionButton, ScoreDelta } from "@/components/vyr";
-import type { VYRState, HistoryDay } from "@/lib/vyr-types";
+import { 
+  StateRing, 
+  PillarRing, 
+  InsightCard, 
+  ActionButton, 
+  ScoreDelta,
+  ContextCard,
+  CognitiveWindowCard,
+  TransitionCard,
+  SachetConfirmation,
+} from "@/components/vyr";
+import type { 
+  VYRState, 
+  HistoryDay, 
+  PhysiologicalContext,
+  CognitiveWindow,
+  SuggestedTransition,
+  SachetConfirmation as SachetConfirmationType,
+  MomentAction,
+} from "@/lib/vyr-types";
 
 interface HomeProps {
   state: VYRState;
   userName?: string;
   greeting: string;
   historyByDay?: HistoryDay[];
+  physiologicalContext?: PhysiologicalContext;
+  cognitiveWindow?: CognitiveWindow;
+  suggestedTransition?: SuggestedTransition;
+  sachetConfirmation?: SachetConfirmationType | null;
   onScoreTap: () => void;
   onActionTap: () => void;
+  onActivateTransition?: (action: MomentAction) => void;
+  onDismissConfirmation?: () => void;
+  onAddObservation?: () => void;
 }
 
 export default function Home({ 
   state, 
   greeting, 
   historyByDay = [],
+  physiologicalContext,
+  cognitiveWindow,
+  suggestedTransition,
+  sachetConfirmation,
   onScoreTap, 
-  onActionTap 
+  onActionTap,
+  onActivateTransition,
+  onDismissConfirmation,
+  onAddObservation,
 }: HomeProps) {
   // Pegar score de ontem para o delta
   const yesterdayScore = historyByDay.length > 1 ? historyByDay[1].score : state.vyrStateScore;
@@ -70,6 +102,20 @@ export default function Home({
         />
       </div>
 
+      {/* CONTEXTO FISIOLÓGICO (novo) */}
+      {physiologicalContext && (
+        <div className="mb-4 animate-stagger-2">
+          <ContextCard context={physiologicalContext} />
+        </div>
+      )}
+
+      {/* JANELA COGNITIVA (novo - condicional) */}
+      {cognitiveWindow?.available && (
+        <div className="mb-4 animate-stagger-2">
+          <CognitiveWindowCard window={cognitiveWindow} />
+        </div>
+      )}
+
       {/* INSIGHT CARD - Leitura do Sistema */}
       <div className="mb-4 animate-stagger-3">
         <InsightCard
@@ -108,6 +154,16 @@ export default function Home({
         </ul>
       </button>
 
+      {/* TRANSIÇÃO SUGERIDA (novo - condicional) */}
+      {suggestedTransition?.available && onActivateTransition && (
+        <div className="mb-4 animate-stagger-4">
+          <TransitionCard
+            transition={suggestedTransition}
+            onActivate={onActivateTransition}
+          />
+        </div>
+      )}
+
       {/* AÇÃO PRINCIPAL */}
       <div className="space-y-3 animate-stagger-4">
         <ActionButton
@@ -120,6 +176,15 @@ export default function Home({
           {state.actionConsequence}
         </p>
       </div>
+
+      {/* CONFIRMAÇÃO DE SACHÊ (modal) */}
+      {sachetConfirmation && onDismissConfirmation && (
+        <SachetConfirmation
+          confirmation={sachetConfirmation}
+          onAddObservation={onAddObservation}
+          onDismiss={onDismissConfirmation}
+        />
+      )}
     </div>
   );
 }

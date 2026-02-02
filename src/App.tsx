@@ -1,30 +1,18 @@
 // VYR Labs App - Navegação principal conforme spec
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { User, Session } from "@supabase/supabase-js";
-import { supabase } from "@/integrations/supabase/client";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import Onboarding from "./pages/Onboarding";
-import Profile from "./pages/Profile";
-import Welcome from "./pages/Welcome";
-import { AppHeader } from "@/components/AppHeader";
-import { NavSidebar } from "./components/nzt";
-import { getParticipante, createParticipante } from "./lib/api";
-import { ThemeProvider } from "./hooks/use-theme";
-import type { Participante } from "./lib/types";
-
-const queryClient = new QueryClient();
-
-const NAV_ITEMS = [
-  { to: "/painel", label: "Painel", icon: "📊" },
-  { to: "/anamnese", label: "Anamnese", icon: "📋" },
-  { to: "/perfil", label: "Perfil", icon: "👤" },
-];
+import Home from "./pages/Home";
+import StateDetail from "./pages/StateDetail";
+import MomentAction from "./pages/MomentAction";
+import Checkpoint from "./pages/Checkpoint";
+import DayReview from "./pages/DayReview";
+import Labs from "./pages/Labs";
+import { useVYRStore, getGreeting } from "./lib/vyr-store";
+import type { DailyReview as DailyReviewType } from "./lib/vyr-types";
 
 const queryClient = new QueryClient();
 
@@ -39,17 +27,23 @@ type Screen =
 
 function VYRApp() {
   const [screen, setScreen] = useState<Screen>("home");
-  const [selectedReview, setSelectedReview] = useState<DailyReview | null>(null);
+  const [selectedReview, setSelectedReview] = useState<DailyReviewType | null>(null);
   const [showCheckpoint, setShowCheckpoint] = useState(false);
-  const [actionConfirmed, setActionConfirmed] = useState(false);
 
   const {
     state,
     checkpoints,
     dailyReviews,
     historyByDay,
+    physiologicalContext,
+    cognitiveWindow,
+    suggestedTransition,
+    sachetConfirmation,
+    detectedPatterns,
     addCheckpoint,
     logAction,
+    dismissConfirmation,
+    activateTransition,
   } = useVYRStore();
 
   const greeting = getGreeting("Diego");
@@ -63,10 +57,7 @@ function VYRApp() {
   // Handler de ação confirmada
   const handleActionConfirm = useCallback(() => {
     logAction(state.momentAction);
-    setActionConfirmed(true);
     setScreen("home");
-    // Reset após 3 segundos
-    setTimeout(() => setActionConfirmed(false), 3000);
   }, [logAction, state.momentAction]);
 
   // Handler de checkpoint
@@ -76,7 +67,7 @@ function VYRApp() {
   }, [addCheckpoint]);
 
   // Handler de review
-  const handleReviewTap = useCallback((review: DailyReview) => {
+  const handleReviewTap = useCallback((review: DailyReviewType) => {
     setSelectedReview(review);
     setScreen("dayReview");
   }, []);
@@ -87,16 +78,14 @@ function VYRApp() {
     setScreen("labs");
   }, []);
 
-  return (
-    <div className="min-h-screen vyr-gradient-bg">
-      <AppHeader codigo={participante?.codigo} />
-      <div className="max-w-7xl mx-auto flex flex-col lg:grid lg:grid-cols-[220px_1fr] gap-4 p-3 sm:p-4 pb-24 lg:pb-4">
-        {/* Sidebar - hidden on mobile, shown on desktop */}
-        <div className="hidden lg:block">
-          <NavSidebar />
-        </div>
-      )}
+  // Handler para adicionar observação após confirmação de sachê
+  const handleAddObservation = useCallback(() => {
+    dismissConfirmation();
+    setShowCheckpoint(true);
+  }, [dismissConfirmation]);
 
+  return (
+    <div className="min-h-screen bg-vyr-bg-primary">
       {/* Checkpoint Modal */}
       {showCheckpoint && (
         <Checkpoint
@@ -111,8 +100,15 @@ function VYRApp() {
           state={state}
           greeting={greeting}
           historyByDay={historyByDay}
+          physiologicalContext={physiologicalContext}
+          cognitiveWindow={cognitiveWindow}
+          suggestedTransition={suggestedTransition}
+          sachetConfirmation={sachetConfirmation}
           onScoreTap={goStateDetail}
           onActionTap={goMomentAction}
+          onActivateTransition={activateTransition}
+          onDismissConfirmation={dismissConfirmation}
+          onAddObservation={handleAddObservation}
         />
       )}
 
@@ -137,49 +133,54 @@ function VYRApp() {
           historyByDay={historyByDay}
           checkpoints={checkpoints}
           dailyReviews={dailyReviews}
+          detectedPatterns={detectedPatterns}
           onBack={goHome}
           onReviewTap={handleReviewTap}
         />
       )}
+
+      {/* Bottom Nav */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-vyr-bg-surface/95 backdrop-blur-sm border-t border-vyr-stroke-divider px-6 py-3 z-20">
+        <div className="flex justify-around max-w-md mx-auto">
+          <button
+            onClick={goHome}
+            className={`flex flex-col items-center gap-1 px-4 py-1 rounded-lg transition-colors ${
+              screen === "home" ? "text-vyr-accent-action" : "text-vyr-text-muted"
+            }`}
+          >
+            <span className="text-lg">🏠</span>
+            <span className="text-xs font-medium">Home</span>
+          </button>
+          <button
+            onClick={goLabs}
+            className={`flex flex-col items-center gap-1 px-4 py-1 rounded-lg transition-colors ${
+              screen === "labs" || screen === "dayReview" ? "text-vyr-accent-action" : "text-vyr-text-muted"
+            }`}
+          >
+            <span className="text-lg">🧪</span>
+            <span className="text-xs font-medium">Labs</span>
+          </button>
+          <button
+            onClick={() => setShowCheckpoint(true)}
+            className="flex flex-col items-center gap-1 px-4 py-1 rounded-lg text-vyr-text-muted transition-colors"
+          >
+            <span className="text-lg">📍</span>
+            <span className="text-xs font-medium">Checkpoint</span>
+          </button>
+        </div>
+      </nav>
     </div>
   );
 }
 
-// App principal com auth
+// App principal
 const App = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-vyr-bg-primary">
-        <div className="text-vyr-text-muted text-sm">Carregando...</div>
-      </div>
-    );
-  }
-
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        {user ? <VYRApp /> : <Login />}
+        <VYRApp />
       </TooltipProvider>
     </QueryClientProvider>
   );
