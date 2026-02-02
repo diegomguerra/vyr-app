@@ -1,105 +1,202 @@
-# VYR Labs App - Plano Concluído ✅
 
-## Status: IMPLEMENTADO
+# Proposta de Evolução — VYR Labs v2
 
-O app foi transformado com sucesso de uma plataforma de marketing completa para um app mobile-first focado em VYR Labs.
+## Diagnóstico do Estado Atual
 
----
+O app já está sólido com:
+- Ring gauges visuais (estilo Whoop)
+- Cards interpretativos ricos
+- Fluxo Home → Detalhe → Ação funcional
+- Design system coerente
 
-## Estrutura Final do App
+## Oportunidades de Evolução
+
+### 1. Gráfico de Evolução no Labs (Alto Impacto)
+
+**Problema:** O histórico mostra apenas lista de dias. Não há visualização temporal.
+
+**Solução:** Adicionar um gráfico de linha/área no topo da aba "Histórico" mostrando a evolução do VYR State nos últimos 7-14 dias.
 
 ```text
-VYR Labs App
-├── Login (tela inicial - /)
-├── Welcome/Onboarding (primeiro acesso)
-└── App Autenticado
-    ├── Painel (/painel) - Dashboard
-    ├── Anamnese (/anamnese) - Onboarding editável
-    └── Perfil (/perfil) - Configurações do usuário
+┌─────────────────────────────────┐
+│     Últimos 7 dias              │
+│                                 │
+│      ╭─╮                        │
+│  ╭───╯ ╰──╮   ╭──╮             │
+│ ─╯        ╰───╯  ╰──           │
+│                                 │
+│ seg ter qua qui sex sab dom    │
+└─────────────────────────────────┘
+```
+
+### 2. Weekly Digest / Resumo Semanal
+
+**Problema:** Não há visão consolidada da semana.
+
+**Solução:** Criar um card no Labs que aparece aos domingos/segundas com:
+- Score médio da semana
+- Dia mais forte
+- Padrão detectado
+- Uma frase de interpretação
+
+```text
+┌─────────────────────────────────┐
+│ Resumo da semana                │
+│                                 │
+│ Score médio: 74                 │
+│ Melhor dia: quinta-feira        │
+│                                 │
+│ "Padrão de queda ao final do    │
+│ dia. Considere ajustar ritmo    │
+│ à tarde."                       │
+└─────────────────────────────────┘
+```
+
+### 3. Comparativo Visual (Ontem vs Hoje)
+
+**Problema:** O usuário não tem contexto comparativo imediato.
+
+**Solução:** Adicionar na Home um indicador sutil mostrando a variação em relação a ontem:
+
+```text
+VYR STATE
+   78
+   ▲ +6 vs ontem
+```
+
+Sutil, sem julgamento, apenas informativo.
+
+### 4. Animações de Entrada Refinadas
+
+**Problema:** As transições são funcionais mas não premium.
+
+**Solução:**
+- Ring principal: animação de "draw" progressivo ao carregar
+- Pilares: entrada escalonada (stagger) de 100ms entre cada
+- Cards: slide-up sequencial suave
+- Transições entre telas com fade crossover
+
+### 5. Check-in Funcional com Cálculo de Score
+
+**Problema:** O score é hardcoded. Não há input real do usuário.
+
+**Solução:** Criar um fluxo de check-in matinal/noturno:
+
+```text
+┌─────────────────────────────────┐
+│ Check-in da manhã               │
+│                                 │
+│ Como você dormiu?               │
+│ ○ Muito bem  ○ Ok  ○ Mal        │
+│                                 │
+│ Nível de energia agora?         │
+│ ○ Alto  ○ Médio  ○ Baixo        │
+│                                 │
+│ Clareza mental?                 │
+│ ○ Alta  ○ Média  ○ Baixa        │
+│                                 │
+│ [ Calcular VYR State ]          │
+└─────────────────────────────────┘
+```
+
+O score passa a ser calculado com base nas respostas.
+
+### 6. Streak/Consistência (Sem Gamificação)
+
+**Problema:** Não há incentivo sutil para uso contínuo.
+
+**Solução:** Mostrar dias consecutivos de uso de forma neutra:
+
+```text
+"7 dias de acompanhamento contínuo"
+```
+
+Sem estrelas, sem troféus, sem urgência. Apenas informação.
+
+### 7. Tela de Boas-Vindas Refinada
+
+**Problema:** O Login vai direto para Home sem contexto.
+
+**Solução:** Adicionar uma tela de primeiro uso que explica o conceito do VYR em 3 slides:
+
+- Slide 1: "O VYR lê seu sistema cognitivo"
+- Slide 2: "Interpreta o que isso significa hoje"
+- Slide 3: "Sugere a ação certa para o momento"
+
+### 8. Pilares com Micro-Sparkline
+
+**Problema:** Os 3 mini-rings mostram apenas o valor atual.
+
+**Solução:** Adicionar uma micro-linha de tendência (últimas 24h ou 7 dias) abaixo de cada pilar na tela de Detalhe:
+
+```text
+Energia ●●●●○
+Energia disponível, porém controlada.
+[sparkline: ─╮╭─╮╭──]
+```
+
+### 9. Haptic Feedback
+
+**Problema:** Interações são visuais mas não táteis.
+
+**Solução:** Adicionar vibração sutil em:
+- Confirmação de ação (BOOT/HOLD/CLEAR)
+- Registro de checkpoint
+- Mudança de estado detectada
+
+### 10. Horário Ideal Detectado
+
+**Problema:** O sistema não indica quando agir proativamente.
+
+**Solução:** Adicionar na Home um indicador de "janela cognitiva":
+
+```text
+┌─────────────────────────────────┐
+│ ⏰ Janela ideal                 │
+│ Próximas 2-3 horas são          │
+│ favoráveis para foco profundo   │
+└─────────────────────────────────┘
 ```
 
 ---
 
-## O Que Foi Mantido
+## Priorização Sugerida
 
-### Páginas Core (5 arquivos)
-- `Login.tsx` - Tela de entrada simplificada
-- `Welcome.tsx` - Fluxo de primeiro acesso
-- `Dashboard.tsx` - Painel principal
-- `Onboarding.tsx` - Anamnese editável
-- `Profile.tsx` - Perfil do usuário
+### Fase 1 — Impacto Visual Imediato
+1. Animações de entrada refinadas
+2. Comparativo Ontem vs Hoje
+3. Gráfico de evolução no Labs
 
-### Componentes Essenciais
-- `src/components/mvp/` - Componentes do painel
-- `src/components/cognitive/` - Dashboard cognitivo
-- `src/components/nzt/` - Navegação e cards
-- `src/components/onboarding/` - Steps do onboarding
-- `src/components/ui/` - Biblioteca de UI (shadcn)
+### Fase 2 — Funcionalidade Real
+4. Check-in funcional com cálculo
+5. Streak/consistência
+6. Weekly digest
 
----
-
-## O Que Foi Removido
-
-### Páginas de Marketing (16 arquivos) ✅
-- Landing.tsx, Products.tsx, ProductDetail.tsx
-- RotinaCompleta.tsx, SistemaCompleto.tsx
-- VYRSystem.tsx, VYRNutrition.tsx, VYRNode.tsx, VYRScience.tsx
-- ComoFunciona.tsx, BrandPreview.tsx, BrandExport.tsx
-- Contact.tsx, NotFound.tsx, VYRLabs.tsx (antigo)
-
-### Componentes de Marketing ✅
-- `src/components/landing/` - 17 arquivos removidos
-- `src/components/labs/` - 5 arquivos removidos
-- `src/brand/` - 7 arquivos removidos
+### Fase 3 — Refinamento Premium
+7. Sparklines nos pilares
+8. Haptic feedback
+9. Janela ideal
+10. Onboarding refinado
 
 ---
 
-## Rotas Atuais
+## Resumo Técnico
 
-```typescript
-// Não autenticado → Login
-<Route path="/" element={user ? <Navigate to="/painel" /> : <Login />} />
-
-// Autenticado → App
-<Route path="/painel" element={<AuthenticatedApp />} />
-<Route path="/anamnese" element={<AuthenticatedApp />} />
-<Route path="/perfil" element={<AuthenticatedApp />} />
-
-// Fallback
-<Route path="*" element={<Navigate to="/" />} />
-```
+| Evolução | Complexidade | Arquivos Afetados |
+|----------|--------------|-------------------|
+| Animações refinadas | Baixa | StateRing, PillarRing, Home |
+| Comparativo vs ontem | Baixa | Home, vyr-store |
+| Gráfico evolução | Média | Labs (novo componente) |
+| Check-in funcional | Média | Nova página + store |
+| Weekly digest | Média | Labs + vyr-store |
+| Sparklines | Média | PillarRing, StateDetail |
+| Streak | Baixa | Home + store |
+| Haptic | Baixa | Hooks + componentes de ação |
+| Janela ideal | Média | Home + store |
+| Onboarding | Média | Nova página |
 
 ---
 
-## Próximos Passos para Capacitor (iOS/Android)
+## Próximos Passos
 
-1. **Instalar Capacitor**:
-   ```bash
-   npm install @capacitor/core @capacitor/cli @capacitor/ios @capacitor/android
-   npx cap init
-   ```
-
-2. **Configurar capacitor.config.ts**:
-   ```json
-   {
-     "appId": "app.lovable.4b617b0406fc49f6b961158f27f7c863",
-     "appName": "VYR Labs",
-     "server": {
-       "url": "https://4b617b04-06fc-49f6-b961-158f27f7c863.lovableproject.com?forceHideBadge=true",
-       "cleartext": true
-     }
-   }
-   ```
-
-3. **Adicionar plataformas**:
-   ```bash
-   npx cap add ios
-   npx cap add android
-   ```
-
-4. **Sincronizar e rodar**:
-   ```bash
-   npm run build
-   npx cap sync
-   npx cap run ios  # ou android
-   ```
+Posso implementar qualquer combinação dessas evoluções. Recomendo começar pela **Fase 1** para impacto visual imediato, seguido do **check-in funcional** para dar vida real ao score.
