@@ -11,12 +11,19 @@
     /* VYR Labs - Tokens de cor (spec) */
     --vyr-bg-primary: 228 14% 7%;        /* #0E0F12 */
     --vyr-bg-surface: 226 13% 9%;        /* #111318 */
+    --vyr-bg-elevated: 226 14% 12%;      /* Superfície elevada */
     --vyr-text-primary: 230 20% 94%;     /* #EDEEF2 */
     --vyr-text-secondary: 218 11% 65%;   /* #9CA3AF */
     --vyr-text-muted: 218 11% 46%;       /* #6B7280 */
     --vyr-stroke-divider: 222 18% 15%;   /* #1F2430 */
-    --vyr-accent-action: 217 91% 60%;    /* #3B82F6 */
-    --vyr-accent-transition: 38 91% 64%; /* #F59E0B */
+    --vyr-accent-action: 217 91% 60%;    /* #3B82F6 - Azul foco */
+    --vyr-accent-transition: 38 91% 64%; /* #F59E0B - Âmbar transição */
+    --vyr-accent-glow: 217 91% 70%;      /* Azul mais claro para glow */
+
+    /* Cores semânticas para pilares */
+    --vyr-energia: 38 92% 50%;           /* Âmbar energia */
+    --vyr-clareza: 217 91% 60%;          /* Azul clareza */
+    --vyr-estabilidade: 160 84% 39%;     /* Verde estabilidade */
 
     /* Shadcn compatibility */
     --background: var(--vyr-bg-primary);
@@ -49,6 +56,10 @@
     --sidebar-accent-foreground: var(--vyr-text-primary);
     --sidebar-border: var(--vyr-stroke-divider);
     --sidebar-ring: var(--vyr-accent-action);
+
+    /* Ring gauge tokens */
+    --vyr-ring-track: 222 18% 18%;
+    --vyr-ring-glow: 217 91% 60% / 0.4;
   }
 
   /* Dark mode é o padrão - não há modo claro nesta versão */

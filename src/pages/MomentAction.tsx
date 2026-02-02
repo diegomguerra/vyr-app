@@ -1,7 +1,8 @@
-// VYR Labs - Ação do Momento (BOOT/HOLD/CLEAR)
-// Texto expandido: o que vai acontecer + o que esperar
+// VYR Labs - Tela de Ação (Visual Whoop-inspired)
+// Explicação rica + Ícone de status + Botão de ação
 
-import { ChevronLeft, Play } from "lucide-react";
+import { ChevronLeft, Play, Pause, Moon } from "lucide-react";
+import { ActionButton } from "@/components/vyr";
 import type { MomentAction } from "@/lib/vyr-types";
 import { ACTION_COPY } from "@/lib/vyr-store";
 
@@ -11,16 +12,37 @@ interface MomentActionProps {
   onConfirm: () => void;
 }
 
+const ACTION_ICONS: Record<MomentAction, typeof Play> = {
+  BOOT: Play,
+  HOLD: Pause,
+  CLEAR: Moon,
+};
+
+const ACTION_COLORS: Record<MomentAction, string> = {
+  BOOT: "text-vyr-accent-action",
+  HOLD: "text-vyr-accent-transition",
+  CLEAR: "text-vyr-pillar-estabilidade",
+};
+
+const ACTION_GRADIENTS: Record<MomentAction, string> = {
+  BOOT: "from-vyr-accent-action/20 to-transparent",
+  HOLD: "from-vyr-accent-transition/20 to-transparent",
+  CLEAR: "from-vyr-pillar-estabilidade/20 to-transparent",
+};
+
 export default function MomentActionPage({ action, onBack, onConfirm }: MomentActionProps) {
   const copy = ACTION_COPY[action];
+  const Icon = ACTION_ICONS[action];
+  const colorClass = ACTION_COLORS[action];
+  const gradientClass = ACTION_GRADIENTS[action];
 
   return (
-    <div className="min-h-screen bg-vyr-bg-primary px-6 py-4 flex flex-col">
-      {/* Header */}
-      <div className="flex items-center gap-3 mb-auto">
+    <div className="min-h-screen bg-vyr-bg-primary flex flex-col">
+      {/* Header com gradiente */}
+      <div className={`relative bg-gradient-to-b ${gradientClass} px-5 pt-4 pb-12`}>
         <button
           onClick={onBack}
-          className="p-2 -ml-2 rounded-full transition-colors active:bg-vyr-bg-surface"
+          className="p-2 -ml-2 rounded-full transition-colors active:bg-vyr-bg-surface/50"
           aria-label="Voltar"
         >
           <ChevronLeft className="w-6 h-6 text-vyr-text-secondary" />
@@ -28,37 +50,54 @@ export default function MomentActionPage({ action, onBack, onConfirm }: MomentAc
       </div>
 
       {/* Conteúdo central */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
+      <div className="flex-1 px-6 -mt-6">
+        {/* Ícone grande */}
+        <div className="flex justify-center mb-6">
+          <div className={`
+            p-6 rounded-full bg-vyr-bg-surface
+            border border-vyr-stroke-divider
+          `}>
+            <Icon className={`w-12 h-12 ${colorClass}`} strokeWidth={1.5} />
+          </div>
+        </div>
+
         {/* Título */}
-        <h1 className="text-vyr-text-primary text-2xl font-medium mb-4 text-center">
+        <h1 className="text-vyr-text-primary text-2xl font-medium text-center mb-2">
           {copy.title}
         </h1>
-
-        {/* Texto do sistema */}
-        <p className="text-vyr-text-secondary text-base mb-6 text-center">
+        
+        {/* System text */}
+        <p className="text-vyr-text-muted text-sm text-center mb-8">
           {copy.systemText}
         </p>
 
-        {/* Texto expandido - O QUE VAI ACONTECER */}
-        <div className="bg-vyr-bg-surface rounded-2xl p-5 mb-8 max-w-sm">
+        {/* Explicação expandida */}
+        <div className="bg-vyr-bg-surface rounded-2xl p-5 mb-6">
+          <h2 className="text-vyr-text-muted text-xs tracking-wider uppercase mb-3">
+            O que vai acontecer
+          </h2>
           <p className="text-vyr-text-secondary text-base leading-relaxed mb-4">
             {copy.expandedText}
           </p>
-          <p className="text-vyr-text-muted text-sm leading-relaxed">
+          
+          <div className="h-px bg-vyr-stroke-divider mb-4" />
+          
+          <h2 className="text-vyr-text-muted text-xs tracking-wider uppercase mb-3">
+            O que esperar
+          </h2>
+          <p className="text-vyr-text-secondary text-base leading-relaxed">
             {copy.expectation}
           </p>
         </div>
       </div>
 
-      {/* CTA */}
-      <div className="mb-8">
-        <button
-          onClick={onConfirm}
-          className="w-full flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-vyr-accent-action text-white font-medium text-base transition-all active:scale-[0.98] active:opacity-90"
-        >
-          <Play className="w-5 h-5" fill="currentColor" />
-          <span>{copy.buttonText}</span>
-        </button>
+      {/* Botão de ação fixo no bottom */}
+      <div className="px-6 pb-8 pt-4 bg-gradient-to-t from-vyr-bg-primary via-vyr-bg-primary to-transparent">
+        <ActionButton
+          action={action}
+          label={copy.buttonText}
+          onTap={onConfirm}
+        />
       </div>
     </div>
   );

@@ -1,8 +1,8 @@
-// VYR Labs - Labs (Memória Inteligente)
-// Histórico rico com estado dominante e nota do sistema
+// VYR Labs - Labs (Visual Whoop-inspired)
+// Memória inteligente com ring gauges e cards visuais
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Clock, FileText, Bell } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock, FileText, Bell, TrendingUp } from "lucide-react";
 import type { Checkpoint, DailyReview, HistoryDay } from "@/lib/vyr-types";
 import { formatDate, formatDateShort, formatTime } from "@/lib/vyr-store";
 
@@ -14,6 +14,57 @@ interface LabsProps {
   dailyReviews: DailyReview[];
   onBack: () => void;
   onReviewTap: (review: DailyReview) => void;
+}
+
+// Mini score ring para histórico
+function MiniScoreRing({ score }: { score: number }) {
+  const size = 48;
+  const strokeWidth = 3;
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const arcLength = circumference * 0.75;
+  const progress = (score / 100) * arcLength;
+  
+  const color = score >= 70 
+    ? "hsl(var(--vyr-accent-action))" 
+    : score >= 40 
+    ? "hsl(var(--vyr-accent-transition))"
+    : "hsl(0 84% 60%)";
+
+  return (
+    <div className="relative flex-shrink-0">
+      <svg width={size} height={size} style={{ transform: "rotate(-225deg)" }}>
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="hsl(var(--vyr-ring-track))"
+          strokeWidth={strokeWidth}
+          strokeDasharray={`${arcLength} ${circumference}`}
+          strokeLinecap="round"
+          className="opacity-30"
+        />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeDasharray={`${progress} ${circumference}`}
+          strokeLinecap="round"
+          style={{ filter: `drop-shadow(0 0 4px ${color.replace(")", " / 0.4)")})` }}
+        />
+      </svg>
+      <span 
+        className="absolute inset-0 flex items-center justify-center text-sm font-medium text-vyr-text-primary"
+        style={{ transform: "translateY(-2px)" }}
+      >
+        {score}
+      </span>
+    </div>
+  );
 }
 
 export default function Labs({
@@ -41,9 +92,9 @@ export default function Labs({
   ];
 
   return (
-    <div className="min-h-screen bg-vyr-bg-primary">
+    <div className="min-h-screen bg-vyr-bg-primary pb-28">
       {/* Header */}
-      <div className="sticky top-0 bg-vyr-bg-primary border-b border-vyr-stroke-divider px-6 py-4 z-10">
+      <div className="sticky top-0 bg-vyr-bg-primary/95 backdrop-blur-sm border-b border-vyr-stroke-divider px-5 py-4 z-10">
         <div className="flex items-center gap-3 mb-4">
           <button
             onClick={onBack}
@@ -55,16 +106,16 @@ export default function Labs({
           <h1 className="text-vyr-text-primary text-lg font-medium">Labs</h1>
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-1 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
+        {/* Tabs com estilo de pílula */}
+        <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+              className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
                 activeTab === tab.id
-                  ? "bg-vyr-bg-surface text-vyr-text-primary"
-                  : "text-vyr-text-muted"
+                  ? "bg-vyr-accent-action text-white"
+                  : "bg-vyr-bg-surface text-vyr-text-muted"
               }`}
             >
               {tab.label}
@@ -74,40 +125,51 @@ export default function Labs({
       </div>
 
       {/* Content */}
-      <div className="px-6 py-4">
-        {/* Histórico RICO */}
+      <div className="px-5 py-4">
+        {/* Histórico com Mini Rings */}
         {activeTab === "historico" && (
           <div className="space-y-3">
-            {historyByDay.map((day) => (
+            {historyByDay.map((day, index) => (
               <div
                 key={day.date}
-                className="bg-vyr-bg-surface rounded-2xl p-4"
+                className={`bg-vyr-bg-surface rounded-2xl p-4 ${
+                  index === 0 ? "border border-vyr-accent-action/20" : ""
+                }`}
               >
-                {/* Data e Score */}
-                <div className="flex items-start justify-between mb-3">
-                  <span className="text-vyr-text-primary text-base font-medium">
-                    {formatDate(day.date)}
-                  </span>
-                  <span className="text-vyr-text-primary text-2xl font-medium">
-                    {day.score}
-                  </span>
+                <div className="flex items-start gap-4">
+                  <MiniScoreRing score={day.score} />
+                  
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-vyr-text-primary text-base font-medium">
+                        {formatDate(day.date)}
+                      </span>
+                      {index === 0 && (
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-vyr-accent-action/20 text-vyr-accent-action">
+                          Hoje
+                        </span>
+                      )}
+                    </div>
+                    
+                    <p className="text-vyr-text-secondary text-sm mb-1 capitalize">
+                      {day.dominantState}
+                    </p>
+                    
+                    <p className="text-vyr-text-muted text-xs">
+                      {day.systemNote}
+                    </p>
+                  </div>
+                  
+                  {index > 0 && index < historyByDay.length - 1 && (
+                    <TrendingUp 
+                      className={`w-4 h-4 flex-shrink-0 ${
+                        day.score > historyByDay[index + 1].score 
+                          ? "text-vyr-pillar-estabilidade" 
+                          : "text-vyr-accent-transition rotate-180"
+                      }`}
+                    />
+                  )}
                 </div>
-                
-                {/* Estado dominante */}
-                <p className="text-vyr-text-muted text-xs tracking-wider uppercase mb-1">
-                  Estado dominante
-                </p>
-                <p className="text-vyr-text-secondary text-sm mb-3">
-                  {day.dominantState}
-                </p>
-                
-                {/* Nota do sistema */}
-                <p className="text-vyr-text-muted text-xs tracking-wider uppercase mb-1">
-                  Nota do sistema
-                </p>
-                <p className="text-vyr-text-secondary text-sm">
-                  {day.systemNote}
-                </p>
               </div>
             ))}
           </div>
