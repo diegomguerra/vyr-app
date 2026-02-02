@@ -1,7 +1,7 @@
 // VYR Labs - Ring Gauge Principal (estilo Whoop)
-// Exibe o VYR State com anel de 270° e glow
+// Exibe o VYR State com anel de 270° e glow + draw animation
 
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 
 interface StateRingProps {
   /** Score de 0-100 */
@@ -20,6 +20,9 @@ export function StateRing({
   animate = true,
   onTap 
 }: StateRingProps) {
+  const [isAnimating, setIsAnimating] = useState(animate);
+  const [displayValue, setDisplayValue] = useState(animate ? 0 : value);
+
   // Configuração do anel
   const size = 220;
   const strokeWidth = 12;
@@ -37,6 +40,40 @@ export function StateRing({
     return "hsl(0 84% 60%)"; // Vermelho - baixo
   }, [value]);
 
+  // Animação de contagem do número
+  useEffect(() => {
+    if (!animate) {
+      setDisplayValue(value);
+      return;
+    }
+
+    const duration = 1200;
+    const startTime = Date.now();
+    const startValue = 0;
+
+    const animateValue = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Easing: ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const currentValue = Math.round(startValue + (value - startValue) * eased);
+      
+      setDisplayValue(currentValue);
+      
+      if (progress < 1) {
+        requestAnimationFrame(animateValue);
+      } else {
+        setIsAnimating(false);
+      }
+    };
+
+    requestAnimationFrame(animateValue);
+  }, [value, animate]);
+
+  // Calcular offset para animação de draw
+  const strokeDashoffset = isAnimating ? arcLength : arcLength - progress;
+
   return (
     <button
       onClick={onTap}
@@ -46,7 +83,7 @@ export function StateRing({
       <svg
         width={size}
         height={size}
-        className={animate ? "animate-fade-in" : ""}
+        className="animate-fade-in"
         style={{ transform: "rotate(-225deg)" }}
       >
         {/* Track de fundo */}
@@ -62,7 +99,7 @@ export function StateRing({
           className="opacity-40"
         />
         
-        {/* Anel de progresso com glow */}
+        {/* Anel de progresso com draw animation */}
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -70,9 +107,10 @@ export function StateRing({
           fill="none"
           stroke={ringColor}
           strokeWidth={strokeWidth}
-          strokeDasharray={`${progress} ${circumference}`}
+          strokeDasharray={`${arcLength} ${circumference}`}
+          strokeDashoffset={strokeDashoffset}
           strokeLinecap="round"
-          className={animate ? "transition-all duration-1000 ease-out" : ""}
+          className="transition-all duration-1000 ease-out"
           style={{
             filter: `drop-shadow(0 0 12px ${ringColor.replace(")", " / 0.5)")})`,
           }}
@@ -81,14 +119,14 @@ export function StateRing({
       
       {/* Conteúdo central */}
       <div 
-        className="absolute inset-0 flex flex-col items-center justify-center"
+        className="absolute inset-0 flex flex-col items-center justify-center animate-fade-in"
         style={{ transform: "translateY(-8px)" }}
       >
         <span className="text-vyr-text-muted text-xs tracking-widest uppercase mb-1">
           VYR STATE
         </span>
-        <span className="text-6xl font-medium text-vyr-text-primary leading-none">
-          {value}
+        <span className="text-6xl font-medium text-vyr-text-primary leading-none tabular-nums">
+          {displayValue}
         </span>
         <span className="text-vyr-text-secondary text-sm mt-2">
           {stateLabel}
