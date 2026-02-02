@@ -1,4 +1,5 @@
-// VYR Labs - Detalhe de Estado (Nível 1)
+// VYR Labs - Detalhe de Estado (Com interpretação)
+// Pilares + Texto + Diagnóstico do Sistema
 
 import { ChevronLeft } from "lucide-react";
 import type { VYRState } from "@/lib/vyr-types";
@@ -8,21 +9,34 @@ interface StateDetailProps {
   onBack: () => void;
 }
 
-// Renderiza pilares como pontos (0-5)
-function PillarDots({ label, value }: { label: string; value: number }) {
+// Renderiza pilares como pontos (0-5) COM texto interpretativo
+function PillarWithDescription({ 
+  label, 
+  value, 
+  description 
+}: { 
+  label: string; 
+  value: number;
+  description: string;
+}) {
   return (
-    <div className="flex items-center justify-between py-3">
-      <span className="text-vyr-text-secondary text-base">{label}</span>
-      <div className="flex gap-1">
-        {[1, 2, 3, 4, 5].map((i) => (
-          <span
-            key={i}
-            className={`w-2.5 h-2.5 rounded-full ${
-              i <= value ? "bg-vyr-text-primary" : "bg-vyr-stroke-divider"
-            }`}
-          />
-        ))}
+    <div className="py-4">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-vyr-text-primary text-base font-medium">{label}</span>
+        <div className="flex gap-1">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <span
+              key={i}
+              className={`w-2.5 h-2.5 rounded-full ${
+                i <= value ? "bg-vyr-text-primary" : "bg-vyr-stroke-divider"
+              }`}
+            />
+          ))}
+        </div>
       </div>
+      <p className="text-vyr-text-secondary text-sm leading-relaxed">
+        {description}
+      </p>
     </div>
   );
 }
@@ -42,9 +56,9 @@ export default function StateDetail({ state, onBack }: StateDetailProps) {
         <h1 className="text-vyr-text-primary text-lg font-medium">Estado atual</h1>
       </div>
 
-      {/* Score */}
+      {/* Score Block */}
       <div className="mb-8">
-        <p className="text-vyr-text-muted text-sm tracking-wider uppercase mb-2">
+        <p className="text-vyr-text-muted text-xs tracking-wider uppercase mb-2">
           VYR STATE
         </p>
         <p className="text-vyr-text-primary text-5xl font-medium">
@@ -52,19 +66,34 @@ export default function StateDetail({ state, onBack }: StateDetailProps) {
         </p>
       </div>
 
-      {/* Pilares */}
-      <div className="bg-vyr-bg-surface rounded-2xl px-5 py-2 mb-8">
-        <PillarDots label="Energia" value={state.pillars.energia} />
+      {/* Pilares com interpretação */}
+      <div className="bg-vyr-bg-surface rounded-2xl px-5 mb-6">
+        <PillarWithDescription 
+          label="Energia" 
+          value={state.pillars.energia} 
+          description={state.pillarDescriptions.energia}
+        />
         <div className="h-px bg-vyr-stroke-divider" />
-        <PillarDots label="Clareza" value={state.pillars.clareza} />
+        <PillarWithDescription 
+          label="Clareza" 
+          value={state.pillars.clareza} 
+          description={state.pillarDescriptions.clareza}
+        />
         <div className="h-px bg-vyr-stroke-divider" />
-        <PillarDots label="Estabilidade" value={state.pillars.estabilidade} />
+        <PillarWithDescription 
+          label="Estabilidade" 
+          value={state.pillars.estabilidade} 
+          description={state.pillarDescriptions.estabilidade}
+        />
       </div>
 
-      {/* Insight */}
-      <div className="bg-vyr-bg-surface rounded-2xl px-5 py-4">
+      {/* Diagnóstico do Sistema */}
+      <div className="bg-vyr-bg-surface rounded-2xl px-5 py-5">
+        <p className="text-vyr-text-muted text-xs tracking-wider uppercase mb-3">
+          Diagnóstico do sistema
+        </p>
         <p className="text-vyr-text-secondary text-base leading-relaxed">
-          {state.contextInsight}
+          {state.systemDiagnosis}
         </p>
       </div>
     </div>

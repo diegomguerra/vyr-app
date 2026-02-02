@@ -1,4 +1,5 @@
 // VYR Labs - Checkpoint (Modal/Página curta)
+// Copy ajustado: "Como você percebe este momento agora?"
 
 import { useState } from "react";
 import { X } from "lucide-react";
@@ -19,10 +20,10 @@ export default function Checkpoint({ onSave, onDismiss }: CheckpointProps) {
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm">
       <div className="w-full max-w-md bg-vyr-bg-surface rounded-t-3xl px-6 py-6 animate-slide-up">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-vyr-text-primary text-lg font-medium">
-            Deseja registrar como está agora?
-          </h2>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-vyr-text-muted text-xs tracking-wider uppercase">
+            Checkpoint do sistema
+          </p>
           <button
             onClick={onDismiss}
             className="p-2 -mr-2 rounded-full transition-colors active:bg-vyr-bg-primary"
@@ -32,6 +33,11 @@ export default function Checkpoint({ onSave, onDismiss }: CheckpointProps) {
           </button>
         </div>
 
+        {/* Pergunta principal */}
+        <h2 className="text-vyr-text-primary text-lg font-medium mb-6">
+          Como você percebe este momento agora?
+        </h2>
+
         {/* Campo de observação */}
         <div className="mb-6">
           <label className="block text-vyr-text-muted text-sm mb-2">
@@ -40,7 +46,7 @@ export default function Checkpoint({ onSave, onDismiss }: CheckpointProps) {
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            placeholder="Como você está se sentindo..."
+            placeholder="Descreva brevemente..."
             className="w-full h-24 px-4 py-3 bg-vyr-bg-primary border border-vyr-stroke-divider rounded-xl text-vyr-text-primary placeholder:text-vyr-text-muted resize-none focus:outline-none focus:border-vyr-accent-action transition-colors"
           />
         </div>
