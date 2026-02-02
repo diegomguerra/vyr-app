@@ -1,239 +1,202 @@
 
-# Plano: Reestruturar VYR Labs com Riqueza de Conteudo
+# Proposta de Evolução — VYR Labs v2
 
-## Problema Identificado
-A implementacao atual segue uma filosofia "minimalista vazia" - apenas score + botao na Home. O prompt definitivo exige uma filosofia "rica em significado" onde cada tela entrega valor cognitivo atraves de 3 camadas: Estado + Interpretacao + Acao.
+## Diagnóstico do Estado Atual
 
----
+O app já está sólido com:
+- Ring gauges visuais (estilo Whoop)
+- Cards interpretativos ricos
+- Fluxo Home → Detalhe → Ação funcional
+- Design system coerente
 
-## Mudancas Necessarias
+## Oportunidades de Evolução
 
-### 1. Modelo de Dados Expandido
+### 1. Gráfico de Evolução no Labs (Alto Impacto)
 
-**vyr-types.ts** - Adicionar campos:
-```typescript
-interface VYRState {
-  // Existentes...
-  
-  // NOVOS - para Home rica
-  microDescription: string;        // "Foco sustentado com boa clareza mental"
-  systemReading: {
-    whyScore: string;              // Por que o score e esse
-    limitingFactor: string;        // Qual o limitante
-    dayRisk: string;               // Qual o risco do dia
-  };
-  todayMeaning: string[];          // 2 bullets de consequencia pratica
-  actionConsequence: string;       // Texto abaixo do botao
-  
-  // NOVOS - para pilares interpretados
-  pillarDescriptions: {
-    energia: string;
-    clareza: string;
-    estabilidade: string;
-  };
-  systemDiagnosis: string;         // 2+ frases de diagnostico
-}
+**Problema:** O histórico mostra apenas lista de dias. Não há visualização temporal.
 
-interface DailyReview {
-  // Existentes...
-  
-  // NOVO - valor gerado obrigatorio
-  valueGenerated: string;
-}
-
-interface HistoryDay {
-  date: string;
-  score: number;
-  dominantState: string;           // "foco sustentado"
-  systemNote: string;              // "dia consistente, sem quedas"
-}
-```
-
----
-
-### 2. HOME - Reestruturacao Completa
-
-**De (atual):**
-- Saudacao
-- Score + label curto
-- Botao sozinho
-
-**Para (novo):**
+**Solução:** Adicionar um gráfico de linha/área no topo da aba "Histórico" mostrando a evolução do VYR State nos últimos 7-14 dias.
 
 ```text
-[Saudacao]
-
 ┌─────────────────────────────────┐
-│ CARD 1 - ESTADO GERAL           │
+│     Últimos 7 dias              │
 │                                 │
-│ VYR STATE                       │
-│ 78                              │
+│      ╭─╮                        │
+│  ╭───╯ ╰──╮   ╭──╮             │
+│ ─╯        ╰───╯  ╰──           │
 │                                 │
-│ Estado atual:                   │
-│ Foco sustentado com boa         │
-│ clareza mental.                 │
-└─────────────────────────────────┘
-
-┌─────────────────────────────────┐
-│ CARD 2 - LEITURA DO SISTEMA     │
-│                                 │
-│ Clareza elevada e energia       │
-│ controlada.                     │
-│ O limitante hoje e a            │
-│ estabilidade ao longo do tempo. │
-│ Evite sobrecarga cognitiva      │
-│ prolongada.                     │
-└─────────────────────────────────┘
-
-┌─────────────────────────────────┐
-│ CARD 3 - HOJE ISSO SIGNIFICA    │
-│                                 │
-│ * Boa capacidade de manter      │
-│   foco continuo                 │
-│ * Melhor desempenho com pausas  │
-│   estrategicas                  │
-└─────────────────────────────────┘
-
-┌─────────────────────────────────┐
-│ CARD 4 - ACAO                   │
-│                                 │
-│    [ Ativar HOLD ]              │
-│                                 │
-│ Manter foco estavel pelas       │
-│ proximas horas, priorizando     │
-│ economia cognitiva.             │
+│ seg ter qua qui sex sab dom    │
 └─────────────────────────────────┘
 ```
 
----
+### 2. Weekly Digest / Resumo Semanal
 
-### 3. STATE DETAIL - Adicionar Interpretacao
+**Problema:** Não há visão consolidada da semana.
 
-**Pilares com texto:**
+**Solução:** Criar um card no Labs que aparece aos domingos/segundas com:
+- Score médio da semana
+- Dia mais forte
+- Padrão detectado
+- Uma frase de interpretação
+
+```text
+┌─────────────────────────────────┐
+│ Resumo da semana                │
+│                                 │
+│ Score médio: 74                 │
+│ Melhor dia: quinta-feira        │
+│                                 │
+│ "Padrão de queda ao final do    │
+│ dia. Considere ajustar ritmo    │
+│ à tarde."                       │
+└─────────────────────────────────┘
+```
+
+### 3. Comparativo Visual (Ontem vs Hoje)
+
+**Problema:** O usuário não tem contexto comparativo imediato.
+
+**Solução:** Adicionar na Home um indicador sutil mostrando a variação em relação a ontem:
+
+```text
+VYR STATE
+   78
+   ▲ +6 vs ontem
+```
+
+Sutil, sem julgamento, apenas informativo.
+
+### 4. Animações de Entrada Refinadas
+
+**Problema:** As transições são funcionais mas não premium.
+
+**Solução:**
+- Ring principal: animação de "draw" progressivo ao carregar
+- Pilares: entrada escalonada (stagger) de 100ms entre cada
+- Cards: slide-up sequencial suave
+- Transições entre telas com fade crossover
+
+### 5. Check-in Funcional com Cálculo de Score
+
+**Problema:** O score é hardcoded. Não há input real do usuário.
+
+**Solução:** Criar um fluxo de check-in matinal/noturno:
+
+```text
+┌─────────────────────────────────┐
+│ Check-in da manhã               │
+│                                 │
+│ Como você dormiu?               │
+│ ○ Muito bem  ○ Ok  ○ Mal        │
+│                                 │
+│ Nível de energia agora?         │
+│ ○ Alto  ○ Médio  ○ Baixo        │
+│                                 │
+│ Clareza mental?                 │
+│ ○ Alta  ○ Média  ○ Baixa        │
+│                                 │
+│ [ Calcular VYR State ]          │
+└─────────────────────────────────┘
+```
+
+O score passa a ser calculado com base nas respostas.
+
+### 6. Streak/Consistência (Sem Gamificação)
+
+**Problema:** Não há incentivo sutil para uso contínuo.
+
+**Solução:** Mostrar dias consecutivos de uso de forma neutra:
+
+```text
+"7 dias de acompanhamento contínuo"
+```
+
+Sem estrelas, sem troféus, sem urgência. Apenas informação.
+
+### 7. Tela de Boas-Vindas Refinada
+
+**Problema:** O Login vai direto para Home sem contexto.
+
+**Solução:** Adicionar uma tela de primeiro uso que explica o conceito do VYR em 3 slides:
+
+- Slide 1: "O VYR lê seu sistema cognitivo"
+- Slide 2: "Interpreta o que isso significa hoje"
+- Slide 3: "Sugere a ação certa para o momento"
+
+### 8. Pilares com Micro-Sparkline
+
+**Problema:** Os 3 mini-rings mostram apenas o valor atual.
+
+**Solução:** Adicionar uma micro-linha de tendência (últimas 24h ou 7 dias) abaixo de cada pilar na tela de Detalhe:
+
 ```text
 Energia ●●●●○
-Energia disponivel, porem controlada.
-
-Clareza ●●●●●
-Boa capacidade de foco e processamento.
-
-Estabilidade ●●●○○
-Sustentacao moderada ao longo do tempo.
+Energia disponível, porém controlada.
+[sparkline: ─╮╭─╮╭──]
 ```
 
-**Novo bloco de diagnostico:**
+### 9. Haptic Feedback
+
+**Problema:** Interações são visuais mas não táteis.
+
+**Solução:** Adicionar vibração sutil em:
+- Confirmação de ação (BOOT/HOLD/CLEAR)
+- Registro de checkpoint
+- Mudança de estado detectada
+
+### 10. Horário Ideal Detectado
+
+**Problema:** O sistema não indica quando agir proativamente.
+
+**Solução:** Adicionar na Home um indicador de "janela cognitiva":
+
 ```text
-Diagnostico do sistema
-
-O sistema indica um estado favoravel para execucao.
-O principal cuidado hoje e evitar longos periodos sem pausa.
+┌─────────────────────────────────┐
+│ ⏰ Janela ideal                 │
+│ Próximas 2-3 horas são          │
+│ favoráveis para foco profundo   │
+└─────────────────────────────────┘
 ```
 
 ---
 
-### 4. MOMENT ACTION - Expandir Texto
+## Priorização Sugerida
 
-**De:**
-```text
-Sustentacao
-Janela de sustentacao detectada.
-Manutencao do estado atual.
-```
+### Fase 1 — Impacto Visual Imediato
+1. Animações de entrada refinadas
+2. Comparativo Ontem vs Hoje
+3. Gráfico de evolução no Labs
 
-**Para:**
-```text
-Sustentacao
-Janela de sustentacao detectada.
+### Fase 2 — Funcionalidade Real
+4. Check-in funcional com cálculo
+5. Streak/consistência
+6. Weekly digest
 
-O sistema ira priorizar estabilidade cognitiva,
-evitando picos e quedas bruscas de energia.
-
-Voce deve esperar uma sensacao de constancia
-ao longo das proximas horas.
-
-[ Ativar HOLD ]
-```
+### Fase 3 — Refinamento Premium
+7. Sparklines nos pilares
+8. Haptic feedback
+9. Janela ideal
+10. Onboarding refinado
 
 ---
 
-### 5. DAY REVIEW - Adicionar Valor Gerado
+## Resumo Técnico
 
-**Estrutura nova:**
-```text
-Encerramento do dia
-
-Inicio do dia
-Voce iniciou o dia com estabilidade moderada.
-
-Ao longo do dia
-Ajustou o ritmo conforme as demandas cognitivas.
-
-Encerramento
-Finalizou o dia com clareza funcional.
-
-────────────────────────────────
-
-O sistema manteve coerencia entre estado
-e estrategia ao longo do dia.
-
-Ciclo concluido.
-```
+| Evolução | Complexidade | Arquivos Afetados |
+|----------|--------------|-------------------|
+| Animações refinadas | Baixa | StateRing, PillarRing, Home |
+| Comparativo vs ontem | Baixa | Home, vyr-store |
+| Gráfico evolução | Média | Labs (novo componente) |
+| Check-in funcional | Média | Nova página + store |
+| Weekly digest | Média | Labs + vyr-store |
+| Sparklines | Média | PillarRing, StateDetail |
+| Streak | Baixa | Home + store |
+| Haptic | Baixa | Hooks + componentes de ação |
+| Janela ideal | Média | Home + store |
+| Onboarding | Média | Nova página |
 
 ---
 
-### 6. CHECKPOINT - Ajuste de Copy
+## Próximos Passos
 
-**De:** "Deseja registrar como esta agora?"
-**Para:** "Como voce percebe este momento agora?"
-
----
-
-### 7. LABS - Historico Rico
-
-**De:**
-```text
-01 fev.     78
-```
-
-**Para:**
-```text
-01 de fev.
-Estado dominante: foco sustentado
-Nota do sistema: dia consistente, sem quedas abruptas
-Score: 78
-```
-
----
-
-## Arquivos a Modificar
-
-1. **src/lib/vyr-types.ts** - Expandir interfaces
-2. **src/lib/vyr-store.ts** - Adicionar dados mock ricos
-3. **src/pages/Home.tsx** - Reescrever com 4 cards
-4. **src/pages/StateDetail.tsx** - Adicionar interpretacoes
-5. **src/pages/MomentAction.tsx** - Expandir textos
-6. **src/pages/DayReview.tsx** - Adicionar valor gerado
-7. **src/pages/Checkpoint.tsx** - Ajustar copy
-8. **src/pages/Labs.tsx** - Enriquecer historico
-
----
-
-## Design Visual
-
-- Cards com fundo `bg-vyr-bg-surface` e `rounded-2xl`
-- Titulos pequenos em `text-vyr-text-muted` uppercase
-- Textos principais em `text-vyr-text-secondary`
-- Muito espaco negativo entre cards
-- Nada "flat vazio" - cada card deve ter presenca visual
-
----
-
-## Resultado Esperado
-
-Usuario abre o app e sente:
-- "Eu entendi meu estado"
-- "Eu sei o que fazer agora"
-- "Isso faz sentido para hoje"
-- "O sistema esta comigo"
-
-Nenhuma tela sera "apenas bonita" - todas entregarao valor cognitivo explicito.
+Posso implementar qualquer combinação dessas evoluções. Recomendo começar pela **Fase 1** para impacto visual imediato, seguido do **check-in funcional** para dar vida real ao score.
