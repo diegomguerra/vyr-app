@@ -54,6 +54,7 @@ export default {
           bg: {
             primary: "hsl(var(--vyr-bg-primary))",
             surface: "hsl(var(--vyr-bg-surface))",
+            elevated: "hsl(var(--vyr-bg-elevated))",
           },
           text: {
             primary: "hsl(var(--vyr-text-primary))",
@@ -66,6 +67,16 @@ export default {
           accent: {
             action: "hsl(var(--vyr-accent-action))",
             transition: "hsl(var(--vyr-accent-transition))",
+            glow: "hsl(var(--vyr-accent-glow))",
+          },
+          pillar: {
+            energia: "hsl(var(--vyr-energia))",
+            clareza: "hsl(var(--vyr-clareza))",
+            estabilidade: "hsl(var(--vyr-estabilidade))",
+          },
+          ring: {
+            track: "hsl(var(--vyr-ring-track))",
+            glow: "hsl(var(--vyr-ring-glow))",
           },
         },
       },
