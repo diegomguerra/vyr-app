@@ -2,7 +2,10 @@ name: Sync VYR app -> VYR project (front only)
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
+      - work
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -45,6 +48,7 @@ jobs:
           done
 
       - name: Commit and push changes
+        id: sync_commit
         run: |
           cd target
           git config user.name "vyr-sync-bot"
@@ -56,14 +60,17 @@ jobs:
           git add .
           if git diff --cached --quiet; then
             echo "No changes to sync."
+            echo "has_changes=false" >> $GITHUB_OUTPUT
             exit 0
           fi
 
           git commit -m "Sync front from vyr-app (source ${{ github.sha }})"
           git push origin "$BRANCH"
           echo "BRANCH=$BRANCH" >> $GITHUB_ENV
+          echo "has_changes=true" >> $GITHUB_OUTPUT
 
       - name: Create PR in vyr-project
+        if: steps.sync_commit.outputs.has_changes == 'true'
         run: |
           cd target
           gh pr create \
