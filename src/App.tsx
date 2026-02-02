@@ -47,7 +47,7 @@ function Header({ codigo }: { codigo?: string }) {
             <Brain className="w-4 h-4 text-vyr-white" />
           </div>
           <div>
-            <h1 className="font-bold text-vyr-white text-sm sm:text-base font-mono tracking-wide">VYR Labs</h1>
+            <h1 className="font-bold text-vyr-white text-sm sm:text-base font-mono tracking-wide">VYR App</h1>
             <p className="text-[10px] sm:text-xs text-vyr-gray-400">
               {codigo ? `ID: ${codigo}` : "Carregando..."}
             </p>
