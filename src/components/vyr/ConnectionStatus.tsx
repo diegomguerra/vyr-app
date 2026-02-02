@@ -38,10 +38,10 @@ export default function ConnectionStatus({ connection, onTap }: ConnectionStatus
     return (
       <button
         onClick={onTap}
-        className="flex items-center gap-2 bg-vyr-accent-negative/10 rounded-full px-3 py-1.5 transition-opacity active:opacity-80"
+        className="flex items-center gap-2 bg-vyr-status-negative/10 rounded-full px-3 py-1.5 transition-opacity active:opacity-80"
       >
-        <AlertCircle className="w-4 h-4 text-vyr-accent-negative" />
-        <span className="text-vyr-accent-negative text-xs font-medium">
+        <AlertCircle className="w-4 h-4 text-vyr-status-negative" />
+        <span className="text-vyr-status-negative text-xs font-medium">
           Wearable não conectado
         </span>
       </button>
@@ -54,21 +54,18 @@ export default function ConnectionStatus({ connection, onTap }: ConnectionStatus
   const statusConfig = {
     synced: {
       icon: CheckCircle2,
-      color: "text-vyr-accent-positive",
-      bgColor: "bg-vyr-accent-positive/10",
-      dot: "🟢",
+      color: "text-vyr-status-positive",
+      bgColor: "bg-vyr-status-positive/10",
     },
     pending: {
       icon: Clock,
-      color: "text-vyr-accent-caution",
-      bgColor: "bg-vyr-accent-caution/10",
-      dot: "🟡",
+      color: "text-vyr-status-caution",
+      bgColor: "bg-vyr-status-caution/10",
     },
     error: {
       icon: AlertCircle,
-      color: "text-vyr-accent-negative",
-      bgColor: "bg-vyr-accent-negative/10",
-      dot: "🔴",
+      color: "text-vyr-status-negative",
+      bgColor: "bg-vyr-status-negative/10",
     },
   };
 

@@ -44,15 +44,9 @@ export default function Settings({ connection, onBack, onReconnect, onDisconnect
   };
 
   const statusColor = {
-    synced: "text-vyr-accent-positive",
-    pending: "text-vyr-accent-caution",
-    error: "text-vyr-accent-negative",
-  };
-
-  const statusDot = {
-    synced: "🟢",
-    pending: "🟡",
-    error: "🔴",
+    synced: "bg-vyr-status-positive",
+    pending: "bg-vyr-status-caution",
+    error: "bg-vyr-status-negative",
   };
 
   return (
@@ -88,9 +82,7 @@ export default function Settings({ connection, onBack, onReconnect, onDisconnect
                   {providerName}
                 </span>
                 {connection.connected && (
-                  <span className={statusColor[connection.syncStatus]}>
-                    {statusDot[connection.syncStatus]}
-                  </span>
+                  <span className={`w-2 h-2 rounded-full ${statusColor[connection.syncStatus]}`} />
                 )}
               </div>
               <span className="text-vyr-text-muted text-sm">
@@ -114,7 +106,7 @@ export default function Settings({ connection, onBack, onReconnect, onDisconnect
               </button>
               <button
                 onClick={onDisconnect}
-                className="flex-1 flex items-center justify-center gap-2 bg-vyr-accent-negative/10 rounded-xl py-3 text-vyr-accent-negative transition-all active:scale-[0.98]"
+                className="flex-1 flex items-center justify-center gap-2 bg-vyr-status-negative/10 rounded-xl py-3 text-vyr-status-negative transition-all active:scale-[0.98]"
               >
                 <Unlink className="w-4 h-4" />
                 <span className="text-sm font-medium">Desconectar</span>
