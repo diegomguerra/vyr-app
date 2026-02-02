@@ -1,10 +1,11 @@
 // VYR Labs - Labs (Visual Whoop-inspired)
-// Memória inteligente com ring gauges e cards visuais
+// Memória inteligente com ring gauges, cards visuais e gráfico de evolução
 
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Clock, FileText, Bell, TrendingUp } from "lucide-react";
 import type { Checkpoint, DailyReview, HistoryDay } from "@/lib/vyr-types";
 import { formatDate, formatDateShort, formatTime } from "@/lib/vyr-store";
+import { EvolutionChart } from "@/components/vyr";
 
 type LabsTab = "historico" | "checkpoints" | "revisoes" | "sinais";
 
@@ -63,6 +64,49 @@ function MiniScoreRing({ score }: { score: number }) {
       >
         {score}
       </span>
+    </div>
+  );
+}
+
+// Toggle para sinais COM descrição
+function SignalToggle({
+  label,
+  description,
+  checked,
+  onChange,
+}: {
+  label: string;
+  description: string;
+  checked: boolean;
+  onChange: (value: boolean) => void;
+}) {
+  return (
+    <div className="flex items-start justify-between px-4 py-4 bg-vyr-bg-surface rounded-2xl gap-3">
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-1">
+          <Bell className="w-4 h-4 text-vyr-text-muted flex-shrink-0" />
+          <span className="text-vyr-text-primary text-sm font-medium">
+            {label}
+          </span>
+        </div>
+        <p className="text-vyr-text-muted text-xs leading-relaxed pl-6">
+          {description}
+        </p>
+      </div>
+      <button
+        onClick={() => onChange(!checked)}
+        className={`relative w-12 h-7 rounded-full transition-colors flex-shrink-0 ${
+          checked ? "bg-vyr-accent-action" : "bg-vyr-stroke-divider"
+        }`}
+        aria-checked={checked}
+        role="switch"
+      >
+        <span
+          className={`absolute top-1 w-5 h-5 rounded-full bg-white transition-transform ${
+            checked ? "translate-x-6" : "translate-x-1"
+          }`}
+        />
+      </button>
     </div>
   );
 }
@@ -126,52 +170,60 @@ export default function Labs({
 
       {/* Content */}
       <div className="px-5 py-4">
-        {/* Histórico com Mini Rings */}
+        {/* Histórico com Gráfico de Evolução + Lista */}
         {activeTab === "historico" && (
-          <div className="space-y-3">
-            {historyByDay.map((day, index) => (
-              <div
-                key={day.date}
-                className={`bg-vyr-bg-surface rounded-2xl p-4 ${
-                  index === 0 ? "border border-vyr-accent-action/20" : ""
-                }`}
-              >
-                <div className="flex items-start gap-4">
-                  <MiniScoreRing score={day.score} />
-                  
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-vyr-text-primary text-base font-medium">
-                        {formatDate(day.date)}
-                      </span>
-                      {index === 0 && (
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-vyr-accent-action/20 text-vyr-accent-action">
-                          Hoje
+          <div className="space-y-4">
+            {/* Gráfico de Evolução */}
+            {historyByDay.length > 1 && (
+              <EvolutionChart history={historyByDay} />
+            )}
+
+            {/* Lista de dias */}
+            <div className="space-y-3">
+              {historyByDay.map((day, index) => (
+                <div
+                  key={day.date}
+                  className={`bg-vyr-bg-surface rounded-2xl p-4 ${
+                    index === 0 ? "border border-vyr-accent-action/20" : ""
+                  }`}
+                >
+                  <div className="flex items-start gap-4">
+                    <MiniScoreRing score={day.score} />
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-vyr-text-primary text-base font-medium">
+                          {formatDate(day.date)}
                         </span>
-                      )}
+                        {index === 0 && (
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-vyr-accent-action/20 text-vyr-accent-action">
+                            Hoje
+                          </span>
+                        )}
+                      </div>
+                      
+                      <p className="text-vyr-text-secondary text-sm mb-1 capitalize">
+                        {day.dominantState}
+                      </p>
+                      
+                      <p className="text-vyr-text-muted text-xs">
+                        {day.systemNote}
+                      </p>
                     </div>
                     
-                    <p className="text-vyr-text-secondary text-sm mb-1 capitalize">
-                      {day.dominantState}
-                    </p>
-                    
-                    <p className="text-vyr-text-muted text-xs">
-                      {day.systemNote}
-                    </p>
+                    {index > 0 && index < historyByDay.length - 1 && (
+                      <TrendingUp 
+                        className={`w-4 h-4 flex-shrink-0 ${
+                          day.score > historyByDay[index + 1].score 
+                            ? "text-vyr-pillar-estabilidade" 
+                            : "text-vyr-accent-transition rotate-180"
+                        }`}
+                      />
+                    )}
                   </div>
-                  
-                  {index > 0 && index < historyByDay.length - 1 && (
-                    <TrendingUp 
-                      className={`w-4 h-4 flex-shrink-0 ${
-                        day.score > historyByDay[index + 1].score 
-                          ? "text-vyr-pillar-estabilidade" 
-                          : "text-vyr-accent-transition rotate-180"
-                      }`}
-                    />
-                  )}
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         )}
 
@@ -270,49 +322,6 @@ export default function Labs({
           </div>
         )}
       </div>
-    </div>
-  );
-}
-
-// Toggle para sinais COM descrição
-function SignalToggle({
-  label,
-  description,
-  checked,
-  onChange,
-}: {
-  label: string;
-  description: string;
-  checked: boolean;
-  onChange: (value: boolean) => void;
-}) {
-  return (
-    <div className="flex items-start justify-between px-4 py-4 bg-vyr-bg-surface rounded-2xl gap-3">
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1">
-          <Bell className="w-4 h-4 text-vyr-text-muted flex-shrink-0" />
-          <span className="text-vyr-text-primary text-sm font-medium">
-            {label}
-          </span>
-        </div>
-        <p className="text-vyr-text-muted text-xs leading-relaxed pl-6">
-          {description}
-        </p>
-      </div>
-      <button
-        onClick={() => onChange(!checked)}
-        className={`relative w-12 h-7 rounded-full transition-colors flex-shrink-0 ${
-          checked ? "bg-vyr-accent-action" : "bg-vyr-stroke-divider"
-        }`}
-        aria-checked={checked}
-        role="switch"
-      >
-        <span
-          className={`absolute top-1 w-5 h-5 rounded-full bg-white transition-transform ${
-            checked ? "translate-x-6" : "translate-x-1"
-          }`}
-        />
-      </button>
     </div>
   );
 }

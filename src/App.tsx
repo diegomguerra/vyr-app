@@ -122,6 +122,7 @@ function VYRApp() {
         <Home
           state={state}
           greeting={greeting}
+          historyByDay={historyByDay}
           onScoreTap={goStateDetail}
           onActionTap={goMomentAction}
         />
