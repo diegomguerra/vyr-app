@@ -131,6 +131,12 @@ export default function Login() {
     },
   ];
 
+  const kpis = [
+    { label: "Signal score", value: "84", suffix: "pts" },
+    { label: "Baseline", value: "7", suffix: "dias" },
+    { label: "Foco", value: "82", suffix: "%" },
+  ];
+
   return (
     <div className="min-h-screen vyr-gradient-bg safe-area-inset">
       {/* Subtle radial glow */}
@@ -146,11 +152,11 @@ export default function Login() {
             </div>
             <div className="space-y-4">
               <h1 className="text-3xl sm:text-4xl font-semibold text-vyr-white">
-                Controle total sobre performance cognitiva
+                A nova experiência VYR para decisões cognitivas precisas
               </h1>
               <p className="text-sm sm:text-base text-vyr-gray-400 max-w-xl">
-                O novo front da VYR App combina análise biométrica, check-ins inteligentes e
-                métricas de foco em um painel elegante e direto ao ponto.
+                O novo front da VYR App integra check-ins guiados, baseline de performance e
+                insights inteligentes em um painel enxuto e executivo.
               </p>
             </div>
 
@@ -171,37 +177,45 @@ export default function Login() {
               })}
             </div>
 
-            <div className="flex flex-wrap gap-3 text-xs text-vyr-gray-500 font-mono">
-              <span className="px-3 py-1 rounded-sm border border-vyr-graphite/60 bg-vyr-graphite-dark/60">
-                Check-ins diários
-              </span>
-              <span className="px-3 py-1 rounded-sm border border-vyr-graphite/60 bg-vyr-graphite-dark/60">
-                Baselines cognitivos
-              </span>
-              <span className="px-3 py-1 rounded-sm border border-vyr-graphite/60 bg-vyr-graphite-dark/60">
-                KPIs em tempo real
-              </span>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {kpis.map((item) => (
+                <div key={item.label} className="vyr-card-glow p-4">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-vyr-gray-500 font-mono">
+                    {item.label}
+                  </p>
+                  <div className="mt-3 flex items-end gap-2">
+                    <span className="text-2xl font-semibold text-vyr-white">{item.value}</span>
+                    <span className="text-xs text-vyr-gray-500">{item.suffix}</span>
+                  </div>
+                  <div className="mt-3 vyr-accent-line" />
+                </div>
+              ))}
             </div>
           </section>
 
           {/* Login Card */}
           <section className="order-1 lg:order-2">
             <div className="space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-vyr-graphite to-vyr-accent flex items-center justify-center shadow-xl shadow-vyr-accent/20">
-                  <Brain className="w-6 h-6 text-vyr-white" />
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-vyr-graphite to-vyr-accent flex items-center justify-center shadow-xl shadow-vyr-accent/20">
+                    <Brain className="w-6 h-6 text-vyr-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-semibold text-vyr-white font-mono tracking-wide">
+                      VYR App
+                    </h2>
+                    <p className="text-xs text-vyr-gray-500 font-mono mt-1">
+                      Performance cognitiva mensurável
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="text-xl font-semibold text-vyr-white font-mono tracking-wide">
-                    VYR App
-                  </h2>
-                  <p className="text-xs text-vyr-gray-500 font-mono mt-1">
-                    Performance cognitiva mensurável
-                  </p>
-                </div>
+                <span className="px-2.5 py-1 rounded-full border border-vyr-graphite/60 text-[10px] uppercase tracking-[0.3em] text-vyr-gray-500">
+                  secure
+                </span>
               </div>
 
-              <div className="vyr-card-graphite p-6 sm:p-8">
+              <div className="vyr-card-glow p-6 sm:p-8">
                 <div className="space-y-6">
                   <div className="space-y-1">
                     <h3 className="text-lg font-medium text-vyr-white">
