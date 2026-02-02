@@ -1,6 +1,7 @@
 // VYR Labs App - Navegação principal conforme spec
 
 import { useState, useCallback } from "react";
+import { Home as HomeIcon, FlaskConical, Settings as SettingsIcon } from "lucide-react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -230,29 +231,29 @@ function VYRApp() {
         <div className="flex justify-around max-w-md mx-auto">
           <button
             onClick={goHome}
-            className={`flex flex-col items-center gap-1 px-4 py-1 rounded-lg transition-colors ${
+            className={`flex flex-col items-center gap-1.5 px-4 py-2 rounded-lg transition-colors ${
               screen === "home" ? "text-vyr-accent-action" : "text-vyr-text-muted"
             }`}
           >
-            <span className="text-lg">🏠</span>
+            <HomeIcon className="w-5 h-5" strokeWidth={screen === "home" ? 2.5 : 1.5} />
             <span className="text-xs font-medium">Home</span>
           </button>
           <button
             onClick={goLabs}
-            className={`flex flex-col items-center gap-1 px-4 py-1 rounded-lg transition-colors ${
+            className={`flex flex-col items-center gap-1.5 px-4 py-2 rounded-lg transition-colors ${
               screen === "labs" || screen === "dayReview" ? "text-vyr-accent-action" : "text-vyr-text-muted"
             }`}
           >
-            <span className="text-lg">🧪</span>
+            <FlaskConical className="w-5 h-5" strokeWidth={screen === "labs" || screen === "dayReview" ? 2.5 : 1.5} />
             <span className="text-xs font-medium">Labs</span>
           </button>
           <button
             onClick={goSettings}
-            className={`flex flex-col items-center gap-1 px-4 py-1 rounded-lg transition-colors ${
+            className={`flex flex-col items-center gap-1.5 px-4 py-2 rounded-lg transition-colors ${
               screen === "settings" ? "text-vyr-accent-action" : "text-vyr-text-muted"
             }`}
           >
-            <span className="text-lg">⚙️</span>
+            <SettingsIcon className="w-5 h-5" strokeWidth={screen === "settings" ? 2.5 : 1.5} />
             <span className="text-xs font-medium">Config</span>
           </button>
         </div>
