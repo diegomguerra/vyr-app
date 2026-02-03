@@ -10,13 +10,24 @@ interface ConnectionStatusProps {
 }
 
 const PROVIDER_SHORT_NAMES: Record<WearableProvider, string> = {
+  // Relógios
   apple_health: "Apple Watch",
   garmin: "Garmin",
-  oura: "Oura",
-  samsung: "Samsung",
   whoop: "Whoop",
-  google_fit: "Google Fit",
   fitbit: "Fitbit",
+  samsung: "Samsung",
+  xiaomi: "Mi Band",
+  polar: "Polar",
+  huawei: "Huawei",
+  amazfit: "Amazfit",
+  google_fit: "Google Fit",
+  // Smart Rings
+  oura: "Oura",
+  ringconn: "RingConn",
+  ultrahuman: "Ultrahuman",
+  circular: "Circular",
+  movano: "Movano",
+  jstyle: "J-Style",
 };
 
 function formatLastSync(date: Date | null): string {
