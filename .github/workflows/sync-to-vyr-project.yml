@@ -44,14 +44,11 @@ jobs:
             fi
           done
 
-      - name: Commit and push changes
+      - name: Commit and push to main
         run: |
           cd target
           git config user.name "vyr-sync-bot"
           git config user.email "vyr-sync-bot@users.noreply.github.com"
-
-          BRANCH="sync/vyrapp-${{ github.sha }}"
-          git checkout -b "$BRANCH"
 
           git add .
           if git diff --cached --quiet; then
@@ -60,16 +57,4 @@ jobs:
           fi
 
           git commit -m "Sync front from vyr-app (source ${{ github.sha }})"
-          git push origin "$BRANCH"
-          echo "BRANCH=$BRANCH" >> $GITHUB_ENV
-
-      - name: Create PR in vyr-project
-        run: |
-          cd target
-          gh pr create \
-            --title "Sync front from vyr-app (source ${{ github.sha }})" \
-            --body "Automated sync from vyr-app. Native code preserved." \
-            --base main \
-            --head "${{ env.BRANCH }}"
-        env:
-          GH_TOKEN: ${{ secrets.SYNC_TOKEN }}
+          git push origin main
