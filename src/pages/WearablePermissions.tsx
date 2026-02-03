@@ -38,72 +38,144 @@ interface Permission {
 }
 
 const PROVIDER_PERMISSIONS: Record<WearableProvider, Permission[]> = {
-  // === RELÓGIOS ===
+  // === RELÓGIOS / BANDS ===
   apple_health: [
-    { id: "hr", label: "Frequência cardíaca", description: "FC contínua, repouso e durante o sono" },
-    { id: "hrv", label: "Variabilidade da FC (HRV)", description: "SDNN – excelente qualidade" },
-    { id: "sleep", label: "Dados de sono", description: "Duração, estágios, fragmentação" },
-    { id: "activity", label: "Atividade física", description: "Passos, calorias, sedentarismo" },
+    // Cardiofisiológicos
+    { id: "hr_continuous", label: "FC contínua", description: "Frequência cardíaca ao longo do dia" },
+    { id: "hr_rest", label: "FC de repouso", description: "Frequência cardíaca em repouso" },
+    { id: "hrv", label: "HRV (SDNN)", description: "Variabilidade da FC – confiável" },
+    { id: "hr_sleep", label: "FC durante o sono", description: "Frequência cardíaca noturna" },
+    // Sono
+    { id: "sleep_duration", label: "Duração do sono", description: "Tempo total de sono" },
+    { id: "sleep_stages", label: "Estágios do sono", description: "Leve, profundo, REM" },
+    { id: "sleep_timing", label: "Horários de sono", description: "Início e término" },
+    { id: "sleep_frag", label: "Fragmentação", description: "Despertares noturnos" },
+    // Atividade
+    { id: "steps", label: "Passos", description: "Contagem diária" },
+    { id: "calories", label: "Calorias ativas", description: "Gasto calórico de atividade" },
+    { id: "active_minutes", label: "Minutos em atividade", description: "Tempo ativo" },
+    { id: "sedentary", label: "Sedentarismo", description: "Períodos inativos" },
+    // Outros
     { id: "spo2", label: "SpO₂", description: "Oxigenação (modelos compatíveis)" },
     { id: "temp", label: "Temperatura do punho", description: "Variação noturna (modelos recentes)" },
+    { id: "respiration", label: "Respiração", description: "Taxa respiratória durante o sono" },
   ],
   garmin: [
-    { id: "hr", label: "Frequência cardíaca", description: "FC contínua e repouso" },
-    { id: "hrv", label: "HRV noturna", description: "Variabilidade durante o sono" },
-    { id: "sleep", label: "Dados de sono", description: "Duração, estágios, regularidade" },
-    { id: "activity", label: "Atividade física", description: "Carga, intensidade, passos" },
-    { id: "stress", label: "Indicadores de estresse", description: "Body Battery, Stress Score" },
+    // Cardio
+    { id: "hr_continuous", label: "FC contínua", description: "Frequência cardíaca ao longo do dia" },
+    { id: "hr_rest", label: "FC repouso", description: "Frequência cardíaca em repouso" },
+    { id: "hrv", label: "HRV noturna", description: "Principalmente durante o sono" },
+    { id: "respiration", label: "Respiração", description: "Taxa respiratória" },
+    // Sono
+    { id: "sleep_duration", label: "Duração do sono", description: "Tempo total de sono" },
+    { id: "sleep_stages", label: "Estágios do sono", description: "Leve, profundo, REM" },
+    { id: "sleep_regularity", label: "Regularidade", description: "Consistência dos horários" },
+    // Atividade
+    { id: "steps", label: "Passos", description: "Contagem diária" },
+    { id: "activity_load", label: "Carga de atividade", description: "Training Load" },
+    { id: "intensity", label: "Intensidade", description: "Nível de esforço" },
+    // Scores derivados
+    { id: "body_battery", label: "Body Battery", description: "Score de energia (auxiliar)" },
+    { id: "stress_score", label: "Stress Score", description: "Indicador de estresse (auxiliar)" },
   ],
   whoop: [
-    { id: "hr", label: "Frequência cardíaca", description: "FC contínua e repouso" },
-    { id: "hrv", label: "HRV (RMSSD)", description: "Alta qualidade, contínua" },
-    { id: "sleep", label: "Dados de sono", description: "Duração, consistência, eficiência" },
-    { id: "strain", label: "Strain e carga", description: "Carga acumulada diária" },
-    { id: "recovery", label: "Recuperação", description: "Score de Recovery" },
+    // Cardio
+    { id: "hr_continuous", label: "FC contínua", description: "Frequência cardíaca ao longo do dia" },
+    { id: "hr_rest", label: "FC repouso", description: "Frequência cardíaca em repouso" },
+    { id: "hrv", label: "HRV (RMSSD)", description: "Alta qualidade" },
+    // Sono
+    { id: "sleep_duration", label: "Duração do sono", description: "Tempo total de sono" },
+    { id: "sleep_consistency", label: "Consistência", description: "Regularidade do sono" },
+    { id: "sleep_efficiency", label: "Eficiência", description: "Qualidade do sono" },
+    // Atividade
+    { id: "strain", label: "Strain", description: "Carga de esforço (derivado)" },
+    { id: "accumulated_load", label: "Carga acumulada", description: "Esforço total do dia" },
+    // Scores proprietários
+    { id: "recovery", label: "Recovery", description: "Score de recuperação (auxiliar)" },
+    { id: "sleep_score", label: "Sleep Score", description: "Score de sono (auxiliar)" },
   ],
   fitbit: [
-    { id: "hr", label: "Frequência cardíaca", description: "FC contínua e repouso" },
-    { id: "hrv", label: "HRV", description: "Disponível em modelos compatíveis" },
-    { id: "sleep", label: "Dados de sono", description: "Duração, estágios, regularidade" },
-    { id: "activity", label: "Atividade física", description: "Passos, minutos ativos" },
-    { id: "readiness", label: "Daily Readiness", description: "Score de prontidão" },
+    // Cardio
+    { id: "hr_continuous", label: "FC contínua", description: "Frequência cardíaca ao longo do dia" },
+    { id: "hr_rest", label: "FC repouso", description: "Frequência cardíaca em repouso" },
+    { id: "hrv", label: "HRV", description: "Modelos compatíveis" },
+    // Sono
+    { id: "sleep_duration", label: "Duração do sono", description: "Tempo total de sono" },
+    { id: "sleep_stages", label: "Estágios do sono", description: "Leve, profundo, REM" },
+    { id: "sleep_regularity", label: "Regularidade", description: "Consistência dos horários" },
+    // Atividade
+    { id: "steps", label: "Passos", description: "Contagem diária" },
+    { id: "active_minutes", label: "Minutos ativos", description: "Tempo em atividade" },
+    // Scores
+    { id: "readiness", label: "Daily Readiness Score", description: "Prontidão (auxiliar)" },
+    { id: "stress_mgmt", label: "Stress Management Score", description: "Estresse (auxiliar)" },
   ],
   samsung: [
-    { id: "hr", label: "Frequência cardíaca", description: "FC contínua" },
+    // Cardio
+    { id: "hr_continuous", label: "FC contínua", description: "Frequência cardíaca ao longo do dia" },
     { id: "hrv", label: "HRV", description: "Limitado, varia por modelo" },
-    { id: "sleep", label: "Dados de sono", description: "Duração, estágios, regularidade" },
-    { id: "activity", label: "Atividade física", description: "Passos, minutos ativos" },
-    { id: "spo2", label: "SpO₂", description: "Oxigenação noturna" },
+    { id: "respiration", label: "Respiração", description: "Taxa respiratória" },
+    // Sono
+    { id: "sleep_duration", label: "Duração do sono", description: "Tempo total de sono" },
+    { id: "sleep_stages", label: "Estágios do sono", description: "Leve, profundo, REM" },
+    { id: "sleep_regularity", label: "Regularidade", description: "Consistência dos horários" },
+    // Atividade
+    { id: "steps", label: "Passos", description: "Contagem diária" },
+    { id: "active_minutes", label: "Minutos ativos", description: "Tempo em atividade" },
+    // Outros
+    { id: "spo2", label: "SpO₂", description: "Oxigenação sanguínea" },
+    { id: "temp", label: "Temperatura noturna", description: "Modelos recentes" },
   ],
   xiaomi: [
-    { id: "hr", label: "Frequência cardíaca", description: "FC contínua e repouso" },
-    { id: "hrv", label: "HRV", description: "Disponível em modelos mais novos" },
-    { id: "sleep", label: "Dados de sono", description: "Duração, estágios" },
-    { id: "activity", label: "Atividade física", description: "Passos, atividade diária" },
+    // Cardio
+    { id: "hr_continuous", label: "FC contínua", description: "Frequência cardíaca ao longo do dia" },
+    { id: "hr_rest", label: "FC repouso", description: "Frequência cardíaca em repouso" },
+    { id: "hrv", label: "HRV", description: "Modelos mais novos" },
+    // Sono
+    { id: "sleep_duration", label: "Duração do sono", description: "Tempo total de sono" },
+    { id: "sleep_stages", label: "Estágios do sono", description: "Leve, profundo, REM" },
+    // Atividade
+    { id: "steps", label: "Passos", description: "Contagem diária" },
+    { id: "activity", label: "Atividade diária", description: "Movimento geral" },
   ],
   polar: [
-    { id: "hr", label: "Frequência cardíaca", description: "FC contínua e repouso" },
+    // Cardio
+    { id: "hr_continuous", label: "FC contínua", description: "Frequência cardíaca ao longo do dia" },
     { id: "hrv", label: "HRV", description: "Alta qualidade" },
-    { id: "sleep", label: "Dados de sono", description: "Duração, qualidade" },
-    { id: "activity", label: "Carga física", description: "Carga de treino" },
-    { id: "recharge", label: "Nightly Recharge", description: "Recuperação noturna" },
+    { id: "hr_rest", label: "FC repouso", description: "Frequência cardíaca em repouso" },
+    // Sono
+    { id: "sleep_duration", label: "Duração do sono", description: "Tempo total de sono" },
+    { id: "sleep_quality", label: "Qualidade do sono", description: "Score de qualidade" },
+    { id: "nightly_recharge", label: "Nightly Recharge", description: "Recuperação noturna (derivado)" },
+    // Atividade
+    { id: "training_load", label: "Carga física", description: "Carga de treino" },
   ],
   huawei: [
-    { id: "hr", label: "Frequência cardíaca", description: "FC contínua" },
-    { id: "hrv", label: "HRV", description: "Disponível em alguns modelos" },
-    { id: "sleep", label: "Dados de sono", description: "Duração, estágios" },
-    { id: "activity", label: "Atividade física", description: "Passos, carga" },
+    // Cardio
+    { id: "hr_continuous", label: "FC contínua", description: "Frequência cardíaca ao longo do dia" },
+    { id: "hrv", label: "HRV", description: "Alguns modelos" },
+    // Sono
+    { id: "sleep_duration", label: "Duração do sono", description: "Tempo total de sono" },
+    { id: "sleep_stages", label: "Estágios do sono", description: "Leve, profundo, REM" },
+    // Atividade
+    { id: "steps", label: "Passos", description: "Contagem diária" },
+    { id: "activity_load", label: "Carga", description: "Carga de atividade" },
   ],
   amazfit: [
-    { id: "hr", label: "Frequência cardíaca", description: "FC contínua" },
-    { id: "hrv", label: "HRV", description: "Disponível em modelos recentes" },
-    { id: "sleep", label: "Dados de sono", description: "Duração, estágios" },
-    { id: "activity", label: "Atividade física", description: "Passos, atividade geral" },
+    // Cardio
+    { id: "hr_continuous", label: "FC contínua", description: "Frequência cardíaca ao longo do dia" },
+    { id: "hrv", label: "HRV", description: "Modelos recentes" },
+    // Sono
+    { id: "sleep_duration", label: "Duração do sono", description: "Tempo total de sono" },
+    { id: "sleep_stages", label: "Estágios do sono", description: "Leve, profundo, REM" },
+    // Atividade
+    { id: "steps", label: "Passos", description: "Contagem diária" },
+    { id: "activity", label: "Atividade geral", description: "Movimento diário" },
   ],
   google_fit: [
-    { id: "hr", label: "Frequência cardíaca", description: "Agregado de dispositivos" },
-    { id: "sleep", label: "Dados de sono", description: "Agregado de dispositivos" },
-    { id: "activity", label: "Atividade física", description: "Passos, exercícios" },
+    { id: "hr", label: "Frequência cardíaca", description: "Agregado de dispositivos conectados" },
+    { id: "sleep", label: "Dados de sono", description: "Agregado de dispositivos conectados" },
+    { id: "activity", label: "Atividade física", description: "Passos e exercícios agregados" },
   ],
   
   // === SMART RINGS ===
