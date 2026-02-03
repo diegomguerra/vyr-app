@@ -31,12 +31,124 @@ const PROVIDER_NAMES: Record<WearableProvider, string> = {
   jstyle: "J-Style Ring",
 };
 
-const PERMISSIONS = [
-  { id: "sleep", label: "Dados de sono", description: "Duração, qualidade e regularidade" },
-  { id: "hr", label: "Frequência cardíaca", description: "Frequência de repouso e variabilidade" },
-  { id: "activity", label: "Atividade física", description: "Passos, exercícios e recuperação" },
-  { id: "stress", label: "Indicadores de estresse", description: "Dados de tensão fisiológica" },
-];
+interface Permission {
+  id: string;
+  label: string;
+  description: string;
+}
+
+const PROVIDER_PERMISSIONS: Record<WearableProvider, Permission[]> = {
+  // === RELÓGIOS ===
+  apple_health: [
+    { id: "hr", label: "Frequência cardíaca", description: "FC contínua, repouso e durante o sono" },
+    { id: "hrv", label: "Variabilidade da FC (HRV)", description: "SDNN – excelente qualidade" },
+    { id: "sleep", label: "Dados de sono", description: "Duração, estágios, fragmentação" },
+    { id: "activity", label: "Atividade física", description: "Passos, calorias, sedentarismo" },
+    { id: "spo2", label: "SpO₂", description: "Oxigenação (modelos compatíveis)" },
+    { id: "temp", label: "Temperatura do punho", description: "Variação noturna (modelos recentes)" },
+  ],
+  garmin: [
+    { id: "hr", label: "Frequência cardíaca", description: "FC contínua e repouso" },
+    { id: "hrv", label: "HRV noturna", description: "Variabilidade durante o sono" },
+    { id: "sleep", label: "Dados de sono", description: "Duração, estágios, regularidade" },
+    { id: "activity", label: "Atividade física", description: "Carga, intensidade, passos" },
+    { id: "stress", label: "Indicadores de estresse", description: "Body Battery, Stress Score" },
+  ],
+  whoop: [
+    { id: "hr", label: "Frequência cardíaca", description: "FC contínua e repouso" },
+    { id: "hrv", label: "HRV (RMSSD)", description: "Alta qualidade, contínua" },
+    { id: "sleep", label: "Dados de sono", description: "Duração, consistência, eficiência" },
+    { id: "strain", label: "Strain e carga", description: "Carga acumulada diária" },
+    { id: "recovery", label: "Recuperação", description: "Score de Recovery" },
+  ],
+  fitbit: [
+    { id: "hr", label: "Frequência cardíaca", description: "FC contínua e repouso" },
+    { id: "hrv", label: "HRV", description: "Disponível em modelos compatíveis" },
+    { id: "sleep", label: "Dados de sono", description: "Duração, estágios, regularidade" },
+    { id: "activity", label: "Atividade física", description: "Passos, minutos ativos" },
+    { id: "readiness", label: "Daily Readiness", description: "Score de prontidão" },
+  ],
+  samsung: [
+    { id: "hr", label: "Frequência cardíaca", description: "FC contínua" },
+    { id: "hrv", label: "HRV", description: "Limitado, varia por modelo" },
+    { id: "sleep", label: "Dados de sono", description: "Duração, estágios, regularidade" },
+    { id: "activity", label: "Atividade física", description: "Passos, minutos ativos" },
+    { id: "spo2", label: "SpO₂", description: "Oxigenação noturna" },
+  ],
+  xiaomi: [
+    { id: "hr", label: "Frequência cardíaca", description: "FC contínua e repouso" },
+    { id: "hrv", label: "HRV", description: "Disponível em modelos mais novos" },
+    { id: "sleep", label: "Dados de sono", description: "Duração, estágios" },
+    { id: "activity", label: "Atividade física", description: "Passos, atividade diária" },
+  ],
+  polar: [
+    { id: "hr", label: "Frequência cardíaca", description: "FC contínua e repouso" },
+    { id: "hrv", label: "HRV", description: "Alta qualidade" },
+    { id: "sleep", label: "Dados de sono", description: "Duração, qualidade" },
+    { id: "activity", label: "Carga física", description: "Carga de treino" },
+    { id: "recharge", label: "Nightly Recharge", description: "Recuperação noturna" },
+  ],
+  huawei: [
+    { id: "hr", label: "Frequência cardíaca", description: "FC contínua" },
+    { id: "hrv", label: "HRV", description: "Disponível em alguns modelos" },
+    { id: "sleep", label: "Dados de sono", description: "Duração, estágios" },
+    { id: "activity", label: "Atividade física", description: "Passos, carga" },
+  ],
+  amazfit: [
+    { id: "hr", label: "Frequência cardíaca", description: "FC contínua" },
+    { id: "hrv", label: "HRV", description: "Disponível em modelos recentes" },
+    { id: "sleep", label: "Dados de sono", description: "Duração, estágios" },
+    { id: "activity", label: "Atividade física", description: "Passos, atividade geral" },
+  ],
+  google_fit: [
+    { id: "hr", label: "Frequência cardíaca", description: "Agregado de dispositivos" },
+    { id: "sleep", label: "Dados de sono", description: "Agregado de dispositivos" },
+    { id: "activity", label: "Atividade física", description: "Passos, exercícios" },
+  ],
+  
+  // === SMART RINGS ===
+  oura: [
+    { id: "hr", label: "FC noturna", description: "Frequência cardíaca durante o sono" },
+    { id: "hrv", label: "HRV noturna", description: "Alta qualidade, excelente baseline" },
+    { id: "sleep", label: "Dados de sono", description: "Duração, estágios, consistência, cronotipo" },
+    { id: "temp", label: "Temperatura corporal", description: "Variação noturna – diferencial" },
+    { id: "activity", label: "Atividade diária", description: "Movimento, inatividade" },
+  ],
+  ringconn: [
+    { id: "hr", label: "Frequência cardíaca", description: "FC principalmente noturna" },
+    { id: "hrv", label: "HRV noturna", description: "Variabilidade durante o sono" },
+    { id: "sleep", label: "Dados de sono", description: "Duração, estágios, regularidade" },
+    { id: "spo2", label: "SpO₂", description: "Oxigenação noturna" },
+    { id: "temp", label: "Temperatura periférica", description: "Variação relativa" },
+  ],
+  ultrahuman: [
+    { id: "hr", label: "FC noturna", description: "Frequência cardíaca durante o sono" },
+    { id: "hrv", label: "HRV noturna", description: "Variabilidade durante o sono" },
+    { id: "sleep", label: "Dados de sono", description: "Duração, estágios, consistência" },
+    { id: "temp", label: "Temperatura noturna", description: "Variação térmica" },
+    { id: "recovery", label: "Recuperação", description: "Leitura metabólica" },
+  ],
+  circular: [
+    { id: "hr", label: "Frequência cardíaca", description: "FC contínua" },
+    { id: "hrv", label: "HRV", description: "Variabilidade cardíaca" },
+    { id: "sleep", label: "Dados de sono", description: "Duração, estágios, regularidade" },
+    { id: "activity", label: "Atividade diária", description: "Passos, movimento" },
+  ],
+  movano: [
+    { id: "hr", label: "Frequência cardíaca", description: "FC durante o sono" },
+    { id: "hrv", label: "HRV", description: "Limitado" },
+    { id: "sleep", label: "Dados de sono", description: "Duração, estágios" },
+    { id: "temp", label: "Temperatura", description: "Variação térmica" },
+    { id: "spo2", label: "SpO₂", description: "Oxigenação" },
+  ],
+  jstyle: [
+    { id: "hr", label: "FC noturna", description: "FC média em repouso" },
+    { id: "hrv", label: "HRV noturna", description: "RMSSD ou SDNN simplificado" },
+    { id: "sleep", label: "Dados de sono", description: "Duração, estágios básicos, fragmentação" },
+    { id: "activity", label: "Atividade diária", description: "Passos, tempo ativo" },
+    { id: "spo2", label: "SpO₂ noturno", description: "Modelos específicos" },
+  ],
+};
 
 export default function WearablePermissions({ provider, onBack, onAuthorize }: WearablePermissionsProps) {
   const providerName = PROVIDER_NAMES[provider];
@@ -71,7 +183,7 @@ export default function WearablePermissions({ provider, onBack, onAuthorize }: W
 
       {/* Permissions List */}
       <div className="space-y-3 mb-8">
-        {PERMISSIONS.map((permission, index) => (
+        {PROVIDER_PERMISSIONS[provider].map((permission, index) => (
           <div
             key={permission.id}
             className="bg-vyr-bg-surface rounded-xl p-4 flex items-start gap-3 animate-fade-in"
