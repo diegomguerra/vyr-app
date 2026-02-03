@@ -1,4 +1,5 @@
-name: Sync VYR app -> VYR project (front + merge deps)
+# Sync workflow v2 - with jq merge for package.json
+name: Sync VYR app -> VYR project
 
 on:
   push:
