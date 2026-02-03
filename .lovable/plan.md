@@ -1,58 +1,65 @@
 
-## Correção do Workflow de Sincronização
+# Plano: Configuração Completa de Deploy para TestFlight
 
-### Problema
-O workflow atual copia o `package.json` inteiro deste projeto para o VYR Project, sobrescrevendo as dependências nativas do Capacitor necessárias para o build iOS.
+## Visão Geral
+O workflow atual está falhando porque o repositório `vyr-project` não possui os arquivos de configuração do Fastlane necessários. Vou criar toda a estrutura necessária.
 
-### Solução
-Fazer um **merge inteligente** do `package.json` usando `jq`, preservando as dependências do Capacitor no VYR Project enquanto atualiza as dependências do frontend.
+## Arquivos a Criar
 
----
+### 1. Gemfile (ios/App/Gemfile)
+Define as dependências Ruby para o Fastlane.
 
-## Implementação
+### 2. Fastfile (ios/App/fastlane/Fastfile)
+Contém as lanes de automação, incluindo:
+- Configuração do App Store Connect API
+- Match para gerenciar certificados
+- Build e upload para TestFlight
 
-### Arquivo: `.github/workflows/sync-to-vyr-project.yml`
+### 3. Matchfile (ios/App/fastlane/Matchfile)
+Configura o Fastlane Match para gerenciar certificados e provisioning profiles automaticamente.
 
-**Mudança:** Substituir a cópia direta do `package.json` por um merge com `jq`
-
-```yaml
-# ANTES (linha 39):
-cp -f ./package.json target/package.json
-
-# DEPOIS:
-# Merge package.json preservando deps nativas do target
-jq -s '
-  .[0] as $source | .[1] as $target |
-  $target * {
-    dependencies: ($target.dependencies + $source.dependencies),
-    devDependencies: ($target.devDependencies + $source.devDependencies),
-    scripts: ($target.scripts + $source.scripts)
-  }
-' ./package.json target/package.json > target/package.json.tmp
-mv target/package.json.tmp target/package.json
-```
-
----
-
-## Como Funciona
-
-```text
-+-------------------+     +-------------------+     +-------------------+
-|    VYR App        |     |     Merge         |     |   VYR Project     |
-|   package.json    | --> |   com jq          | --> |   package.json    |
-+-------------------+     +-------------------+     +-------------------+
-| react, tailwind   |     | Mantém @capacitor |     | react + capacitor |
-| radix, recharts   |     | Adiciona frontend |     | todas dependências|
-+-------------------+     +-------------------+     +-------------------+
-```
+### 4. Appfile (ios/App/fastlane/Appfile)
+Contém informações do app (bundle ID, team ID).
 
 ---
 
 ## Detalhes Técnicos
 
-O merge com `jq`:
-- Mantém o `package.json` do target como base
-- Adiciona/atualiza `dependencies` do source
-- Adiciona/atualiza `devDependencies` do source  
-- Mantém `@capacitor/*` e outras deps nativas que existem apenas no target
-- Preserva campos específicos do target (name, version se diferentes)
+### Estrutura de Arquivos
+```text
+ios/
+└── App/
+    ├── Gemfile
+    └── fastlane/
+        ├── Appfile
+        ├── Fastfile
+        └── Matchfile
+```
+
+### Configuração do Fastfile
+- Usa API Key do App Store Connect (sem senha de Apple ID)
+- Match em modo `readonly` para CI (certificados já devem existir no repo)
+- Incrementa build number automaticamente
+- Build com `gym` e upload com `pilot`
+
+### Pré-requisito Importante
+**Antes do primeiro deploy**, você precisa executar o Match localmente no seu Mac uma única vez para gerar os certificados:
+
+```bash
+cd ios/App
+bundle install
+bundle exec fastlane match appstore
+```
+
+Isso vai criar os certificados no repositório privado definido em `MATCH_GIT_URL`.
+
+---
+
+## Workflow Atualizado
+O workflow `.github/workflows/deploy-testflight.yml` permanece o mesmo, mas agora terá os arquivos de suporte necessários.
+
+## Próximos Passos Após Aprovação
+1. Criar os 4 arquivos de configuração do Fastlane
+2. Sincronizar com vyr-project via workflow
+3. Executar Match localmente para gerar certificados (uma única vez)
+4. Re-executar o workflow de deploy
