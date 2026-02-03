@@ -36,7 +36,16 @@ jobs:
           fi
 
           cp -f ./index.html target/index.html
-          cp -f ./package.json target/package.json
+          # Merge package.json preservando deps nativas do target
+          jq -s '
+            .[0] as $source | .[1] as $target |
+            $target * {
+              dependencies: ($target.dependencies + $source.dependencies),
+              devDependencies: ($target.devDependencies + $source.devDependencies),
+              scripts: ($target.scripts + $source.scripts)
+            }
+          ' ./package.json target/package.json > target/package.json.tmp
+          mv target/package.json.tmp target/package.json
 
           for f in vite.config.ts vite.config.js vercel.json tailwind.config.ts tailwind.config.js postcss.config.js eslint.config.js components.json tsconfig.json tsconfig.app.json tsconfig.node.json .gitignore .env.example README.md; do
             if [ -f "./$f" ]; then
