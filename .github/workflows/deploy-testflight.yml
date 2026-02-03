@@ -1,5 +1,6 @@
 # Deploy to TestFlight workflow
 # Synced from vyr-app - DO NOT edit directly in vyr-project
+# This workflow should ONLY run in vyr-project (has ios/ folder)
 name: Deploy to TestFlight
 
 on:
@@ -12,6 +13,13 @@ jobs:
     runs-on: macos-latest
 
     steps:
+      - name: Check for ios folder
+        run: |
+          if [ ! -d "ios" ]; then
+            echo "No ios/ folder found - this workflow should only run in vyr-project"
+            exit 1
+          fi
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -19,10 +27,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build web app
         run: npm run build
