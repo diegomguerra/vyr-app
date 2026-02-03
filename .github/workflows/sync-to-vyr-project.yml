@@ -1,4 +1,4 @@
-name: Sync VYR app -> VYR project (front only)
+name: Sync VYR app -> VYR project (front + merge deps)
 
 on:
   push:
