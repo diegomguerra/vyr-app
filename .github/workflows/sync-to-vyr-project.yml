@@ -37,13 +37,23 @@ jobs:
           fi
 
           cp -f ./index.html target/index.html
-          # Merge package.json preservando deps nativas do target
+          # Merge package.json: source deps + inject Capacitor deps
           jq -s '
             .[0] as $source | .[1] as $target |
-            $target * {
-              dependencies: ($target.dependencies + $source.dependencies),
-              devDependencies: ($target.devDependencies + $source.devDependencies),
-              scripts: ($target.scripts + $source.scripts)
+            {
+              "name": $target.name,
+              "private": true,
+              "version": "0.0.0",
+              "type": "module",
+              "scripts": ($target.scripts + $source.scripts),
+              "dependencies": ($source.dependencies + {
+                "@capacitor/core": "^7.2.0",
+                "@capacitor/ios": "^7.2.0",
+                "@capacitor/android": "^7.2.0"
+              }),
+              "devDependencies": ($source.devDependencies + {
+                "@capacitor/cli": "^7.2.0"
+              })
             }
           ' ./package.json target/package.json > target/package.json.tmp
           mv target/package.json.tmp target/package.json
