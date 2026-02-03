@@ -11,11 +11,13 @@ platform :ios do
       is_key_content_base64: true
     )
 
-    # Fetch certificates and provisioning profiles
+    # Fetch or create certificates and provisioning profiles
+    # First run will create them, subsequent runs will fetch
     match(
       type: "appstore",
-      readonly: true,
-      api_key: api_key
+      readonly: is_ci ? false : true,
+      api_key: api_key,
+      force_for_new_devices: true
     )
 
     # Increment build number
