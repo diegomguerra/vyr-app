@@ -1,4 +1,4 @@
-# Deploy to TestFlight workflow
+# Deploy to TestFlight workflow (v2)
 # Synced from vyr-app - DO NOT edit directly in vyr-project
 # This workflow should ONLY run in vyr-project (has ios/ folder)
 name: Deploy to TestFlight
