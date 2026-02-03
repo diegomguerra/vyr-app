@@ -42,8 +42,8 @@
        Poucas cores de acento, sempre dessaturadas.
        ───────────────────────────────────────────────────────────────────────── */
     
-    /* 🔵 Acento Primário — FOCO / AÇÃO */
-    --vyr-accent-action: 229 100% 61%;   /* VYR Focus Blue #3A5EFF */
+    /* 🔵 Acento Primário — FOCO / AÇÃO (discreto) */
+    --vyr-accent-action: 220 25% 45%;    /* VYR Slate Blue #556B8A - mais sutil */
     
     /* 🟢 Acento Secundário — ESTABILIDADE */
     --vyr-accent-stable: 161 17% 37%;    /* VYR Moss Green #4F6F64 */
@@ -101,7 +101,7 @@
 
     /* Ring gauge tokens */
     --vyr-ring-track: 225 18% 17%;
-    --vyr-ring-glow: 229 100% 61% / 0.2;
+    --vyr-ring-glow: 220 25% 45% / 0.15;
   }
 
   /* Dark mode é o padrão - não há modo claro nesta versão */
