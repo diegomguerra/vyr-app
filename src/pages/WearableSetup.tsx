@@ -9,42 +9,107 @@ interface WearableSetupProps {
   onSelectProvider: (provider: WearableProvider) => void;
 }
 
-const PROVIDERS: WearableProviderInfo[] = [
+// Relógios / Pulseiras
+const WATCH_PROVIDERS: WearableProviderInfo[] = [
   {
     id: "apple_health",
-    name: "Apple Watch / Apple Health",
+    name: "Apple Watch",
     icon: "watch",
-    description: "Conectar via Apple Health",
+    description: "FC, HRV, sono, atividade via Apple Health",
   },
   {
     id: "garmin",
-    name: "Garmin Connect",
+    name: "Garmin",
     icon: "activity",
-    description: "Sincronizar dados do Garmin",
-  },
-  {
-    id: "oura",
-    name: "Oura Ring",
-    icon: "circle",
-    description: "Conectar anel Oura",
-  },
-  {
-    id: "samsung",
-    name: "Samsung Health",
-    icon: "smartphone",
-    description: "Sincronizar Samsung Galaxy",
+    description: "Body Battery, Stress Score, carga de treino",
   },
   {
     id: "whoop",
     name: "Whoop",
     icon: "heart",
-    description: "Conectar pulseira Whoop",
+    description: "HRV de alta qualidade, Recovery, Strain",
+  },
+  {
+    id: "fitbit",
+    name: "Fitbit",
+    icon: "activity",
+    description: "Daily Readiness, sono, FC contínua",
+  },
+  {
+    id: "samsung",
+    name: "Samsung Galaxy Watch",
+    icon: "smartphone",
+    description: "FC, sono, SpO₂ via Samsung Health",
+  },
+  {
+    id: "xiaomi",
+    name: "Xiaomi Mi Band",
+    icon: "activity",
+    description: "FC, sono, passos – custo-benefício",
+  },
+  {
+    id: "polar",
+    name: "Polar",
+    icon: "heart",
+    description: "HRV de alta qualidade, Nightly Recharge",
+  },
+  {
+    id: "huawei",
+    name: "Huawei Watch",
+    icon: "watch",
+    description: "FC, sono, carga de atividade",
+  },
+  {
+    id: "amazfit",
+    name: "Amazfit",
+    icon: "activity",
+    description: "FC, HRV, sono – alternativa acessível",
   },
   {
     id: "google_fit",
     name: "Google Fit",
-    icon: "activity",
-    description: "Outros dispositivos via Google",
+    icon: "smartphone",
+    description: "Agregador para outros dispositivos Android",
+  },
+];
+
+// Smart Rings
+const RING_PROVIDERS: WearableProviderInfo[] = [
+  {
+    id: "oura",
+    name: "Oura Ring",
+    icon: "circle",
+    description: "HRV noturna, temperatura, sono – excelente baseline",
+  },
+  {
+    id: "ringconn",
+    name: "RingConn",
+    icon: "circle",
+    description: "FC, HRV, sono, SpO₂, temperatura",
+  },
+  {
+    id: "ultrahuman",
+    name: "Ultrahuman Ring Air",
+    icon: "circle",
+    description: "Recuperação, temperatura, metabolismo",
+  },
+  {
+    id: "circular",
+    name: "Circular Ring",
+    icon: "circle",
+    description: "FC, HRV, sono, alertas hápticos",
+  },
+  {
+    id: "movano",
+    name: "Movano Evie Ring",
+    icon: "circle",
+    description: "Temperatura, sono, foco em saúde feminina",
+  },
+  {
+    id: "jstyle",
+    name: "J-Style Ring",
+    icon: "circle",
+    description: "FC, HRV, sono – via Apple/Google Health",
   },
 ];
 
@@ -90,28 +155,62 @@ export default function WearableSetup({ onBack, onSelectProvider }: WearableSetu
         </p>
       </div>
 
-      {/* Provider List */}
-      <div className="space-y-3 mb-8">
-        {PROVIDERS.map((provider, index) => (
-          <button
-            key={provider.id}
-            onClick={() => onSelectProvider(provider.id)}
-            className="w-full bg-vyr-bg-surface rounded-2xl p-4 flex items-center gap-4 transition-all active:scale-[0.98] active:opacity-90 animate-fade-in"
-            style={{ animationDelay: `${index * 50}ms` }}
-          >
-            <div className="w-12 h-12 rounded-xl bg-vyr-bg-primary flex items-center justify-center">
-              <ProviderIcon icon={provider.icon} />
-            </div>
-            <div className="flex-1 text-left">
-              <span className="text-vyr-text-primary font-medium block">
-                {provider.name}
-              </span>
-              <span className="text-vyr-text-muted text-sm">
-                {provider.description}
-              </span>
-            </div>
-          </button>
-        ))}
+      {/* Relógios / Pulseiras */}
+      <div className="mb-6 animate-fade-in">
+        <h2 className="text-vyr-text-muted text-xs uppercase tracking-wider mb-3 px-1">
+          Relógios & Pulseiras
+        </h2>
+        <div className="space-y-3">
+          {WATCH_PROVIDERS.map((provider, index) => (
+            <button
+              key={provider.id}
+              onClick={() => onSelectProvider(provider.id)}
+              className="w-full bg-vyr-bg-surface rounded-2xl p-4 flex items-center gap-4 transition-all active:scale-[0.98] active:opacity-90 animate-fade-in"
+              style={{ animationDelay: `${index * 50}ms` }}
+            >
+              <div className="w-12 h-12 rounded-xl bg-vyr-bg-primary flex items-center justify-center">
+                <ProviderIcon icon={provider.icon} />
+              </div>
+              <div className="flex-1 text-left">
+                <span className="text-vyr-text-primary font-medium block">
+                  {provider.name}
+                </span>
+                <span className="text-vyr-text-muted text-sm">
+                  {provider.description}
+                </span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Smart Rings */}
+      <div className="mb-8 animate-fade-in">
+        <h2 className="text-vyr-text-muted text-xs uppercase tracking-wider mb-3 px-1">
+          Smart Rings
+        </h2>
+        <div className="space-y-3">
+          {RING_PROVIDERS.map((provider, index) => (
+            <button
+              key={provider.id}
+              onClick={() => onSelectProvider(provider.id)}
+              className="w-full bg-vyr-bg-surface rounded-2xl p-4 flex items-center gap-4 transition-all active:scale-[0.98] active:opacity-90 animate-fade-in"
+              style={{ animationDelay: `${(index + WATCH_PROVIDERS.length) * 50}ms` }}
+            >
+              <div className="w-12 h-12 rounded-xl bg-vyr-bg-primary flex items-center justify-center">
+                <ProviderIcon icon={provider.icon} />
+              </div>
+              <div className="flex-1 text-left">
+                <span className="text-vyr-text-primary font-medium block">
+                  {provider.name}
+                </span>
+                <span className="text-vyr-text-muted text-sm">
+                  {provider.description}
+                </span>
+              </div>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Privacy Note */}

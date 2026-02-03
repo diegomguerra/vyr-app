@@ -171,13 +171,24 @@ export interface SachetConfirmation {
 // ===== WEARABLE CONNECTION TYPES =====
 
 export type WearableProvider = 
+  // Relógios
   | "apple_health"
   | "garmin"
-  | "oura"
-  | "samsung"
   | "whoop"
+  | "fitbit"
+  | "samsung"
+  | "xiaomi"
+  | "polar"
+  | "huawei"
+  | "amazfit"
   | "google_fit"
-  | "fitbit";
+  // Smart Rings
+  | "oura"
+  | "ringconn"
+  | "ultrahuman"
+  | "circular"
+  | "movano"
+  | "jstyle";
 
 export type SyncStatus = "synced" | "pending" | "error";
 

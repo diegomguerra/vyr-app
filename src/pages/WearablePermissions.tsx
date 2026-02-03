@@ -11,13 +11,24 @@ interface WearablePermissionsProps {
 }
 
 const PROVIDER_NAMES: Record<WearableProvider, string> = {
-  apple_health: "Apple Health",
-  garmin: "Garmin Connect",
-  oura: "Oura",
-  samsung: "Samsung Health",
+  // Relógios
+  apple_health: "Apple Watch",
+  garmin: "Garmin",
   whoop: "Whoop",
-  google_fit: "Google Fit",
   fitbit: "Fitbit",
+  samsung: "Samsung Galaxy Watch",
+  xiaomi: "Xiaomi Mi Band",
+  polar: "Polar",
+  huawei: "Huawei Watch",
+  amazfit: "Amazfit",
+  google_fit: "Google Fit",
+  // Smart Rings
+  oura: "Oura Ring",
+  ringconn: "RingConn",
+  ultrahuman: "Ultrahuman Ring",
+  circular: "Circular Ring",
+  movano: "Movano Evie",
+  jstyle: "J-Style Ring",
 };
 
 const PERMISSIONS = [
