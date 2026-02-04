@@ -1,53 +1,43 @@
 
 
-# Plano: Adicionar Debug Detalhado ao Deploy TestFlight
+# Plano: Deixar "Wearable não conectado" em vermelho
 
-## Contexto
+## Objetivo
+Alterar a cor do status "Wearable não conectado" de cinza dessaturado para vermelho, acionando o pipeline de deploy no GitHub Actions.
 
-O Copilot sugeriu adicionar `FASTLANE_DEBUG=1` para obter logs mais detalhados durante a execução do Fastlane. Isso ajudará a identificar exatamente onde está falhando a autenticação com a App Store Connect API.
+## Alteração
 
-## Alteracao Necessaria
+**Arquivo:** `src/components/vyr/ConnectionStatus.tsx`
 
-### Arquivo: `.github/workflows/deploy-testflight.yml`
+**Mudança:** Substituir as classes de cor do estado desconectado de `text-vyr-status-negative` para `text-red-500` (vermelho direto do Tailwind).
 
-**Antes:**
-```yaml
-- name: Deploy to TestFlight
-  env:
-    APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
-    # ... outros secrets
-  run: |
-    cd ios/App
-    bundle exec fastlane beta
+```diff
+  // Linhas 50-58: Estado não conectado
+  <button
+    onClick={onTap}
+-   className="flex items-center gap-2 bg-vyr-status-negative/10 rounded-full px-3 py-1.5 ..."
++   className="flex items-center gap-2 bg-red-500/10 rounded-full px-3 py-1.5 ..."
+  >
+-   <AlertCircle className="w-4 h-4 text-vyr-status-negative" />
++   <AlertCircle className="w-4 h-4 text-red-500" />
+-   <span className="text-vyr-status-negative text-xs font-medium">
++   <span className="text-red-500 text-xs font-medium">
+      Wearable não conectado
+    </span>
+  </button>
 ```
 
-**Depois:**
-```yaml
-- name: Deploy to TestFlight
-  env:
-    APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
-    # ... outros secrets
-  run: |
-    cd ios/App
-    FASTLANE_DEBUG=1 bundle exec fastlane beta
-```
+## Resultado Visual
+- **Antes:** Ícone e texto em cinza (#6F7683)
+- **Depois:** Ícone e texto em vermelho (#EF4444)
 
-## Beneficio
+## Fluxo de Deploy
+1. Commit será enviado para `lovable-project`
+2. GitHub Actions sincroniza para `vyr-project`
+3. Workflow `deploy-testflight.yml` é executado
+4. Se os arquivos `Appfile`, `Matchfile` e `Fastfile` estão corretos, o build deve passar
 
-Com `FASTLANE_DEBUG=1`, o log vai mostrar:
-- Detalhes da comunicacao com App Store Connect API
-- Valores de configuracao sendo usados (mascarados)
-- Passo-a-passo detalhado do processo de autenticacao
-- Mensagens de erro mais especificas
+---
 
-## Lembrete Importante
-
-Como a pasta `.github/workflows/` e sincronizada automaticamente do `vyr-app` para `vyr-project`, essa alteracao feita aqui sera propagada automaticamente na proxima sincronizacao.
-
-## Secao Tecnica
-
-A variavel `FASTLANE_DEBUG=1` ativa o modo verbose do Fastlane, que inclui:
-- Stack traces completos
-- Logs de requisicoes HTTP (sem dados sensiveis)
-- Estado interno das acoes executadas
+**Nota:** Esta alteração viola intencionalmente o design system VYR (que proíbe vermelho). Após o teste do pipeline, podemos reverter ou manter conforme preferência.
 
