@@ -1,65 +1,53 @@
 
-# Plano: Configuração Completa de Deploy para TestFlight
 
-## Visão Geral
-O workflow atual está falhando porque o repositório `vyr-project` não possui os arquivos de configuração do Fastlane necessários. Vou criar toda a estrutura necessária.
+# Plano: Adicionar Debug Detalhado ao Deploy TestFlight
 
-## Arquivos a Criar
+## Contexto
 
-### 1. Gemfile (ios/App/Gemfile)
-Define as dependências Ruby para o Fastlane.
+O Copilot sugeriu adicionar `FASTLANE_DEBUG=1` para obter logs mais detalhados durante a execução do Fastlane. Isso ajudará a identificar exatamente onde está falhando a autenticação com a App Store Connect API.
 
-### 2. Fastfile (ios/App/fastlane/Fastfile)
-Contém as lanes de automação, incluindo:
-- Configuração do App Store Connect API
-- Match para gerenciar certificados
-- Build e upload para TestFlight
+## Alteracao Necessaria
 
-### 3. Matchfile (ios/App/fastlane/Matchfile)
-Configura o Fastlane Match para gerenciar certificados e provisioning profiles automaticamente.
+### Arquivo: `.github/workflows/deploy-testflight.yml`
 
-### 4. Appfile (ios/App/fastlane/Appfile)
-Contém informações do app (bundle ID, team ID).
-
----
-
-## Detalhes Técnicos
-
-### Estrutura de Arquivos
-```text
-ios/
-└── App/
-    ├── Gemfile
-    └── fastlane/
-        ├── Appfile
-        ├── Fastfile
-        └── Matchfile
+**Antes:**
+```yaml
+- name: Deploy to TestFlight
+  env:
+    APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+    # ... outros secrets
+  run: |
+    cd ios/App
+    bundle exec fastlane beta
 ```
 
-### Configuração do Fastfile
-- Usa API Key do App Store Connect (sem senha de Apple ID)
-- Match em modo `readonly` para CI (certificados já devem existir no repo)
-- Incrementa build number automaticamente
-- Build com `gym` e upload com `pilot`
-
-### Pré-requisito Importante
-**Antes do primeiro deploy**, você precisa executar o Match localmente no seu Mac uma única vez para gerar os certificados:
-
-```bash
-cd ios/App
-bundle install
-bundle exec fastlane match appstore
+**Depois:**
+```yaml
+- name: Deploy to TestFlight
+  env:
+    APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+    # ... outros secrets
+  run: |
+    cd ios/App
+    FASTLANE_DEBUG=1 bundle exec fastlane beta
 ```
 
-Isso vai criar os certificados no repositório privado definido em `MATCH_GIT_URL`.
+## Beneficio
 
----
+Com `FASTLANE_DEBUG=1`, o log vai mostrar:
+- Detalhes da comunicacao com App Store Connect API
+- Valores de configuracao sendo usados (mascarados)
+- Passo-a-passo detalhado do processo de autenticacao
+- Mensagens de erro mais especificas
 
-## Workflow Atualizado
-O workflow `.github/workflows/deploy-testflight.yml` permanece o mesmo, mas agora terá os arquivos de suporte necessários.
+## Lembrete Importante
 
-## Próximos Passos Após Aprovação
-1. Criar os 4 arquivos de configuração do Fastlane
-2. Sincronizar com vyr-project via workflow
-3. Executar Match localmente para gerar certificados (uma única vez)
-4. Re-executar o workflow de deploy
+Como a pasta `.github/workflows/` e sincronizada automaticamente do `vyr-app` para `vyr-project`, essa alteracao feita aqui sera propagada automaticamente na proxima sincronizacao.
+
+## Secao Tecnica
+
+A variavel `FASTLANE_DEBUG=1` ativa o modo verbose do Fastlane, que inclui:
+- Stack traces completos
+- Logs de requisicoes HTTP (sem dados sensiveis)
+- Estado interno das acoes executadas
+
