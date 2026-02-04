@@ -39,7 +39,7 @@ platform :ios do
       export_method: "app-store",
       export_options: {
         provisioningProfiles: {
-          "app.lovable.4b617b0406fc49f6b961158f27f7c863" => "match AppStore app.lovable.4b617b0406fc49f6b961158f27f7c863"
+          "com.vyrlabs.app" => "match AppStore com.vyrlabs.app"
         }
       }
     )
