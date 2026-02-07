@@ -17,6 +17,14 @@ platform :ios do
       is_key_content_base64: true
     )
 
+    # Build frontend (safety net for local runs)
+    unless ENV["CI"]
+      sh("cd ../.. && npm install && npm run build && npx cap sync ios")
+    end
+
+    # Verify frontend build output exists
+    UI.user_error!("dist/index.html not found — frontend build failed or was not run.") unless File.exist?("../../dist/index.html")
+
     # Fetch or create certificates and provisioning profiles
     # In CI, allow creating new certs if they don't exist
     match(
