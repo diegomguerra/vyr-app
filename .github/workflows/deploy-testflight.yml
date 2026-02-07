@@ -29,6 +29,14 @@ jobs:
       - name: Build web app
         run: npm run build
 
+      - name: Verify frontend build output
+        run: |
+          if [ ! -f "dist/index.html" ]; then
+            echo "❌ ERROR: dist/index.html not found. Frontend build failed."
+            exit 1
+          fi
+          echo "✅ dist/index.html found. Frontend build OK."
+
       - name: Sync Capacitor iOS
         run: npx cap sync ios
 
