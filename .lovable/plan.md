@@ -1,43 +1,120 @@
 
 
-# Plano: Deixar "Wearable não conectado" em vermelho
+# Algoritmo VYR State — Production-Ready
 
 ## Objetivo
-Alterar a cor do status "Wearable não conectado" de cinza dessaturado para vermelho, acionando o pipeline de deploy no GitHub Actions.
 
-## Alteração
+Tornar o algoritmo de calculo do VYR State robusto o suficiente para funcionar corretamente com dados reais, independente da fonte (mock ou wearable). Os dados podem continuar fictícios, mas o algoritmo precisa ser correto.
 
-**Arquivo:** `src/components/vyr/ConnectionStatus.tsx`
+## Problemas Atuais
 
-**Mudança:** Substituir as classes de cor do estado desconectado de `text-vyr-status-negative` para `text-red-500` (vermelho direto do Tailwind).
+1. **Thresholds fixos para todos os usuarios** — RHR < 58 e bom para um atleta, mas otimo para alguem sedentario. Sem baseline pessoal, o algoritmo erra para a maioria dos usuarios reais.
 
-```diff
-  // Linhas 50-58: Estado não conectado
-  <button
-    onClick={onTap}
--   className="flex items-center gap-2 bg-vyr-status-negative/10 rounded-full px-3 py-1.5 ..."
-+   className="flex items-center gap-2 bg-red-500/10 rounded-full px-3 py-1.5 ..."
-  >
--   <AlertCircle className="w-4 h-4 text-vyr-status-negative" />
-+   <AlertCircle className="w-4 h-4 text-red-500" />
--   <span className="text-vyr-status-negative text-xs font-medium">
-+   <span className="text-red-500 text-xs font-medium">
-      Wearable não conectado
-    </span>
-  </button>
-```
+2. **Hora do dia ignorada** — O algoritmo recomenda BOOT, HOLD ou CLEAR sem considerar o horario. BOOT as 22h ou CLEAR as 8h nao faz sentido.
 
-## Resultado Visual
-- **Antes:** Ícone e texto em cinza (#6F7683)
-- **Depois:** Ícone e texto em vermelho (#EF4444)
+3. **Historico de sachets ignorado** — Se o usuario ja tomou BOOT, o sistema ainda pode recomendar BOOT novamente.
 
-## Fluxo de Deploy
-1. Commit será enviado para `lovable-project`
-2. GitHub Actions sincroniza para `vyr-project`
-3. Workflow `deploy-testflight.yml` é executado
-4. Se os arquivos `Appfile`, `Matchfile` e `Fastfile` estão corretos, o build deve passar
+4. **Sem validacao de entrada** — Dados fora de range (RHR = -5, HRV = 999) passam sem erro.
+
+5. **Label de estado simplista** — `getStateLabel` usa apenas o score numerico, ignorando a composicao dos pilares.
 
 ---
 
-**Nota:** Esta alteração viola intencionalmente o design system VYR (que proíbe vermelho). Após o teste do pipeline, podemos reverter ou manter conforme preferência.
+## Plano de Implementacao
+
+### 1. Baseline Pessoal (`src/lib/vyr-baseline.ts`) — NOVO ARQUIVO
+
+Criar um sistema de baseline que normaliza os biomarcadores em relacao ao proprio usuario:
+
+- Tipo `PersonalBaseline` com media e desvio padrao para cada biomarcador (RHR, HRV, sleepDuration, etc.)
+- Funcao `computeBaselineFromHistory(data: WearableData[]): PersonalBaseline` que calcula a partir dos ultimos 7-14 dias
+- Funcao `normalizeToBaseline(value: number, mean: number, std: number): number` que converte valor absoluto em desvio relativo (-2 a +2)
+- Baseline padrao (fallback) para usuarios sem historico suficiente
+
+Assim, em vez de "RHR < 58 = bom", o calculo sera "RHR esta 1 desvio abaixo da sua media = bom".
+
+### 2. Validacao de Entrada (`src/lib/vyr-engine.ts`)
+
+Adicionar funcao `validateWearableData(data: WearableData): WearableData` que:
+
+- Aplica clamp em todos os campos para ranges fisiologicamente possiveis
+- RHR: 35-120 bpm
+- HRV: 0-100
+- Sleep duration: 0-14h
+- Sleep quality: 0-100
+- Awakenings: 0-30
+- Stress: 0-100
+- Retorna dados sanitizados
+
+### 3. Contexto Temporal na Acao (`src/lib/vyr-engine.ts`)
+
+Modificar `getRecommendedAction` para receber hora do dia e historico de sachets:
+
+```text
+Regras temporais:
+- 05h-11h: BOOT permitido (janela de ativacao)
+- 11h-17h: HOLD preferido (sustentacao)
+- 17h-22h: CLEAR preferido (recuperacao)
+- 22h-05h: Sempre CLEAR
+
+Regras de historico:
+- Se ja tomou BOOT hoje: nao recomendar BOOT
+- Se ja tomou HOLD hoje: nao recomendar HOLD
+- Sequencia esperada: BOOT -> HOLD -> CLEAR
+```
+
+### 4. StateLabel Rico (`src/lib/vyr-engine.ts`)
+
+Reescrever `getStateLabel` para considerar a composicao dos pilares:
+
+```text
+Exemplos:
+- Score 85 + clareza dominante = "Foco sustentado"
+- Score 85 + energia dominante = "Energia plena"
+- Score 60 + estabilidade baixa = "Foco instavel"
+- Score 40 + energia baixa = "Recuperacao necessaria"
+```
+
+### 5. Atualizar Types (`src/lib/vyr-types.ts`)
+
+- Adicionar `PersonalBaseline` ao tipo
+- Adicionar `timeOfDay: number` (hora) ao contexto
+- Adicionar `sachetsTakenToday: MomentAction[]` ao contexto
+
+### 6. Atualizar Store (`src/lib/vyr-store.ts`)
+
+- Passar hora atual e sachets tomados para `getRecommendedAction`
+- Computar baseline a partir do historico mock
+- Usar baseline nos calculos dos pilares
+
+### 7. Atualizar Mock Data (`src/lib/vyr-mock-data.ts`)
+
+- Gerar baseline a partir dos 30 dias simulados
+- Incluir hora do dia nos cenarios
+
+---
+
+## Arquivos Afetados
+
+| Arquivo | Tipo |
+|---|---|
+| `src/lib/vyr-baseline.ts` | Novo |
+| `src/lib/vyr-types.ts` | Modificado |
+| `src/lib/vyr-engine.ts` | Modificado |
+| `src/lib/vyr-interpreter.ts` | Ajuste menor |
+| `src/lib/vyr-store.ts` | Modificado |
+| `src/lib/vyr-mock-data.ts` | Modificado |
+
+Nenhum arquivo de UI precisa mudar — as interfaces `VYRState` e `ComputedState` mantem a mesma forma, apenas os valores serao mais precisos.
+
+---
+
+## Resultado Esperado
+
+O algoritmo passa a ser correto para qualquer usuario real:
+- Alguem com RHR 50 e alguem com RHR 70 recebem scores justos (relativos ao proprio baseline)
+- As recomendacoes respeitam o horario do dia
+- Nao ha recomendacao duplicada de sachet
+- Dados invalidos sao tratados silenciosamente
+- Os labels refletem a composicao real do estado, nao apenas o numero
 
