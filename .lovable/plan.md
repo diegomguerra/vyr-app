@@ -1,120 +1,78 @@
 
 
-# Algoritmo VYR State — Production-Ready
+# Ranges e Niveis do VYR State + Contexto alinhado aos Pilares
 
-## Objetivo
+## Problema Atual
 
-Tornar o algoritmo de calculo do VYR State robusto o suficiente para funcionar corretamente com dados reais, independente da fonte (mock ou wearable). Os dados podem continuar fictícios, mas o algoritmo precisa ser correto.
+**1. Sem niveis formais:** O score 0-100 usa thresholds diferentes em cada funcao (85, 80, 75, 70, 65, 55, 50, 45...), sem uma definicao unica de "ruim", "moderado" ou "otimo".
 
-## Problemas Atuais
-
-1. **Thresholds fixos para todos os usuarios** — RHR < 58 e bom para um atleta, mas otimo para alguem sedentario. Sem baseline pessoal, o algoritmo erra para a maioria dos usuarios reais.
-
-2. **Hora do dia ignorada** — O algoritmo recomenda BOOT, HOLD ou CLEAR sem considerar o horario. BOOT as 22h ou CLEAR as 8h nao faz sentido.
-
-3. **Historico de sachets ignorado** — Se o usuario ja tomou BOOT, o sistema ainda pode recomendar BOOT novamente.
-
-4. **Sem validacao de entrada** — Dados fora de range (RHR = -5, HRV = 999) passam sem erro.
-
-5. **Label de estado simplista** — `getStateLabel` usa apenas o score numerico, ignorando a composicao dos pilares.
+**2. Contexto do Dia desconectado dos pilares:** O card "Contexto do Dia" mostra 3 items genericos (Recuperacao, Ritmo, Reserva fisiologica) baseados em thresholds fixos de biomarcadores brutos (RHR < 62, HRV > 60, etc.). Esses items nao refletem os pilares computados (Energia, Clareza, Estabilidade) e podem contradizer o estado calculado.
 
 ---
 
-## Plano de Implementacao
+## Solucao
 
-### 1. Baseline Pessoal (`src/lib/vyr-baseline.ts`) — NOVO ARQUIVO
+### 1. Definir Ranges e Niveis Oficiais do VYR State
 
-Criar um sistema de baseline que normaliza os biomarcadores em relacao ao proprio usuario:
-
-- Tipo `PersonalBaseline` com media e desvio padrao para cada biomarcador (RHR, HRV, sleepDuration, etc.)
-- Funcao `computeBaselineFromHistory(data: WearableData[]): PersonalBaseline` que calcula a partir dos ultimos 7-14 dias
-- Funcao `normalizeToBaseline(value: number, mean: number, std: number): number` que converte valor absoluto em desvio relativo (-2 a +2)
-- Baseline padrao (fallback) para usuarios sem historico suficiente
-
-Assim, em vez de "RHR < 58 = bom", o calculo sera "RHR esta 1 desvio abaixo da sua media = bom".
-
-### 2. Validacao de Entrada (`src/lib/vyr-engine.ts`)
-
-Adicionar funcao `validateWearableData(data: WearableData): WearableData` que:
-
-- Aplica clamp em todos os campos para ranges fisiologicamente possiveis
-- RHR: 35-120 bpm
-- HRV: 0-100
-- Sleep duration: 0-14h
-- Sleep quality: 0-100
-- Awakenings: 0-30
-- Stress: 0-100
-- Retorna dados sanitizados
-
-### 3. Contexto Temporal na Acao (`src/lib/vyr-engine.ts`)
-
-Modificar `getRecommendedAction` para receber hora do dia e historico de sachets:
+Tabela de referencia unica para todo o sistema:
 
 ```text
-Regras temporais:
-- 05h-11h: BOOT permitido (janela de ativacao)
-- 11h-17h: HOLD preferido (sustentacao)
-- 17h-22h: CLEAR preferido (recuperacao)
-- 22h-05h: Sempre CLEAR
-
-Regras de historico:
-- Se ja tomou BOOT hoje: nao recomendar BOOT
-- Se ja tomou HOLD hoje: nao recomendar HOLD
-- Sequencia esperada: BOOT -> HOLD -> CLEAR
+Score       Nivel          Label interno     Cor semantica
+------      -----          -------------     -------------
+85-100      Otimo          "optimal"         Slate Blue (favoravel)
+70-84       Bom            "good"            Slate Blue (favoravel)
+55-69       Moderado       "moderate"        Dust Gray (atencao)
+40-54       Baixo          "low"             Energy Slate (limitante)
+0-39        Critico        "critical"        Energy Slate (limitante)
 ```
 
-### 4. StateLabel Rico (`src/lib/vyr-engine.ts`)
+Isso sera exportado como tipo `StateLevel` e funcao `getStateLevel(score)` no `vyr-engine.ts`, unificando todos os thresholds do sistema.
 
-Reescrever `getStateLabel` para considerar a composicao dos pilares:
+### 2. Alinhar Contexto do Dia aos 3 Pilares
+
+Substituir os 3 items genericos por items derivados diretamente dos pilares computados:
 
 ```text
-Exemplos:
-- Score 85 + clareza dominante = "Foco sustentado"
-- Score 85 + energia dominante = "Energia plena"
-- Score 60 + estabilidade baixa = "Foco instavel"
-- Score 40 + energia baixa = "Recuperacao necessaria"
+Antes (generico)                    Depois (alinhado)
+-----------------                   ------------------
+Recuperacao adequada/parcial/...  -> Energia: [status baseado no pilar]
+Ritmo consistente/irregular/...   -> Clareza: [status baseado no pilar]
+Reserva fisiologica preservada... -> Estabilidade: [status baseado no pilar]
 ```
 
-### 5. Atualizar Types (`src/lib/vyr-types.ts`)
+Cada pilar tera seu proprio mapeamento para status qualitativo:
 
-- Adicionar `PersonalBaseline` ao tipo
-- Adicionar `timeOfDay: number` (hora) ao contexto
-- Adicionar `sachetsTakenToday: MomentAction[]` ao contexto
-
-### 6. Atualizar Store (`src/lib/vyr-store.ts`)
-
-- Passar hora atual e sachets tomados para `getRecommendedAction`
-- Computar baseline a partir do historico mock
-- Usar baseline nos calculos dos pilares
-
-### 7. Atualizar Mock Data (`src/lib/vyr-mock-data.ts`)
-
-- Gerar baseline a partir dos 30 dias simulados
-- Incluir hora do dia nos cenarios
+```text
+Pilar >= 4.0  -> "favorable"  (ex: "Energia preservada")
+Pilar >= 3.0  -> "attention"  (ex: "Clareza parcial")
+Pilar <  3.0  -> "limiting"   (ex: "Estabilidade reduzida")
+```
 
 ---
 
-## Arquivos Afetados
+## Detalhes Tecnicos
 
-| Arquivo | Tipo |
-|---|---|
-| `src/lib/vyr-baseline.ts` | Novo |
-| `src/lib/vyr-types.ts` | Modificado |
-| `src/lib/vyr-engine.ts` | Modificado |
-| `src/lib/vyr-interpreter.ts` | Ajuste menor |
-| `src/lib/vyr-store.ts` | Modificado |
-| `src/lib/vyr-mock-data.ts` | Modificado |
+### Arquivos modificados
 
-Nenhum arquivo de UI precisa mudar — as interfaces `VYRState` e `ComputedState` mantem a mesma forma, apenas os valores serao mais precisos.
+**`src/lib/vyr-engine.ts`**
+- Adicionar tipo `StateLevel` ("optimal" | "good" | "moderate" | "low" | "critical")
+- Adicionar funcao `getStateLevel(score): { level: StateLevel, label: string }`
+- Refatorar `getStateLabel()` para usar os ranges definidos
 
----
+**`src/lib/vyr-types.ts`**
+- Exportar `StateLevel` type
 
-## Resultado Esperado
+**`src/lib/vyr-interpreter.ts`**
+- Reescrever `generatePhysiologicalContext()` para receber `ComputedState` alem de `WearableData`
+- Novos items derivados dos pilares computados com labels descritivos por faixa
+- Manter funcoes antigas como internas (podem alimentar diagnostico)
 
-O algoritmo passa a ser correto para qualquer usuario real:
-- Alguem com RHR 50 e alguem com RHR 70 recebem scores justos (relativos ao proprio baseline)
-- As recomendacoes respeitam o horario do dia
-- Nao ha recomendacao duplicada de sachet
-- Dados invalidos sao tratados silenciosamente
-- Os labels refletem a composicao real do estado, nao apenas o numero
+**`src/lib/vyr-mock-data.ts`**
+- Atualizar chamada de `generatePhysiologicalContext()` para passar o `computedState`
+
+**`src/components/vyr/ContextCard.tsx`**
+- Sem mudanca estrutural (ja consome `PhysiologicalContext` corretamente)
+
+**`src/test/vyr-engine.test.ts`**
+- Adicionar testes para `getStateLevel()` validando cada range
 
