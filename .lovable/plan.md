@@ -1,133 +1,49 @@
 
+# Simplificar Integrações: Apple Health + J-Style
 
-# Plano: Notificacoes e Gestao de Usuario Completa
+## Objetivo
+Reduzir a lista de provedores para apenas os dois que funcionam hoje, e adicionar uma nota informativa sobre compatibilidade futura via Apple Health.
 
-## Resumo
+## Mudanças
 
-Este plano cobre duas grandes areas: sistema de notificacoes (push + in-app) e gestao completa de usuario (login social, recuperacao de senha, perfil editavel, foto). Varias funcionalidades ja existem (cadastro, login email/senha, logout) e serao mantidas.
+### 1. `src/pages/Integrations.tsx`
+- **Remover** a lista `OTHER_PROVIDERS` com 16 provedores
+- **Manter** apenas o card Apple Health (já existente, sem alterações)
+- **Adicionar** um card J-Style Ring logo abaixo do Apple Health, com o mesmo padrão visual (ícone, status conectado/desconectado, botão de conectar)
+- **Substituir** a seção "Outros dispositivos" por uma nota informativa:
+  - Titulo: "Outros wearables"
+  - Texto: "Garmin, Whoop, Oura, Fitbit e demais dispositivos compatíveis serão integrados automaticamente via Apple Health."
+  - Estilo: card sutil com ícone informativo, texto em `text-vyr-text-muted`
 
----
+### 2. `src/components/vyr/ConnectionStatus.tsx`
+- Sem alterações necessarias -- o menu dropdown ja mostra apenas Apple Health
 
-## Parte 1 -- Notificacoes
-
-### 1.1 Tabela de notificacoes in-app
-
-Criar tabela `notifications` no banco para armazenar notificacoes internas do usuario:
-
-```text
-notifications
-- id (uuid, PK)
-- user_id (uuid, NOT NULL)
-- title (text)
-- body (text)
-- type (text) -- ex: 'insight', 'reminder', 'system'
-- read (boolean, default false)
-- created_at (timestamptz)
-```
-
-RLS: usuarios so acessam as proprias notificacoes.
-
-### 1.2 Tabela de preferencias de notificacao
-
-Criar tabela `notification_preferences`:
+## Resultado Visual
 
 ```text
-notification_preferences
-- id (uuid, PK)
-- user_id (uuid, UNIQUE)
-- push_enabled (boolean, default true)
-- insights_enabled (boolean, default true)
-- reminders_enabled (boolean, default true)
-- created_at / updated_at
+┌─────────────────────────────┐
+│  Apple Health               │
+│  Conectado / Não conectado  │
+│  [Conectar / Gerenciar]     │
+└─────────────────────────────┘
+
+┌─────────────────────────────┐
+│  J-Style Ring               │
+│  Conectado / Não conectado  │
+│  [Conectar]                 │
+└─────────────────────────────┘
+
+┌─────────────────────────────┐
+│ ℹ Outros wearables          │
+│ Garmin, Whoop, Oura, Fitbit │
+│ e demais serao integrados   │
+│ via Apple Health.            │
+└─────────────────────────────┘
 ```
-
-### 1.3 UI -- Centro de notificacoes
-
-- Adicionar icone de sino (Bell) no header da Home com badge de contagem de nao lidas.
-- Nova tela "Notificacoes" acessivel pelo icone, listando notificacoes com swipe/tap para marcar como lida.
-- Notificacoes agrupadas por data.
-
-### 1.4 UI -- Preferencias de notificacao
-
-- Adicionar secao "Notificacoes" na pagina de Settings com toggles (switches) para:
-  - Push notifications (ativar/desativar)
-  - Insights cognitivos
-  - Lembretes de sachets
-
-### 1.5 Push Notifications
-
-- Registrar Service Worker para receber push via Web Push API.
-- Armazenar push subscription token no banco (nova coluna ou tabela `push_subscriptions`).
-- Edge function para enviar push via Web Push quando notificacoes forem criadas.
-- Nota: Push nativo (iOS/Android) requer o setup Capacitor que ja esta parcialmente configurado. Para web, usaremos a Web Push API padrao.
-
----
-
-## Parte 2 -- Gestao de Usuario
-
-### 2.1 Login Social (Google e Apple)
-
-- Configurar Google e Apple OAuth usando o Lovable Cloud (solucao gerenciada, sem necessidade de credenciais externas).
-- Adicionar botoes "Continuar com Google" e "Continuar com Apple" na tela de login/cadastro abaixo do formulario atual.
-- Usar `lovable.auth.signInWithOAuth()` para ambos os provedores.
-
-### 2.2 Recuperacao de Senha
-
-- Adicionar link "Esqueci minha senha" na tela de login.
-- Nova tela/modal com campo de email que dispara `supabase.auth.resetPasswordForEmail()`.
-- Tela de confirmacao informando que o email foi enviado.
-
-### 2.3 Perfil do Usuario
-
-- Nova tela "Perfil" acessivel via Settings.
-- Campos editaveis baseados na tabela `participantes` ja existente:
-  - Nome publico
-  - Data de nascimento
-  - Sexo
-  - Altura / Peso
-  - Objetivo principal
-- Upload de foto de perfil:
-  - Criar bucket `avatars` no Storage.
-  - Componente de avatar com camera/galeria para upload.
-  - Salvar URL da foto no perfil.
-
-### 2.4 Autenticacao em Dois Fatores (2FA)
-
-- Nao sera implementado neste momento pois o Lovable Cloud nao suporta TOTP/MFA configuravel via API. Sera documentado como melhoria futura.
-
----
-
-## Sequencia de Implementacao
-
-1. **Migracao DB**: Criar tabelas `notifications`, `notification_preferences`, `push_subscriptions` e bucket `avatars`.
-2. **Login Social**: Configurar OAuth Google/Apple + botoes na LoginLayout.
-3. **Recuperacao de Senha**: Link + tela de reset na LoginLayout/Login.
-4. **Tela de Perfil**: Nova pagina com formulario de edicao + upload de avatar.
-5. **Notificacoes In-App**: Hook `useNotifications` + tela de listagem + icone com badge na Home.
-6. **Preferencias de Notificacao**: Secao nova em Settings com toggles.
-7. **Push Notifications**: Service worker + edge function de envio.
-
----
 
 ## Detalhes Tecnicos
 
-### Arquivos novos
-- `src/pages/Profile.tsx` -- tela de edicao de perfil
-- `src/pages/Notifications.tsx` -- central de notificacoes
-- `src/pages/ForgotPassword.tsx` -- recuperacao de senha
-- `src/hooks/use-notifications.ts` -- hook para buscar/gerenciar notificacoes
-- `src/components/vyr/NotificationBell.tsx` -- icone com badge
-- `src/components/vyr/AvatarUpload.tsx` -- componente de upload de foto
-- `supabase/functions/send-push/index.ts` -- edge function para Web Push
-
-### Arquivos modificados
-- `src/App.tsx` -- novas telas no router + screen type
-- `src/pages/Login.tsx` -- botoes OAuth + link esqueci senha
-- `src/components/LoginLayout.tsx` -- novos props para OAuth e reset
-- `src/pages/Settings.tsx` -- secoes de perfil + notificacoes + preferencias
-
-### Migracoes SQL
-- Tabelas: `notifications`, `notification_preferences`, `push_subscriptions`
-- Storage bucket: `avatars`
-- Politicas RLS para todas as novas tabelas
-
+- O card J-Style usara o mesmo padrao visual do Apple Health card, com icone `Activity` e cor neutra
+- O J-Style tera estados conectado/desconectado identicos ao Apple Health (status pill, ultima sync, botao desconectar)
+- A nota informativa sera um `div` estatico com icone `Info` do lucide-react, sem interacao
+- Nenhuma alteracao nos tipos (`vyr-types.ts`) -- `jstyle` ja existe como `WearableProvider`
