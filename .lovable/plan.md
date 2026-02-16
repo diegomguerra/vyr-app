@@ -1,55 +1,50 @@
 
-# Corrigir Conexão com Apple Health
+# Corrigir importacao do plugin HealthKit
 
 ## Problema
-O plugin nativo `@perfood/capacitor-healthkit` nao esta instalado no projeto. Sem ele, a funcao `isHealthKitAvailable()` sempre retorna `false`, exibindo o toast "HealthKit disponivel apenas no dispositivo iOS" mesmo no simulador.
+O arquivo `src/lib/healthkit.ts` registra o plugin manualmente com `registerPlugin("CapacitorHealthkit")`. Porem, a biblioteca `@perfood/capacitor-healthkit` ja exporta o plugin pronto. O registro manual cria uma instancia "vazia" que nao encontra o codigo nativo, fazendo `isHealthKitAvailable()` sempre retornar `false` -- mesmo no simulador iOS.
 
-Alem disso, ha um bug: quando o HealthKit nao esta disponivel, o codigo chama `onConnectAppleHealth()` mesmo assim, o que pode marcar a conexao como ativa incorretamente.
+## O que vai mudar
 
-## Plano de Correcao
+### Arquivo: `src/lib/healthkit.ts`
 
-### 1. Instalar o plugin @perfood/capacitor-healthkit
-Adicionar a dependencia ao `package.json`. Isso permite que o Capacitor registre o plugin nativo no iOS.
-
-### 2. Corrigir o bug na logica de conexao (Integrations.tsx)
-Remover a chamada `onConnectAppleHealth()` do bloco `if (!available)`. Quando o HealthKit nao esta disponivel, o botao deve apenas mostrar o aviso, sem alterar o estado de conexao.
-
-Codigo atual (com bug):
+**Antes (codigo atual):**
 ```typescript
-if (!available) {
-  onConnectAppleHealth();  // BUG: marca como conectado sem estar
-  toast.info("HealthKit disponível apenas no dispositivo iOS.");
-  return;
-}
+import { Capacitor, registerPlugin } from "@capacitor/core";
+
+interface HealthKitPlugin { ... } // interface manual
+
+let CapacitorHealthkit: HealthKitPlugin | null = null;
+try {
+  if (Capacitor.isNativePlatform()) {
+    CapacitorHealthkit = registerPlugin<HealthKitPlugin>("CapacitorHealthkit");
+  }
+} catch { }
 ```
 
-Codigo corrigido:
+**Depois (corrigido):**
 ```typescript
-if (!available) {
-  toast.info("HealthKit disponível apenas no dispositivo iOS.");
-  return;
-}
+import { Capacitor } from "@capacitor/core";
+import {
+  CapacitorHealthkit,
+  type OtherData,
+  type SampleNames,
+} from "@perfood/capacitor-healthkit";
 ```
 
-### 3. Apos aprovar o plano
-Depois que eu fizer as alteracoes no Lovable, o Bruno precisara:
-1. Fazer `git pull` no repositorio
-2. Rodar `npm install` (para instalar o plugin novo)
-3. Rodar `npx cap sync ios` (para sincronizar o plugin nativo)
-4. No Xcode, adicionar a capability "HealthKit" no target do app (se ainda nao estiver):
-   - Xcode > Target > Signing and Capabilities > + Capability > HealthKit
-5. Buildar novamente (`Cmd+R` para teste local ou Archive para TestFlight)
+- Remove a interface `HealthKitPlugin` definida manualmente
+- Remove o bloco `try/catch` com `registerPlugin`
+- Importa diretamente o plugin exportado pela biblioteca
+- Nas funcoes que checam `if (!CapacitorHealthkit)`, troca para `if (!Capacitor.isNativePlatform())` -- isso garante que no web continua mostrando o toast, e no iOS o plugin nativo e chamado corretamente
 
-## Detalhes Tecnicos
+## Resultado esperado
+- **No Lovable/web**: toast "HealthKit disponivel apenas no dispositivo iOS" continua aparecendo (correto)
+- **No simulador iOS**: o prompt de permissao do Apple Health aparece ao clicar "Conectar"
+- **No iPhone fisico**: conexao real funciona
 
-**Dependencia a instalar:**
-- `@perfood/capacitor-healthkit` (compativel com Capacitor 8)
-
-**Arquivos modificados:**
-- `package.json` - adicionar dependencia
-- `src/pages/Integrations.tsx` - remover `onConnectAppleHealth()` do bloco de fallback
-
-**Resultado esperado:**
-- No Lovable/web: toast continua aparecendo (correto, pois nao ha HealthKit)
-- No simulador iOS: o prompt de permissao do Apple Health deve aparecer ao clicar "Conectar"
-- No iPhone fisico: conexao real com Apple Health funciona
+## Apos aprovar
+No terminal local:
+1. `git pull`
+2. `npm install`
+3. `npx cap sync ios`
+4. No Xcode: `Shift+Cmd+K` (Clean) depois `Cmd+R` (Run)
