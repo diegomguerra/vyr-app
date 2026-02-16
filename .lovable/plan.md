@@ -1,50 +1,90 @@
 
-# Corrigir toast de HealthKit no preview web
 
 ## Problema
-No preview web (Lovable), ao clicar "Conectar Apple Health", o codigo chama `isHealthKitAvailable()` que retorna `false` (correto, nao e iOS), e entao mostra o toast "HealthKit disponivel apenas no dispositivo iOS". Esse toast nao deveria aparecer no web -- e irrelevante para quem esta testando o layout.
+
+O plugin `@perfood/capacitor-healthkit` (v1.3.2) suporta apenas Capacitor 4, mas o projeto usa Capacitor 8. Isso causa o erro `ERESOLVE` no `npm install` do projeto nativo (vyr-project).
+
+No Lovable (vyr-app), o build funciona porque roda apenas web e o plugin nunca e de fato chamado. Mas no projeto nativo, a incompatibilidade impede a instalacao.
 
 ## Solucao
 
-### Arquivo: `src/pages/Integrations.tsx`
+Migrar de `@perfood/capacitor-healthkit` para `@capgo/capacitor-health`, que suporta Capacitor 8 nativamente e oferece a mesma funcionalidade (leitura de HealthKit).
 
-Alterar a funcao `handleConnect` para verificar primeiro se estamos no ambiente nativo antes de tentar conectar:
+## Alteracoes
+
+### 1. Trocar dependencia no package.json
+
+- Remover: `@perfood/capacitor-healthkit`
+- Adicionar: `@capgo/capacitor-health`
+
+### 2. Reescrever `src/lib/healthkit.ts`
+
+Adaptar as chamadas para a API do `@capgo/capacitor-health`:
+
+- `isHealthKitAvailable()` -- usar `Health.isAvailable()`
+- `requestHealthKitPermissions()` -- usar `Health.requestAuthorization()` com os tipos correspondentes
+- `readHealthKitData()` -- usar `Health.query()` para cada tipo de dado (heart_rate, heart_rate.variability, sleep, steps, oxygen_saturation, body_temperature)
+- Manter a mesma interface `WearableData` de saida para que nenhum outro arquivo precise mudar
+
+### 3. Atualizar `src/lib/healthkit-sync.ts`
+
+Revisar os imports para apontar ao novo modulo. A logica de sincronizacao e persistencia em `ring_daily_data` permanece igual.
+
+### 4. Atualizar `src/pages/Integrations.tsx`
+
+Nenhuma mudanca necessaria -- ja usa apenas funcoes exportadas de `healthkit-sync.ts`.
+
+### 5. Workflow de sync (`.github/workflows/sync-to-vyr-project.yml`)
+
+Nenhuma mudanca necessaria -- o `package.json` ja e mergeado com jq e as dependencias do Capacitor sao injetadas automaticamente.
+
+---
+
+### Secao tecnica
+
+**API do @capgo/capacitor-health (resumo):**
 
 ```typescript
-const handleConnect = async () => {
-  // No web, nao mostrar toast de erro -- apenas informar
-  if (!Capacitor.isNativePlatform()) {
-    toast.info("Abra o app no seu iPhone para conectar o Apple Health.");
-    return;
-  }
-  
-  setLoading(true);
-  try {
-    const result = await connectAppleHealth();
-    if (result.success) {
-      onConnectAppleHealth();
-      toast.success("Apple Health conectado com sucesso!");
-    } else {
-      toast.error(result.error ?? "Erro ao conectar Apple Health.");
-    }
-  } catch {
-    toast.error("Erro inesperado ao conectar.");
-  } finally {
-    setLoading(false);
-  }
-};
+import { Health } from '@capgo/capacitor-health';
+
+// Verificar disponibilidade
+await Health.isAvailable();
+
+// Solicitar permissoes
+await Health.requestAuthorization({
+  read: ['steps', 'heart_rate', 'heart_rate.variability', 'sleep', 'oxygen_saturation', 'body_temperature'],
+  write: []
+});
+
+// Consultar dados
+const result = await Health.query({
+  startDate: new Date('2026-02-15').toISOString(),
+  endDate: new Date('2026-02-16').toISOString(),
+  dataType: 'heart_rate',
+  limit: 1000
+});
 ```
 
-Mudancas:
-1. Importar `Capacitor` de `@capacitor/core` no topo do arquivo
-2. Verificar `Capacitor.isNativePlatform()` diretamente no handler, **antes** de chamar `isHealthKitAvailable()`
-3. No web: mostrar toast informativo "Abra o app no seu iPhone para conectar o Apple Health" (mensagem mais clara)
-4. No nativo (simulador/device): pular o check de `isHealthKitAvailable()` redundante e ir direto para `connectAppleHealth()`, que internamente ja faz a verificacao
+**Mapeamento de tipos:**
 
-### Arquivo: `src/lib/healthkit.ts`
-Nenhuma mudanca -- o codigo ja esta correto com a importacao direta do plugin.
+| Antes (@perfood)             | Depois (@capgo)              |
+|------------------------------|------------------------------|
+| heartRate                    | heart_rate                   |
+| heartRateVariabilitySDNN     | heart_rate.variability       |
+| restingHeartRate             | heart_rate (filtrado)        |
+| sleepAnalysis                | sleep                        |
+| stepCount                    | steps                        |
+| oxygenSaturation             | oxygen_saturation            |
+| bodyTemperature              | body_temperature             |
 
-## Resultado
-- **No Lovable/web**: toast informativo dizendo para abrir no iPhone (nao parece erro)
-- **No simulador iOS**: vai direto para `connectAppleHealth()` sem o toast de bloqueio
-- **No iPhone fisico**: funciona normalmente
+**Impacto:**
+- Apenas 2 arquivos modificados: `healthkit.ts` e possivelmente `healthkit-sync.ts`
+- Zero mudancas na UI ou na logica de negocio
+- Resolve o conflito de peer dependency permanentemente
+
+**Apos aprovar**, no terminal local:
+```bash
+git pull
+npm install
+npm run build && npx cap sync ios
+```
