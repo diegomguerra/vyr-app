@@ -1,34 +1,24 @@
 
 
-## Problema Identificado
+# Corrigir client.ts apontando para projeto Supabase errado
 
-O erro "new row violates row-level security policy for table ring_daily_data" aparece por causa de um problema em cascata:
+## Problema
+O arquivo `src/integrations/supabase/client.ts` foi manualmente editado para apontar para `uirbicdwikvgnuounlia.supabase.co` (um projeto externo). As tabelas do app existem no Lovable Cloud (`jjuuexzrfcnjngxbxine.supabase.co`), causando 404 em todas as queries.
 
-1. O **upsert** usa `onConflict: "user_id,day"` (2 colunas)
-2. Mas o unique constraint real no banco e `(user_id, day, source_provider)` (3 colunas)
-3. O PostgreSQL rejeita o upsert com erro 42P10 ("no unique or exclusion constraint matching")
-4. O codigo tenta um fallback com INSERT simples, que falha com erro de RLS (provavelmente porque o registro ja existe e gera conflito)
+## Solucao
+Reverter `src/integrations/supabase/client.ts` para usar o client auto-gerado pelo Lovable Cloud. Este arquivo e gerenciado automaticamente e nao deve ser editado manualmente.
 
-As politicas RLS estao corretas (PERMISSIVE). O problema e exclusivamente no parametro `onConflict`.
+O arquivo correto importa de `@/integrations/supabase/client` e aponta para:
+- URL: `https://jjuuexzrfcnjngxbxine.supabase.co`  
+- Anon Key: a chave do `.env` (`VITE_SUPABASE_PUBLISHABLE_KEY`)
 
-## Correcao
+## Detalhes tecnicos
 
-### Arquivo: `src/lib/healthkit-sync.ts`
+1. **Restaurar `src/integrations/supabase/client.ts`** para o formato padrao do Lovable Cloud, removendo as credenciais hardcoded do projeto externo.
 
-Alterar a linha do `onConflict` de:
-```typescript
-{ onConflict: "user_id,day" }
-```
-Para:
-```typescript
-{ onConflict: "user_id,day,source_provider" }
-```
+2. **Verificar `src/lib/supabase.ts`** — se houver outro client duplicado, remover ou redirecionar para o client oficial.
 
-Isso corresponde ao unique constraint existente e o upsert funcionara corretamente, tanto para inserir novos registros quanto para atualizar registros existentes do mesmo dia e provider.
+3. **Impacto**: Todos os 404s serao resolvidos imediatamente (action_logs, checkpoints, daily_reviews, computed_states, notifications).
 
-## Detalhes Tecnicos
-
-- O unique index atual e: `ring_daily_data_user_id_day_source_provider_key ON (user_id, day, source_provider)`
-- O campo `source_provider` ja e incluido no payload com valor `"apple_health"`, entao a unica mudanca necessaria e no parametro `onConflict`
-- Apos essa correcao, o fluxo completo de conexao com Apple Health deve funcionar sem erros
+4. **Sync para vyr-project**: O workflow de GitHub Actions ira propagar a correcao automaticamente para o repositorio nativo.
 
