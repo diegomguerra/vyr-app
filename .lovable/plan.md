@@ -1,24 +1,46 @@
 
 
-# Corrigir client.ts apontando para projeto Supabase errado
+# Blindar RLS em `ring_daily_data`
 
-## Problema
-O arquivo `src/integrations/supabase/client.ts` foi manualmente editado para apontar para `uirbicdwikvgnuounlia.supabase.co` (um projeto externo). As tabelas do app existem no Lovable Cloud (`jjuuexzrfcnjngxbxine.supabase.co`), causando 404 em todas as queries.
+## Situacao Atual
 
-## Solucao
-Reverter `src/integrations/supabase/client.ts` para usar o client auto-gerado pelo Lovable Cloud. Este arquivo e gerenciado automaticamente e nao deve ser editado manualmente.
+- **RLS policy**: Existe com `USING (user_id = auth.uid())` e `WITH CHECK (user_id = auth.uid())`, porem aplica a **todos os roles** (incluindo `anon`). Isso significa que um request anonimo com `user_id` nulo simplesmente nao retorna dados, mas idealmente a policy deveria ser restrita ao role `authenticated`.
+- **Frontend (healthkit-sync.ts)**: Ja possui a logica de `getSession()` seguida de `refreshSession()` antes do upsert. **Nenhuma alteracao necessaria no codigo.**
 
-O arquivo correto importa de `@/integrations/supabase/client` e aponta para:
-- URL: `https://jjuuexzrfcnjngxbxine.supabase.co`  
-- Anon Key: a chave do `.env` (`VITE_SUPABASE_PUBLISHABLE_KEY`)
+## Plano
 
-## Detalhes tecnicos
+### Passo 1 — Recriar a policy com `TO authenticated`
 
-1. **Restaurar `src/integrations/supabase/client.ts`** para o formato padrao do Lovable Cloud, removendo as credenciais hardcoded do projeto externo.
+Executar via migration SQL:
 
-2. **Verificar `src/lib/supabase.ts`** — se houver outro client duplicado, remover ou redirecionar para o client oficial.
+```text
+DROP POLICY IF EXISTS "Users manage own ring_daily_data" ON public.ring_daily_data;
 
-3. **Impacto**: Todos os 404s serao resolvidos imediatamente (action_logs, checkpoints, daily_reviews, computed_states, notifications).
+CREATE POLICY "Users manage own ring_daily_data"
+  ON public.ring_daily_data
+  FOR ALL
+  TO authenticated
+  USING (user_id = auth.uid())
+  WITH CHECK (user_id = auth.uid());
+```
 
-4. **Sync para vyr-project**: O workflow de GitHub Actions ira propagar a correcao automaticamente para o repositorio nativo.
+Isso garante que:
+- Somente usuarios autenticados podem acessar a tabela
+- Cada usuario so ve/edita seus proprios registros
+- Requests anonimos sao bloqueados por completo
+
+### Passo 2 — Nenhum (frontend ja esta correto)
+
+O arquivo `src/lib/healthkit-sync.ts` ja implementa:
+1. `supabase.auth.getSession()` para obter sessao ativa
+2. Fallback para `supabase.auth.refreshSession()` se sessao estiver expirada
+3. Rejeicao explicita se nenhuma sessao valida existir
+
+Nenhuma alteracao de codigo e necessaria.
+
+## Secao Tecnica
+
+A diferenca entre a policy atual (sem `TO`) e a nova (com `TO authenticated`):
+- Sem `TO`: aplica a todos os roles, incluindo `anon`. Um request anonimo passa pela policy mas `auth.uid()` retorna `NULL`, entao a condicao falha silenciosamente.
+- Com `TO authenticated`: requests anonimos nem chegam a avaliar a policy — sao rejeitados pelo Postgres antes. Isso e mais seguro e explicito.
 
