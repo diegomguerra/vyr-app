@@ -1,90 +1,34 @@
 
 
-## Problema
+## Problema Identificado
 
-O plugin `@perfood/capacitor-healthkit` (v1.3.2) suporta apenas Capacitor 4, mas o projeto usa Capacitor 8. Isso causa o erro `ERESOLVE` no `npm install` do projeto nativo (vyr-project).
+O erro "new row violates row-level security policy for table ring_daily_data" aparece por causa de um problema em cascata:
 
-No Lovable (vyr-app), o build funciona porque roda apenas web e o plugin nunca e de fato chamado. Mas no projeto nativo, a incompatibilidade impede a instalacao.
+1. O **upsert** usa `onConflict: "user_id,day"` (2 colunas)
+2. Mas o unique constraint real no banco e `(user_id, day, source_provider)` (3 colunas)
+3. O PostgreSQL rejeita o upsert com erro 42P10 ("no unique or exclusion constraint matching")
+4. O codigo tenta um fallback com INSERT simples, que falha com erro de RLS (provavelmente porque o registro ja existe e gera conflito)
 
-## Solucao
+As politicas RLS estao corretas (PERMISSIVE). O problema e exclusivamente no parametro `onConflict`.
 
-Migrar de `@perfood/capacitor-healthkit` para `@capgo/capacitor-health`, que suporta Capacitor 8 nativamente e oferece a mesma funcionalidade (leitura de HealthKit).
+## Correcao
 
-## Alteracoes
+### Arquivo: `src/lib/healthkit-sync.ts`
 
-### 1. Trocar dependencia no package.json
-
-- Remover: `@perfood/capacitor-healthkit`
-- Adicionar: `@capgo/capacitor-health`
-
-### 2. Reescrever `src/lib/healthkit.ts`
-
-Adaptar as chamadas para a API do `@capgo/capacitor-health`:
-
-- `isHealthKitAvailable()` -- usar `Health.isAvailable()`
-- `requestHealthKitPermissions()` -- usar `Health.requestAuthorization()` com os tipos correspondentes
-- `readHealthKitData()` -- usar `Health.query()` para cada tipo de dado (heart_rate, heart_rate.variability, sleep, steps, oxygen_saturation, body_temperature)
-- Manter a mesma interface `WearableData` de saida para que nenhum outro arquivo precise mudar
-
-### 3. Atualizar `src/lib/healthkit-sync.ts`
-
-Revisar os imports para apontar ao novo modulo. A logica de sincronizacao e persistencia em `ring_daily_data` permanece igual.
-
-### 4. Atualizar `src/pages/Integrations.tsx`
-
-Nenhuma mudanca necessaria -- ja usa apenas funcoes exportadas de `healthkit-sync.ts`.
-
-### 5. Workflow de sync (`.github/workflows/sync-to-vyr-project.yml`)
-
-Nenhuma mudanca necessaria -- o `package.json` ja e mergeado com jq e as dependencias do Capacitor sao injetadas automaticamente.
-
----
-
-### Secao tecnica
-
-**API do @capgo/capacitor-health (resumo):**
-
+Alterar a linha do `onConflict` de:
 ```typescript
-import { Health } from '@capgo/capacitor-health';
-
-// Verificar disponibilidade
-await Health.isAvailable();
-
-// Solicitar permissoes
-await Health.requestAuthorization({
-  read: ['steps', 'heart_rate', 'heart_rate.variability', 'sleep', 'oxygen_saturation', 'body_temperature'],
-  write: []
-});
-
-// Consultar dados
-const result = await Health.query({
-  startDate: new Date('2026-02-15').toISOString(),
-  endDate: new Date('2026-02-16').toISOString(),
-  dataType: 'heart_rate',
-  limit: 1000
-});
+{ onConflict: "user_id,day" }
+```
+Para:
+```typescript
+{ onConflict: "user_id,day,source_provider" }
 ```
 
-**Mapeamento de tipos:**
+Isso corresponde ao unique constraint existente e o upsert funcionara corretamente, tanto para inserir novos registros quanto para atualizar registros existentes do mesmo dia e provider.
 
-| Antes (@perfood)             | Depois (@capgo)              |
-|------------------------------|------------------------------|
-| heartRate                    | heart_rate                   |
-| heartRateVariabilitySDNN     | heart_rate.variability       |
-| restingHeartRate             | heart_rate (filtrado)        |
-| sleepAnalysis                | sleep                        |
-| stepCount                    | steps                        |
-| oxygenSaturation             | oxygen_saturation            |
-| bodyTemperature              | body_temperature             |
+## Detalhes Tecnicos
 
-**Impacto:**
-- Apenas 2 arquivos modificados: `healthkit.ts` e possivelmente `healthkit-sync.ts`
-- Zero mudancas na UI ou na logica de negocio
-- Resolve o conflito de peer dependency permanentemente
+- O unique index atual e: `ring_daily_data_user_id_day_source_provider_key ON (user_id, day, source_provider)`
+- O campo `source_provider` ja e incluido no payload com valor `"apple_health"`, entao a unica mudanca necessaria e no parametro `onConflict`
+- Apos essa correcao, o fluxo completo de conexao com Apple Health deve funcionar sem erros
 
-**Apos aprovar**, no terminal local:
-```bash
-git pull
-npm install
-npm run build && npx cap sync ios
-```
