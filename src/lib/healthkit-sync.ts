@@ -53,23 +53,30 @@ export async function disconnectAppleHealth(): Promise<void> {
 
 /** Sync today's HealthKit data to ring_daily_data */
 export async function syncHealthKitData(): Promise<SyncResult> {
-  // Always use fresh session to guarantee auth.uid() matches in RLS
-  let userId: string | undefined;
+  // 1) Check current session & access_token
+  const { data: sessionData } = await supabase.auth.getSession();
+  let session = sessionData?.session;
 
-  const { data: { session } } = await supabase.auth.getSession();
-  if (session?.user?.id) {
-    userId = session.user.id;
-  } else {
-    // Session stale — try refresh
+  console.log("[HealthKit Sync] access_token present?", !!session?.access_token);
+  console.log("[HealthKit Sync] user id", session?.user?.id);
+
+  // 2) If no access_token, try refresh once
+  if (!session?.access_token) {
+    console.log("[HealthKit Sync] No access_token — attempting refreshSession...");
     const { data: refreshData } = await supabase.auth.refreshSession();
-    userId = refreshData.session?.user?.id;
+    session = refreshData.session;
+    console.log("[HealthKit Sync] After refresh — access_token present?", !!session?.access_token);
+    console.log("[HealthKit Sync] After refresh — user id", session?.user?.id);
   }
 
-  if (!userId) {
-    console.error("[HealthKit Sync] No valid session for RLS. Cannot write data.");
+  // 3) Abort if still no valid token — never write as anon
+  if (!session?.access_token || !session?.user?.id) {
+    console.error("[HealthKit Sync] No access_token available — aborting write.");
     return { success: false, error: "Sessão expirada. Faça login novamente." };
   }
 
+  // 4) userId always from session — never accept external user_id
+  const userId = session.user.id;
   console.log("[HealthKit Sync] Authenticated as:", userId);
 
   const authorized = await isHealthKitAuthorized();
@@ -110,6 +117,8 @@ export async function syncHealthKitData(): Promise<SyncResult> {
       user_id: userId,
       day: today,
       metricsCount: Object.keys(metrics).length,
+      batchSize: 1,
+      accessTokenPresent: true,
     });
 
     const { error } = await supabase
