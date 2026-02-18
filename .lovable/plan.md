@@ -1,64 +1,71 @@
 
 
-# Tratamento de erros e logs visuais no healthkit-sync.ts
+## Script de automacao iOS completo (Info.plist + Entitlements + Capability)
 
-## Problema
-A funcao `upsertIntegration()` falha silenciosamente -- nao captura erros do Supabase e nao retorna resultado. Isso esconde o erro real que impede a conexao do Apple Health no iPhone.
+### Problema
+Cada `npx cap sync ios` ou `npx cap add ios` regenera o projeto nativo e apaga:
+- Chaves de privacidade do `Info.plist`
+- Arquivo `App.entitlements` com HealthKit
+- Referencia ao entitlements e capability HealthKit no `.pbxproj`
 
-## Mudancas planejadas
+### Solucao
 
-Arquivo unico: **src/lib/healthkit-sync.ts**
+Criar `scripts/patch-ios.mjs` que restaura **todas as tres camadas** automaticamente.
 
-### 1. upsertIntegration() -- capturar erros
-- Alterar retorno para `Promise<{ error?: string }>`
-- Capturar erro do `select`, `update` e `insert` com logging
-- Retornar `{ error: mensagem }` se qualquer operacao falhar
+### O que o script fara
 
-### 2. connectAppleHealth() -- verificar resultado
-- Checar retorno do `upsertIntegration`
-- Se houver erro, retornar `{ success: false, error }` imediatamente com toast visual mostrando o codigo do erro
-- Nao prosseguir para `syncHealthKitData()` se a integracao falhou
+**Camada 1 — Info.plist**
+- Verifica se `NSHealthShareUsageDescription` e `NSHealthUpdateUsageDescription` existem
+- Se nao existirem, injeta antes do `</dict>` final
+- Textos em portugues descrevendo o uso dos dados
 
-### 3. Toasts com detalhes do erro
-- Substituir mensagens genericas "Tente novamente mais tarde" por mensagens que incluam o codigo e texto real do erro
-- Formato: `"[code] message"` na descricao do toast
-- Permite debug visual no iPhone sem Xcode
+**Camada 2 — App.entitlements**
+- Cria (ou sobrescreve) `ios/App/App/App.entitlements` com:
+  - `com.apple.developer.healthkit` = true
+  - `com.apple.developer.healthkit.access` = ["health-records"] (necessario para leitura)
 
-## Secao tecnica
+**Camada 3 — .pbxproj**
+- Localiza o arquivo `ios/App/App.xcodeproj/project.pbxproj`
+- Injeta `CODE_SIGN_ENTITLEMENTS = App/App.entitlements` nos buildSettings do target App (Debug e Release)
+- Adiciona o `App.entitlements` como PBXFileReference e ao PBXGroup do target se ainda nao estiver la
+- Registra o SystemCapability HealthKit no `TargetAttributes`
 
-### upsertIntegration -- antes vs depois
+### Arquivos
 
-Antes: funcao `async` sem retorno, sem try/catch, ignora erros silenciosamente.
+**Novo: `scripts/patch-ios.mjs`**
+- Node.js puro (sem dependencias externas)
+- Usa `fs` para ler/escrever os tres arquivos
+- Usa regex para localizar e injetar trechos no `.pbxproj`
+- Log colorido no terminal mostrando o que foi adicionado ou ja existia
 
-Depois:
-```text
-async function upsertIntegration(...): Promise<{ error?: string }> {
-  const { data: existing, error: selectErr } = await supabase...select...
-  if (selectErr) return { error: `[select] ${selectErr.code}: ${selectErr.message}` };
+**Modificado: `package.json`**
+- Adicionar scripts:
+  - `"patch:ios": "node scripts/patch-ios.mjs"`
+  - `"sync:ios": "npx cap sync ios && node scripts/patch-ios.mjs"`
 
-  if (existing) {
-    const { error: updateErr } = await supabase...update...
-    if (updateErr) return { error: `[update] ${updateErr.code}: ${updateErr.message}` };
-  } else {
-    const { error: insertErr } = await supabase...insert...
-    if (insertErr) return { error: `[insert] ${insertErr.code}: ${insertErr.message}` };
-  }
-  return {};
-}
-```
-
-### connectAppleHealth -- adicionar verificacao
+### Uso
 
 ```text
-const intResult = await upsertIntegration(user.id, "apple_health", "active");
-if (intResult.error) {
-  toast({ title: "Erro na integração", description: intResult.error, variant: "destructive" });
-  return { success: false, error: intResult.error };
-}
+# Apos qualquer sync ou recreacao do iOS:
+npm run sync:ios
+
+# Ou separadamente:
+npx cap add ios
+npm run patch:ios
 ```
 
-### Toasts em syncHealthKitData -- antes vs depois
+Depois so precisa abrir o Xcode para configurar o **Team** (signing) e dar Run. Todo o resto (Info.plist, entitlements, capability) estara restaurado automaticamente.
 
-Antes: `description: "Tente novamente mais tarde."`
-Depois: `description: \`[\${error.code}] \${error.message}\``
+### Detalhes tecnicos
+
+O `.pbxproj` e um formato baseado em plist da Apple com UUIDs. O script:
+- Busca o bloco `buildSettings` do target "App" via regex
+- Injeta `CODE_SIGN_ENTITLEMENTS` se ausente
+- Busca a secao `TargetAttributes` e adiciona `SystemCapabilities` com HealthKit
+- Adiciona o `App.entitlements` como `PBXFileReference` (tipo `text.plist.entitlements`) se nao existir
+- Todas as modificacoes sao idempotentes (rodar varias vezes nao duplica nada)
+
+### Nota sobre Team/Bundle ID
+
+O script **nao** configura Team nem Bundle ID — esses sao vinculados a conta Apple pessoal do Bruno e devem ser configurados manualmente no Xcode (apenas uma vez apos cada `cap add`). Tudo mais sera automatico.
 
