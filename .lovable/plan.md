@@ -1,55 +1,64 @@
 
 
-# Corrigir RLS: RESTRICTIVE para PERMISSIVE em 10 tabelas
+# Tratamento de erros e logs visuais no healthkit-sync.ts
 
 ## Problema
+A funcao `upsertIntegration()` falha silenciosamente -- nao captura erros do Supabase e nao retorna resultado. Isso esconde o erro real que impede a conexao do Apple Health no iPhone.
 
-As mesmas tabelas que causaram o erro 42501 em `ring_daily_data` tem policies RESTRICTIVE. Sem pelo menos uma policy PERMISSIVE, o PostgreSQL nega todo acesso mesmo com `user_id = auth.uid()` correto.
+## Mudancas planejadas
 
-## Tabelas afetadas
+Arquivo unico: **src/lib/healthkit-sync.ts**
 
-| Tabela | Policy atual | Tipo |
-|--------|-------------|------|
-| action_logs | "Users manage own action_logs" (ALL, RESTRICTIVE) | user_id direto |
-| checkpoints | "Users manage own checkpoints" (ALL, RESTRICTIVE) | user_id direto |
-| computed_states | "Users manage own computed_states" (ALL, RESTRICTIVE) | user_id direto |
-| daily_reviews | "Users manage own daily_reviews" (ALL, RESTRICTIVE) | user_id direto |
-| notification_preferences | "Users manage own notification_preferences" (ALL, RESTRICTIVE) | user_id direto |
-| notifications | "Users manage own notifications" (ALL, RESTRICTIVE) | user_id direto |
-| push_subscriptions | "Users manage own push_subscriptions" (ALL, RESTRICTIVE) | user_id direto |
-| user_baselines | "Users manage own baselines" (ALL, RESTRICTIVE) | user_id direto |
-| user_consents | "Users manage own user_consents" (ALL, RESTRICTIVE) | user_id direto |
-| participantes | "Users manage own participante" (ALL, RESTRICTIVE) | user_id direto |
+### 1. upsertIntegration() -- capturar erros
+- Alterar retorno para `Promise<{ error?: string }>`
+- Capturar erro do `select`, `update` e `insert` com logging
+- Retornar `{ error: mensagem }` se qualquer operacao falhar
 
-## Plano
+### 2. connectAppleHealth() -- verificar resultado
+- Checar retorno do `upsertIntegration`
+- Se houver erro, retornar `{ success: false, error }` imediatamente com toast visual mostrando o codigo do erro
+- Nao prosseguir para `syncHealthKitData()` se a integracao falhou
 
-Uma unica migracao SQL que, para cada tabela:
+### 3. Toasts com detalhes do erro
+- Substituir mensagens genericas "Tente novamente mais tarde" por mensagens que incluam o codigo e texto real do erro
+- Formato: `"[code] message"` na descricao do toast
+- Permite debug visual no iPhone sem Xcode
 
-1. Remove a policy RESTRICTIVE antiga
-2. Cria 4 policies PERMISSIVE (SELECT, INSERT, UPDATE, DELETE) com `TO authenticated` e `user_id = auth.uid()`
+## Secao tecnica
 
-Nenhuma alteracao de codigo e necessaria.
+### upsertIntegration -- antes vs depois
 
-## Secao Tecnica
+Antes: funcao `async` sem retorno, sem try/catch, ignora erros silenciosamente.
 
-A migracao executara o seguinte padrao para cada tabela:
-
+Depois:
 ```text
-DROP POLICY IF EXISTS "<nome_antigo>" ON public.<tabela>;
+async function upsertIntegration(...): Promise<{ error?: string }> {
+  const { data: existing, error: selectErr } = await supabase...select...
+  if (selectErr) return { error: `[select] ${selectErr.code}: ${selectErr.message}` };
 
-CREATE POLICY "<tabela>_select_own" ON public.<tabela>
-  FOR SELECT TO authenticated USING (user_id = auth.uid());
-
-CREATE POLICY "<tabela>_insert_own" ON public.<tabela>
-  FOR INSERT TO authenticated WITH CHECK (user_id = auth.uid());
-
-CREATE POLICY "<tabela>_update_own" ON public.<tabela>
-  FOR UPDATE TO authenticated
-  USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
-
-CREATE POLICY "<tabela>_delete_own" ON public.<tabela>
-  FOR DELETE TO authenticated USING (user_id = auth.uid());
+  if (existing) {
+    const { error: updateErr } = await supabase...update...
+    if (updateErr) return { error: `[update] ${updateErr.code}: ${updateErr.message}` };
+  } else {
+    const { error: insertErr } = await supabase...insert...
+    if (insertErr) return { error: `[insert] ${insertErr.code}: ${insertErr.message}` };
+  }
+  return {};
+}
 ```
 
-Isso sera aplicado a todas as 10 tabelas de uma vez. As tabelas `registros_dose`, `resumos_diarios`, `referencias_populacionais`, `user_roles` e `webhook_logs` nao serao alteradas pois tem logica diferente (participante_id, service role, etc).
+### connectAppleHealth -- adicionar verificacao
+
+```text
+const intResult = await upsertIntegration(user.id, "apple_health", "active");
+if (intResult.error) {
+  toast({ title: "Erro na integração", description: intResult.error, variant: "destructive" });
+  return { success: false, error: intResult.error };
+}
+```
+
+### Toasts em syncHealthKitData -- antes vs depois
+
+Antes: `description: "Tente novamente mais tarde."`
+Depois: `description: \`[\${error.code}] \${error.message}\``
 
