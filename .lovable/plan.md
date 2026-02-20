@@ -1,71 +1,90 @@
 
+# Correção definitiva: healthkit-sync.ts
 
-## Script de automacao iOS completo (Info.plist + Entitlements + Capability)
+## Diagnóstico confirmado
 
-### Problema
-Cada `npx cap sync ios` ou `npx cap add ios` regenera o projeto nativo e apaga:
-- Chaves de privacidade do `Info.plist`
-- Arquivo `App.entitlements` com HealthKit
-- Referencia ao entitlements e capability HealthKit no `.pbxproj`
+**Banco:** OK. 4 policies PERMISSIVE confirmadas no projeto `jjuuexzrfcnjngxbxine`. Nenhuma mudança necessária no banco.
 
-### Solucao
+**Problema:** 100% no código de `src/lib/healthkit-sync.ts`. Três funções usam `supabase.auth.getUser()`, que no iOS retorna o usuário do cache local mesmo quando o JWT expirou. Resultado: o request chega no Postgres sem `Authorization` válido, `auth.uid()` retorna `null`, RLS bloqueia com `42501`.
 
-Criar `scripts/patch-ios.mjs` que restaura **todas as tres camadas** automaticamente.
+---
 
-### O que o script fara
+## O que será corrigido
 
-**Camada 1 — Info.plist**
-- Verifica se `NSHealthShareUsageDescription` e `NSHealthUpdateUsageDescription` existem
-- Se nao existirem, injeta antes do `</dict>` final
-- Textos em portugues descrevendo o uso dos dados
+### Função 1 — `connectAppleHealth()` (linha 32)
 
-**Camada 2 — App.entitlements**
-- Cria (ou sobrescreve) `ios/App/App/App.entitlements` com:
-  - `com.apple.developer.healthkit` = true
-  - `com.apple.developer.healthkit.access` = ["health-records"] (necessario para leitura)
-
-**Camada 3 — .pbxproj**
-- Localiza o arquivo `ios/App/App.xcodeproj/project.pbxproj`
-- Injeta `CODE_SIGN_ENTITLEMENTS = App/App.entitlements` nos buildSettings do target App (Debug e Release)
-- Adiciona o `App.entitlements` como PBXFileReference e ao PBXGroup do target se ainda nao estiver la
-- Registra o SystemCapability HealthKit no `TargetAttributes`
-
-### Arquivos
-
-**Novo: `scripts/patch-ios.mjs`**
-- Node.js puro (sem dependencias externas)
-- Usa `fs` para ler/escrever os tres arquivos
-- Usa regex para localizar e injetar trechos no `.pbxproj`
-- Log colorido no terminal mostrando o que foi adicionado ou ja existia
-
-**Modificado: `package.json`**
-- Adicionar scripts:
-  - `"patch:ios": "node scripts/patch-ios.mjs"`
-  - `"sync:ios": "npx cap sync ios && node scripts/patch-ios.mjs"`
-
-### Uso
-
-```text
-# Apos qualquer sync ou recreacao do iOS:
-npm run sync:ios
-
-# Ou separadamente:
-npx cap add ios
-npm run patch:ios
+**Problema atual:**
+```typescript
+const { data: { user } } = await supabase.auth.getUser();
 ```
 
-Depois so precisa abrir o Xcode para configurar o **Team** (signing) e dar Run. Todo o resto (Info.plist, entitlements, capability) estara restaurado automaticamente.
+**Correção:** substituir por `getSession()` com refresh explícito — o mesmo padrão já usado corretamente em `syncHealthKitData()`:
+```typescript
+const { data: sessionData } = await supabase.auth.getSession();
+let session = sessionData?.session;
 
-### Detalhes tecnicos
+if (!session?.access_token) {
+  const { data: refreshData } = await supabase.auth.refreshSession();
+  session = refreshData.session;
+}
 
-O `.pbxproj` e um formato baseado em plist da Apple com UUIDs. O script:
-- Busca o bloco `buildSettings` do target "App" via regex
-- Injeta `CODE_SIGN_ENTITLEMENTS` se ausente
-- Busca a secao `TargetAttributes` e adiciona `SystemCapabilities` com HealthKit
-- Adiciona o `App.entitlements` como `PBXFileReference` (tipo `text.plist.entitlements`) se nao existir
-- Todas as modificacoes sao idempotentes (rodar varias vezes nao duplica nada)
+if (!session?.access_token || !session?.user?.id) {
+  return { success: false, error: "Sessão expirada. Faça login novamente." };
+}
+const userId = session.user.id;
+```
 
-### Nota sobre Team/Bundle ID
+### Função 2 — `upsertIntegration()` (linhas 268–321)
 
-O script **nao** configura Team nem Bundle ID — esses sao vinculados a conta Apple pessoal do Bruno e devem ser configurados manualmente no Xcode (apenas uma vez apos cada `cap add`). Tudo mais sera automatico.
+**Problema atual:** SELECT → depois INSERT ou UPDATE separados. Race condition: se o SELECT retornar erro de RLS (sessão inválida), cai no branch INSERT e falha.
 
+**Correção:** eliminar a função `upsertIntegration()` e substituir por upsert atômico direto, aproveitando o índice único `(user_id, provider)` que já existe na tabela:
+
+```typescript
+const { error: upsertErr } = await supabase
+  .from("user_integrations")
+  .upsert(
+    {
+      user_id: userId,
+      provider: "apple_health" as const,
+      status: "active",
+      last_error: null,
+      scopes: ["heart_rate", "hrv", "sleep", "steps", "spo2", "body_temperature", "workouts"],
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "user_id,provider" }
+  );
+```
+
+### Função 3 — `disconnectAppleHealth()` (linha 48)
+
+**Problema atual:** `getUser()` sem refresh.
+
+**Correção:** mesma troca para `getSession()` + refresh.
+
+### Função 4 — `getAppleHealthStatus()` (linha 244)
+
+**Problema atual:** `getUser()` sem refresh — pode retornar dados do cache.
+
+**Correção:** mesma troca para `getSession()` com refresh.
+
+---
+
+## Arquivo alterado
+
+- `src/lib/healthkit-sync.ts` — único arquivo modificado
+
+---
+
+## Sequência de rebuild iOS após a correção
+
+```text
+git pull
+npm install
+npm run build
+npx cap sync ios
+node scripts/patch-ios.mjs
+```
+
+Abrir no Xcode: `ios/App/App.xcodeproj`
+Clean Build Folder (⇧⌘K) → Run no iPhone
