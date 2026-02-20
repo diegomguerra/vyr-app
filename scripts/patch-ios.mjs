@@ -37,9 +37,9 @@ const ROOT = resolve(dirname(new URL(import.meta.url).pathname), '..');
 
 // ── Paths ────────────────────────────────────────────────────────────
 
-const PLIST_PATH       = resolve(ROOT, 'ios/App/App/Info.plist');
+const PLIST_PATH        = resolve(ROOT, 'ios/App/App/Info.plist');
 const ENTITLEMENTS_PATH = resolve(ROOT, 'ios/App/App/App.entitlements');
-const PBXPROJ_PATH     = resolve(ROOT, 'ios/App/App.xcodeproj/project.pbxproj');
+const PBXPROJ_PATH      = resolve(ROOT, 'ios/App/App.xcodeproj/project.pbxproj');
 
 // ═════════════════════════════════════════════════════════════════════
 // CAMADA 1 — Info.plist
@@ -141,26 +141,21 @@ function patchPbxproj() {
 
   // ── 3a. CODE_SIGN_ENTITLEMENTS nos buildSettings ──
 
-  // Match all buildSettings blocks that belong to the App target
-  // They contain PRODUCT_NAME = App or PRODUCT_BUNDLE_IDENTIFIER
   const buildSettingsRegex = /buildSettings\s*=\s*\{[^}]*PRODUCT_NAME\s*=\s*App;[^}]*\}/g;
   let match;
   const insertions = [];
 
-  // Reset regex
   buildSettingsRegex.lastIndex = 0;
   while ((match = buildSettingsRegex.exec(pbx)) !== null) {
     const block = match[0];
     if (block.includes('CODE_SIGN_ENTITLEMENTS')) {
-      continue; // already has it
+      continue;
     }
-    // Insert after the opening brace of buildSettings
     const insertPos = match.index + block.indexOf('{') + 1;
     insertions.push(insertPos);
   }
 
   if (insertions.length > 0) {
-    // Insert in reverse order to preserve positions
     const snippet = '\n\t\t\t\tCODE_SIGN_ENTITLEMENTS = App/App.entitlements;';
     let chars = pbx.split('');
     for (const pos of insertions.reverse()) {
@@ -176,11 +171,9 @@ function patchPbxproj() {
   // ── 3b. PBXFileReference para App.entitlements ──
 
   if (!pbx.includes('App.entitlements')) {
-    // Generate a deterministic-ish UUID (not random, but unique enough)
     const ENT_FILE_REF = 'A1B2C3D4E5F60001';
     const fileRefLine = `\t\t${ENT_FILE_REF} /* App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = App.entitlements; sourceTree = "<group>"; };`;
 
-    // Insert in PBXFileReference section
     const fileRefMarker = '/* Begin PBXFileReference section */';
     const frIdx = pbx.indexOf(fileRefMarker);
     if (frIdx !== -1) {
@@ -190,8 +183,6 @@ function patchPbxproj() {
       log.added('PBXFileReference para App.entitlements');
     }
 
-    // Add to PBXGroup children of the App group
-    // Look for the group that contains Info.plist
     const groupRegex = /children\s*=\s*\([^)]*Info\.plist[^)]*\)/;
     const groupMatch = pbx.match(groupRegex);
     if (groupMatch) {
@@ -210,11 +201,9 @@ function patchPbxproj() {
   // ── 3c. SystemCapabilities — HealthKit no TargetAttributes ──
 
   if (!pbx.includes('com.apple.HealthKit')) {
-    // Find TargetAttributes section
     const taMarker = 'TargetAttributes = {';
     const taIdx = pbx.indexOf(taMarker);
     if (taIdx !== -1) {
-      // Find the first target UUID block inside TargetAttributes
       const afterTa = pbx.slice(taIdx + taMarker.length);
       const targetBlockMatch = afterTa.match(/(\s*[A-F0-9]{24}\s*=\s*\{)/);
       if (targetBlockMatch) {
@@ -251,6 +240,6 @@ patchPbxproj();
 
 console.log(bold('\n✅ Patch concluído!\n'));
 console.log('Próximos passos:');
-console.log('  1. Abra o Xcode: ios/App/App.xcworkspace');
+console.log('  1. Abra o Xcode: ios/App/App.xcodeproj');
 console.log('  2. Configure o Team (Signing & Capabilities)');
 console.log('  3. Build & Run ▶️\n');
