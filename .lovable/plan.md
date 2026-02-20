@@ -1,90 +1,32 @@
 
-## Correção definitiva: criar as UNIQUE constraints ausentes
+## Problema
 
-### Diagnóstico confirmado
+O arquivo `scripts/patch-ios.mjs` chegou ao disco com os backticks das template literals corrompidos (provavelmente foram escapados ou omitidos durante a criação manual anterior). Por isso o Node.js não consegue parsear o módulo.
 
-O banco de dados tem as RLS policies corretas (PERMISSIVE), mas **não possui as UNIQUE constraints** que o código `upsert({ onConflict: "user_id,provider" })` precisa para funcionar. Sem essas constraints, o Postgres não consegue resolver o conflito e retorna erro.
-
-Isso explica por que o 42501 persiste mesmo com o código correto: o upsert atômico depende de constraints UNIQUE que simplesmente não existem nas tabelas.
-
----
-
-### O que será feito
-
-#### Migration 1 — UNIQUE constraint em `user_integrations`
-
-```sql
-ALTER TABLE public.user_integrations
-  ADD CONSTRAINT user_integrations_user_id_provider_key
-  UNIQUE (user_id, provider);
+A linha problemática é:
+```
+const green  = (t) => \x1b[32m${t}\x1b[0m;
+```
+Deveria ser:
+```js
+const green  = (t) => `\x1b[32m${t}\x1b[0m`;
 ```
 
-#### Migration 2 — UNIQUE constraint em `ring_daily_data`
+## Solução
 
-```sql
-ALTER TABLE public.ring_daily_data
-  ADD CONSTRAINT ring_daily_data_user_id_day_source_key
-  UNIQUE (user_id, day, source_provider);
-```
+Sobrescrever o arquivo `scripts/patch-ios.mjs` com o conteúdo correto — garantindo que todos os backticks das template literals de cores ANSI estejam presentes.
 
-Essas duas constraints são as únicas mudanças necessárias. O código `healthkit-sync.ts` já está correto e não precisa de mais alterações.
+## Arquivos que serão alterados
 
----
+- `scripts/patch-ios.mjs` — reescrito com a sintaxe correta das template literals
 
-### Por que isso resolve o 42501
+## Impacto
 
-O fluxo após as constraints:
+Nenhuma mudança em banco de dados, autenticação ou componentes de UI. Apenas o script de automação do iOS será corrigido.
 
-```text
-connectAppleHealth()
-  → getValidSession()          [JWT válido, user_id confirmado]
-  → upsert user_integrations   [onConflict: "user_id,provider" → constraint encontrada → INSERT ou UPDATE atômico]
-  → syncHealthKitData()
-  → upsert ring_daily_data     [onConflict: "user_id,day,source_provider" → constraint encontrada → INSERT ou UPDATE atômico]
-  → update last_sync_at        [UPDATE simples com eq filters]
-```
+## Próximos passos após aprovação
 
-Sem as constraints, o Postgres rejeita o upsert ou cai em erro de permissão ao tentar resolver o conflito internamente.
-
----
-
-### Arquivo alterado
-
-- Nenhum arquivo de código será alterado
-- Apenas duas migrations de banco de dados serão executadas
-
----
-
-### Sequência de rebuild iOS após a migration
-
-Após aplicar as migrations:
-
-```text
-git pull
-npm run build
-npx cap sync ios
-node scripts/patch-ios.mjs
-```
-
-No Xcode:
-1. Abrir `ios/App/App.xcodeproj`
-2. Clean Build Folder (⇧⌘K)
-3. Run no iPhone
-
-### Verificação pós-rebuild
-
-No banco, após clicar em "Conectar Apple Health" no iPhone:
-
-```sql
-SELECT * FROM user_integrations WHERE provider = 'apple_health';
--- Deve retornar 1 linha com status = 'active'
-
-SELECT * FROM ring_daily_data WHERE source_provider = 'apple_health';
--- Deve retornar 1 linha com as métricas do dia
-```
-
----
-
-### Nota sobre as sugestões recebidas
-
-As sugestões de `pod install`, `rm -rf ios/Pods`, e reinstalar React Native CLI **não se aplicam** a este projeto. O VYR usa Capacitor 8 com Swift Package Manager (SPM), sem CocoaPods e sem React Native. Executar esses comandos não vai resolver nada e pode corromper a estrutura do projeto iOS.
+1. O arquivo será reescrito com a sintaxe correta
+2. Você roda `node scripts/patch-ios.mjs` no terminal
+3. O resultado esperado é `✅ Patch concluído!` com as 3 camadas aplicadas
+4. Abrir `ios/App/App.xcodeproj` no Xcode, selecionar o Team e fazer Archive
